@@ -1,0 +1,231 @@
+[10:44:11 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[10:44:11 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[10:44:12 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 400.5072ms - 200
+[10:44:12 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 455.3081ms - 200
+[10:44:12 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功！LocalId: YBxakWqoX7bL7AXswlM75UHVRUz2
+[10:44:12 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[10:44:12 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[10:44:13 ERR] [Microsoft.EntityFrameworkCore.Database.Command] Failed executing DbCommand (8ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[10:44:13 ERR] [Microsoft.EntityFrameworkCore.Query] An exception occurred while iterating over the results of a query for context type 'StockEvernote.Data.EvernoteDbContext'.
+Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Notebooks'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Notebooks'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+[10:46:03 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 111075.3784ms - 200
+[10:46:03 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 111089.0177ms - 200
+[13:42:17 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[13:42:17 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[13:42:18 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 381.5955ms - 200
+[13:42:18 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 432.8891ms - 200
+[13:42:18 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功！LocalId: YBxakWqoX7bL7AXswlM75UHVRUz2
+[13:42:18 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[13:42:18 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[13:42:18 ERR] [Microsoft.EntityFrameworkCore.Database.Command] Failed executing DbCommand (7ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[13:42:18 ERR] [Microsoft.EntityFrameworkCore.Query] An exception occurred while iterating over the results of a query for context type 'StockEvernote.Data.EvernoteDbContext'.
+Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Notebooks'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Notebooks'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+[13:46:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[13:46:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+[13:46:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[13:46:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[13:46:00 INF] [Microsoft.EntityFrameworkCore.Migrations] Applying migration '20260319231553_InitialCreate'.
+[13:46:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Notebooks" (
+    "Id" TEXT NOT NULL CONSTRAINT "PK_Notebooks" PRIMARY KEY,
+    "UserId" TEXT NOT NULL,
+    "Name" TEXT NOT NULL,
+    "CreatedAt" TEXT NOT NULL,
+    "UpdatedAt" TEXT NOT NULL,
+    "IsSynced" INTEGER NOT NULL,
+    "IsDeleted" INTEGER NOT NULL
+);
+[13:46:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Notes" (
+    "Id" TEXT NOT NULL CONSTRAINT "PK_Notes" PRIMARY KEY,
+    "NotebookId" TEXT NOT NULL,
+    "Name" TEXT NOT NULL,
+    "Content" TEXT NOT NULL,
+    "CreatedAt" TEXT NOT NULL,
+    "UpdatedAt" TEXT NOT NULL,
+    "IsSynced" INTEGER NOT NULL,
+    "IsDeleted" INTEGER NOT NULL,
+    CONSTRAINT "FK_Notes_Notebooks_NotebookId" FOREIGN KEY ("NotebookId") REFERENCES "Notebooks" ("Id") ON DELETE CASCADE
+);
+[13:46:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Notes_NotebookId" ON "Notes" ("NotebookId");
+[13:46:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260319231553_InitialCreate', '8.0.25');
+[13:46:10 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[13:46:10 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[13:46:10 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 349.7936ms - 200
+[13:46:10 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 364.4765ms - 200
+[13:46:10 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功！LocalId: YBxakWqoX7bL7AXswlM75UHVRUz2
+[13:46:10 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[13:46:10 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[13:46:11 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (5ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[13:46:12 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1399.0063ms - 200
+[13:46:12 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1401.8831ms - 200
+[13:46:12 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-22 13:46:10` 成功登入 StockEvernote！
+[15:07:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:07:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:07:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:07:28 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:07:55 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:07:55 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:07:55 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 392.3607ms - 200
+[15:07:55 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 406.6873ms - 200
+[15:07:56 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功！LocalId: YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:07:56 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:07:56 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:07:56 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[15:07:57 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1364.7395ms - 200
+[15:07:57 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1368.3561ms - 200
+[15:07:57 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-22 15:07:56` 成功登入 StockEvernote！
+[15:11:41 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:11:41 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:11:41 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:11:41 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:11:42 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[15:14:21 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:14:21 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:14:21 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:14:21 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:14:22 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[16:01:58 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[16:01:58 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[16:01:58 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[16:01:58 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[16:01:58 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[16:06:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[16:06:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[16:06:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[16:06:13 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[16:06:14 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[16:06:16 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (5ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (Size = 3), @p5='?' (DbType = DateTime), @p6='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notebooks" ("Id", "CreatedAt", "IsDeleted", "IsSynced", "Name", "UpdatedAt", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+[16:09:17 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[16:09:17 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[16:09:17 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[16:09:17 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[16:09:18 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC

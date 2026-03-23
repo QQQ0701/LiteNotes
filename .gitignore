@@ -1,0 +1,5 @@
+# 忽略機密設定檔，防止金鑰外洩
+appsettings.json
+/.vs
+/EvernoteClone/obj
+/EvernoteClone/bin/Debug/net8.0-windows

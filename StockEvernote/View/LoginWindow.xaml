@@ -1,0 +1,170 @@
+﻿<Window x:Class="StockEvernote.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StockEvernote"
+        xmlns:vm="clr-namespace:StockEvernote.ViewModel"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance Type=vm:LoginViewModel}"
+        Title="登入 / 註冊" Height="450" Width="350">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="{Binding ErrorMessage ,FallbackValue='⚠️ 帳號或密碼錯誤，請重新輸入！'}"
+                   Foreground="Red"
+                   FontWeight="Bold"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,10"
+                   d:Visibility="Visible">
+            
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ErrorMessage}" Value="">
+                            <Setter  Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ErrorMessage}" Value="{x:Null}">
+                            <Setter  Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <StackPanel Grid.Row="1">
+
+            <StackPanel d:Visibility="Visible">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoginMode}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+
+                <TextBlock Text="電子郵件" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                         Height="28" Margin="0,0,0,15"
+                         FontSize="16"
+                         VerticalContentAlignment="Center"/>
+
+                <TextBlock Text="密碼" Margin="0,0,0,5"/>
+                <PasswordBox x:Name="loginPasswordBox" Height="28" 
+                             Margin="0,0,0,20"
+                             FontSize="16"
+                             VerticalContentAlignment="Center"/>
+
+                <Button Content="登入"
+                        Command="{Binding LoginCommand}"
+                        Click="LoginButton_Click"
+                        Height="35" Margin="0,0,0,10"
+                        Background="#2196F3" 
+                        Foreground="White" 
+                        FontWeight="Bold" 
+                        IsDefault="True">
+                    
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="IsEnabled" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button Content="切換到註冊"
+                        Command="{Binding ToggleModeCommand}"
+                        Height="30" Margin="0,0,0,8" 
+                        Background="Transparent" 
+                        BorderThickness="0" 
+                        Foreground="DodgerBlue" 
+                        Cursor="Hand"/>
+            </StackPanel>
+
+            <StackPanel>
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoginMode}" Value="False">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+
+                <TextBlock Text="名字" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Height="28" Margin="0,0,0,10"
+                         FontSize="16"
+                         VerticalContentAlignment="Center"/>
+
+                <TextBlock Text="姓氏" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Height="28" Margin="0,0,0,10"
+                         FontSize="16"
+                             VerticalContentAlignment="Center"/>
+
+                <TextBlock Text="電子郵件" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Height="28" Margin="0,0,0,10"
+                         FontSize="16"
+                             VerticalContentAlignment="Center"/>
+
+                <TextBlock Text="密碼" Margin="0,0,0,5"/>
+                <PasswordBox x:Name="registerPasswordBox"
+                             Height="28" Margin="0,0,0,10"
+                             FontSize="16"
+                             VerticalContentAlignment="Center"/>
+
+                <TextBlock Text="確認密碼" Margin="0,0,0,5"/>
+                <PasswordBox x:Name="registerConfirmPasswordBox"
+                             Height="28" Margin="0,0,0,20"
+                             FontSize="16"
+                             VerticalContentAlignment="Center"/>
+
+                <Button Content="註冊"
+                        Command="{Binding RegisterCommand}"
+                        Click="RegisterButton_Click"
+                        Height="35" Margin="0,0,0,10"
+                        Background="#4CAF50" 
+                        Foreground="White"
+                        FontWeight="Bold">
+                    
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="IsEnabled" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button Content="切換到登入"
+                        Command="{Binding ToggleModeCommand}"
+                        Height="30" 
+                        Margin="0,0,0,8" 
+                        Background="Transparent" 
+                        BorderThickness="0"
+                        Foreground="DodgerBlue"
+                        Cursor="Hand"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
