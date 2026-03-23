@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StockEvernote")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d461045d9db03dad8267ab27dea1af5dc1cc1ef4")]
 [assembly: System.Reflection.AssemblyProductAttribute("StockEvernote")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StockEvernote")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
