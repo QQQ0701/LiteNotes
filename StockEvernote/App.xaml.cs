@@ -151,6 +151,8 @@ public partial class App : Application
 
                 // 命令它：去檢查 AppData 裡有沒有資料表，沒有的話立刻照著設計圖建出來！
                 dbContext.Database.Migrate();
+
+                DbInitializer.Seed(dbContext);//測試用
             }
 
             // 5. 自動解析並顯示 LoginWindow (DI 容器會幫我們把所有依賴組裝好)

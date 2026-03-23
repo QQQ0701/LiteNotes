@@ -40,7 +40,7 @@ public class NotebookService : INotebookService
 
         existing.Name = notebook.Name;
         existing.IsSynced = false; // 修改後標記為未同步
-
+        existing.UpdatedAt = DateTime.Now;
         await _dbContext.SaveChangesAsync();
         return existing;
     }
@@ -50,6 +50,7 @@ public class NotebookService : INotebookService
         var existing = await _dbContext.Notebooks.FindAsync(notebookId)
             ?? throw new KeyNotFoundException($"找不到 Notebook Id：{notebookId}");
 
+        existing.UpdatedAt = DateTime.Now;
         existing.IsDeleted = true;  // 軟刪除，配合你原本的設計
         existing.IsSynced = false;  // 標記為未同步，等待雲端同步刪除
 
