@@ -866,3 +866,270 @@ ORDER BY "n"."CreatedAt" DESC
 [10:03:25 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (Size = 4), @p5='?' (DbType = DateTime), @p6='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
 INSERT INTO "Notebooks" ("Id", "CreatedAt", "IsDeleted", "IsSynced", "Name", "UpdatedAt", "UserId")
 VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+[10:12:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[10:12:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[10:12:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[10:12:31 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[10:12:32 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Notebooks" AS "n")
+[10:12:32 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[10:12:35 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (Size = 4), @p5='?' (DbType = DateTime), @p6='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notebooks" ("Id", "CreatedAt", "IsDeleted", "IsSynced", "Name", "UpdatedAt", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+[10:12:38 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsDeleted" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[10:12:39 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsDeleted" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[10:12:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsDeleted" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[10:12:41 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsDeleted" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[10:12:42 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsDeleted" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[10:12:44 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsDeleted" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[10:36:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[10:36:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[10:36:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[10:36:00 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[10:36:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Notebooks" AS "n")
+[10:36:01 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[10:36:04 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (5ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (Size = 4), @p5='?' (DbType = DateTime), @p6='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notebooks" ("Id", "CreatedAt", "IsDeleted", "IsSynced", "Name", "UpdatedAt", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+[10:36:04 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:36:09 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:36:10 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:36:12 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (Size = 4), @p5='?' (DbType = DateTime), @p6='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notebooks" ("Id", "CreatedAt", "IsDeleted", "IsSynced", "Name", "UpdatedAt", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+[10:36:12 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:38:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[10:38:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[10:38:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[10:38:52 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[10:38:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Notebooks" AS "n")
+[10:38:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (5ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[10:38:54 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (6ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (Size = 4), @p5='?' (DbType = DateTime), @p6='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notebooks" ("Id", "CreatedAt", "IsDeleted", "IsSynced", "Name", "UpdatedAt", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+[10:38:54 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:41:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[10:41:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[10:41:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[10:41:13 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[10:41:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Notebooks" AS "n")
+[10:41:14 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[10:41:16 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (5ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (Size = 4), @p5='?' (DbType = DateTime), @p6='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notebooks" ("Id", "CreatedAt", "IsDeleted", "IsSynced", "Name", "UpdatedAt", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+[10:41:16 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:41:22 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:41:22 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:41:24 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (Size = 4), @p5='?' (DbType = DateTime), @p6='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notebooks" ("Id", "CreatedAt", "IsDeleted", "IsSynced", "Name", "UpdatedAt", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+[10:41:24 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:41:33 ERR] [Microsoft.EntityFrameworkCore.Database.Command] Failed executing DbCommand (2ms) [Parameters=[@p0='?' (Size = 36), @p1='?', @p2='?' (DbType = DateTime), @p3='?' (DbType = Boolean), @p4='?' (DbType = Boolean), @p5='?' (Size = 36), @p6='?' (Size = 3), @p7='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notes" ("Id", "Content", "CreatedAt", "IsDeleted", "IsSynced", "Name", "NotebookId", "UpdatedAt")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+[10:41:33 ERR] [Microsoft.EntityFrameworkCore.Update] An exception occurred in the database while saving changes for context type 'StockEvernote.Data.EvernoteDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 19: 'FOREIGN KEY constraint failed'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 19: 'FOREIGN KEY constraint failed'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+[10:44:53 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[10:44:53 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[10:44:53 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[10:44:53 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[10:44:54 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Notebooks" AS "n")
+[10:44:54 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 11)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[10:44:56 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:44:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (2ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsDeleted" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[10:44:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:44:58 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsDeleted" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[10:44:58 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:44:59 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsDeleted" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[10:44:59 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:45:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsDeleted" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[10:45:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[10:45:01 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsDeleted" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[10:45:04 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC

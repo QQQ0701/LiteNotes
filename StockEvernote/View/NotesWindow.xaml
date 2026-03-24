@@ -34,7 +34,6 @@
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    <Setter Property="Focusable" Value="False"/>
                 </Style>
             </ListView.ItemContainerStyle>
 
@@ -66,8 +65,7 @@
                                      FontSize="15" Padding="5,8" BorderThickness="0"
                                      Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
                                      Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
-                                     IsVisibleChanged="RenameTextBox_IsVisibleChanged">
-                                     
+                                     LostFocus="RenameTextBox_LostFocus">
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter"
                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Tag.ConfirmRenameCommand}"

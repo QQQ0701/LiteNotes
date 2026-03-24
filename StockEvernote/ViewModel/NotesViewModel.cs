@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using StockEvernote.Contracts;
 using StockEvernote.Model;
-using StockEvernote.Services;
 using System.Collections.ObjectModel;
 
 namespace StockEvernote.ViewModel;
@@ -13,7 +12,6 @@ public partial class NotesViewModel:ObservableObject
     private readonly INoteService _noteService;
     private readonly string _currentUserId = "TestUser123";
 
-    public event Action<Notebook>? RequestFocusNotebook;
     public NotesViewModel(INotebookService notebookService ,INoteService noteService)
     {
         _notebookService = notebookService;
@@ -27,6 +25,7 @@ public partial class NotesViewModel:ObservableObject
     [ObservableProperty] private ObservableCollection<Note> _notes = new();
     [ObservableProperty] private string _newNoteName = string.Empty;
     [ObservableProperty] private Notebook? _selectedNote;
+    [ObservableProperty] private bool _isAddingNote = false;
 
     // 當選擇的筆記本改變時，自動載入該本的筆記
     partial void OnSelectedNotebookChanged(Notebook? value)
