@@ -12,6 +12,8 @@ public partial class NotesViewModel:ObservableObject
     private readonly INotebookService _notebookService;
     private readonly INoteService _noteService;
     private readonly string _currentUserId = "TestUser123";
+
+    public event Action<Notebook>? RequestFocusNotebook;
     public NotesViewModel(INotebookService notebookService ,INoteService noteService)
     {
         _notebookService = notebookService;
@@ -30,7 +32,7 @@ public partial class NotesViewModel:ObservableObject
     partial void OnSelectedNotebookChanged(Notebook? value)
     {
         if (value is null) return;
-        _ = LoadNotesAsync(value);
+        _ = LoadNotesAsync(value.Id);
     }
 
     [RelayCommand]
@@ -45,14 +47,11 @@ public partial class NotesViewModel:ObservableObject
         }
     }
     [RelayCommand]
-    private async Task LoadNotesAsync(Notebook? notebook)
+    private async Task LoadNotesAsync(string notebookId)
     {
+        var data = await _noteService.GetNotesAsync(notebookId);
         Notes.Clear();
-       // SelectedNote = null;
-        if (notebook == null) return;
-
-        var data = await _noteService.GetNotesAsync(notebook.Id);
-
+   
         foreach (var item in data)
         {
             Notes.Add(item);
@@ -64,32 +63,34 @@ public partial class NotesViewModel:ObservableObject
     [RelayCommand]
     private async Task AddNotebookAsync()
     {
-        if (string.IsNullOrWhiteSpace(NewNotebookName)) return;
+        // ✅ 改成直接用預設名稱新增，不需要先輸入
+        var name = string.IsNullOrWhiteSpace(NewNotebookName) ? "新筆記本" : NewNotebookName.Trim();
+        var created = await _notebookService.CreateNotebookAsync(name, _currentUserId);
 
-        // 1. 呼叫 Service 寫入 SQLite
-        var createdNotebook = await _notebookService.CreateNotebookAsync(NewNotebookName, _currentUserId);
+        Notebooks.Insert(0, created);
+        SelectedNotebook = created;
 
-        // 2. 把新增成功的筆記本塞進集合裡，WPF 畫面就會瞬間多出一筆！
-        Notebooks.Insert(0, createdNotebook); // 塞在最上面
-
-        // 3. 清空 TextBox
-        NewNotebookName = string.Empty;
+        // ✅ 新增後自動進入編輯模式，讓使用者可以直接改名
+        Edit(created);
     }
-
+    [RelayCommand]
+    private void StartAddNote()
+    {
+        if (SelectedNotebook is null) return;
+        NewNoteName = string.Empty;
+        IsAddingNote = true;
+    }
     [RelayCommand]
     private async Task AddNoteAsync(string notebookId)
     {
-        if (SelectedNotebook == null) return;
-        if (SelectedNotebook is null && string.IsNullOrWhiteSpace(NewNoteName)) return;
+        if (SelectedNotebook is null) return;
 
-        var createdNote = await _noteService.CreateNoteAsync(
-             SelectedNotebook.Id,
-             NewNoteName.Trim());
+        var name = string.IsNullOrWhiteSpace(NewNoteName) ? "New" : NewNoteName.Trim();
+        var created = await _noteService.CreateNoteAsync(name, SelectedNotebook.Id);
+        Notes.Insert(0, created);
 
-        Notes.Insert(0, createdNote); // 塞在最上面
-
+        IsAddingNote = false;
         NewNoteName = string.Empty;
-       // SelectedNote = created;
     }
 
     [RelayCommand]
@@ -140,8 +141,8 @@ public partial class NotesViewModel:ObservableObject
         await _noteService.DeleteNoteAsync(note.Id);
         Notes.Remove(note);
 
-        // 如果刪的是目前選中的筆記本，清空右側筆記列表
-        //if (SelectedNote == note) { SelectedNote = null; }
-            
+        //如果刪的是目前選中的筆記本，清空右側筆記列表
+      //  if (SelectedNote == note) { SelectedNote = null; }
+
     }
 }

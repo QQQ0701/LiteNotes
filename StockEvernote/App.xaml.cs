@@ -105,6 +105,7 @@ public partial class App : Application
             // ==========================================
 
             services.AddTransient<INotebookService, NotebookService>();
+            services.AddTransient<INoteService, NoteService>();
 
             services.AddHttpClient<ITelegramService, TelegramMessageServices>(client =>
             {
