@@ -781,3 +781,342 @@ ORDER BY "MigrationId";
 [14:05:39 INF] [] 資料庫 Schema 更新完成
 [14:05:39 INF] [] 顯示 LoginWindow
 [14:05:41 INF] [] 系統準備關閉...
+[14:05:59 INF] [] 系統啟動中...
+[14:05:59 INF] [] 當前執行環境：Production
+[14:05:59 INF] [] 設定檔載入完成
+[14:05:59 INF] [] DI 容器建置完成
+[14:05:59 INF] [] 開始檢查並更新資料庫 Schema...
+[14:06:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:06:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:06:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:06:00 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[14:06:00 INF] [] 資料庫 Schema 更新完成
+[14:06:00 INF] [] 顯示 LoginWindow
+[14:06:17 INF] [] 系統準備關閉...
+[14:15:02 INF] [] 系統啟動中...
+[14:15:02 INF] [] 當前執行環境：Production
+[14:15:02 INF] [] 設定檔載入完成
+[14:15:02 INF] [] DI 容器建置完成
+[14:15:02 INF] [] 開始檢查並更新資料庫 Schema...
+[14:15:03 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:15:03 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:15:03 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:15:03 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[14:15:03 INF] [] 資料庫 Schema 更新完成
+[14:15:03 INF] [] 顯示 LoginWindow
+[14:15:10 INF] [] 系統準備關閉...
+[14:15:36 INF] [] 系統啟動中...
+[14:15:36 INF] [] 當前執行環境：Production
+[14:15:36 INF] [] 設定檔載入完成
+[14:15:36 INF] [] DI 容器建置完成
+[14:15:36 INF] [] 開始檢查並更新資料庫 Schema...
+[14:15:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:15:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:15:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:15:37 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[14:15:37 INF] [] 資料庫 Schema 更新完成
+[14:15:37 INF] [] 顯示 LoginWindow
+[14:15:43 INF] [] 系統準備關閉...
+[14:16:12 INF] [] 系統啟動中...
+[14:16:12 INF] [] 當前執行環境：Production
+[14:16:12 INF] [] 設定檔載入完成
+[14:16:12 INF] [] DI 容器建置完成
+[14:16:12 INF] [] 開始檢查並更新資料庫 Schema...
+[14:16:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:16:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:16:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:16:13 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[14:16:13 INF] [] 資料庫 Schema 更新完成
+[14:16:13 INF] [] 顯示 LoginWindow
+[14:16:24 INF] [] 系統準備關閉...
+[14:20:31 INF] [] 系統啟動中...
+[14:20:31 INF] [] 當前執行環境：Production
+[14:20:31 INF] [] 設定檔載入完成
+[14:20:31 INF] [] DI 容器建置完成
+[14:20:31 INF] [] 開始檢查並更新資料庫 Schema...
+[14:20:32 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:20:32 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:20:32 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:20:32 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[14:20:32 INF] [] 資料庫 Schema 更新完成
+[14:20:32 INF] [] 顯示 LoginWindow
+[14:20:49 INF] [] 系統準備關閉...
+[14:23:46 INF] [] 系統啟動中...
+[14:23:46 INF] [] 當前執行環境：Production
+[14:23:46 INF] [] 設定檔載入完成
+[14:23:46 INF] [] DI 容器建置完成
+[14:23:46 INF] [] 開始檢查並更新資料庫 Schema...
+[14:23:46 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:23:46 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:23:46 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:23:46 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[14:23:46 INF] [] 資料庫 Schema 更新完成
+[14:23:47 INF] [] 顯示 LoginWindow
+[14:23:56 INF] [] 系統準備關閉...
+[14:55:09 INF] [] 系統啟動中...
+[14:55:09 INF] [] 當前執行環境：Production
+[14:55:09 INF] [] 設定檔載入完成
+[14:55:09 INF] [] DI 容器建置完成
+[14:55:09 INF] [] 開始檢查並更新資料庫 Schema...
+[14:55:09 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:55:09 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:55:10 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:55:10 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[14:55:10 INF] [] 資料庫 Schema 更新完成
+[14:55:10 INF] [] 顯示 LoginWindow
+[14:55:15 INF] [] 系統準備關閉...
+[15:01:05 INF] [] 系統啟動中...
+[15:01:05 INF] [] 當前執行環境：Production
+[15:01:05 INF] [] 設定檔載入完成
+[15:01:05 INF] [] DI 容器建置完成
+[15:01:05 INF] [] 開始檢查並更新資料庫 Schema...
+[15:01:06 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:01:06 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:01:06 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:01:06 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:01:06 INF] [] 資料庫 Schema 更新完成
+[15:01:06 INF] [] 顯示 LoginWindow
+[15:01:11 INF] [] 系統準備關閉...
+[15:01:36 INF] [] 系統啟動中...
+[15:01:36 INF] [] 當前執行環境：Production
+[15:01:36 INF] [] 設定檔載入完成
+[15:01:36 INF] [] DI 容器建置完成
+[15:01:36 INF] [] 開始檢查並更新資料庫 Schema...
+[15:01:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:01:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:01:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:01:37 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:01:37 INF] [] 資料庫 Schema 更新完成
+[15:01:37 INF] [] 顯示 LoginWindow
+[15:01:40 INF] [] 系統準備關閉...
+[15:01:48 INF] [] 系統啟動中...
+[15:01:48 INF] [] 當前執行環境：Production
+[15:01:48 INF] [] 設定檔載入完成
+[15:01:48 INF] [] DI 容器建置完成
+[15:01:48 INF] [] 開始檢查並更新資料庫 Schema...
+[15:01:49 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:01:49 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:01:49 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:01:49 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:01:49 INF] [] 資料庫 Schema 更新完成
+[15:01:49 INF] [] 顯示 LoginWindow
+[15:01:52 INF] [] 系統準備關閉...
+[15:02:09 INF] [] 系統啟動中...
+[15:02:09 INF] [] 當前執行環境：Production
+[15:02:10 INF] [] 設定檔載入完成
+[15:02:10 INF] [] DI 容器建置完成
+[15:02:10 INF] [] 開始檢查並更新資料庫 Schema...
+[15:02:10 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:02:10 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:02:10 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:02:10 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:02:10 INF] [] 資料庫 Schema 更新完成
+[15:02:10 INF] [] 顯示 LoginWindow
+[15:02:18 INF] [] 系統準備關閉...
+[15:02:22 INF] [] 系統啟動中...
+[15:02:22 INF] [] 當前執行環境：Production
+[15:02:23 INF] [] 設定檔載入完成
+[15:02:23 INF] [] DI 容器建置完成
+[15:02:23 INF] [] 開始檢查並更新資料庫 Schema...
+[15:02:23 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:02:23 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:02:23 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:02:23 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:02:23 INF] [] 資料庫 Schema 更新完成
+[15:02:24 INF] [] 顯示 LoginWindow
+[15:02:26 INF] [] 系統準備關閉...
+[15:02:35 INF] [] 系統啟動中...
+[15:02:35 INF] [] 當前執行環境：Production
+[15:02:35 INF] [] 設定檔載入完成
+[15:02:35 INF] [] DI 容器建置完成
+[15:02:35 INF] [] 開始檢查並更新資料庫 Schema...
+[15:02:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:02:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:02:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:02:36 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:02:36 INF] [] 資料庫 Schema 更新完成
+[15:02:36 INF] [] 顯示 LoginWindow
+[15:02:39 INF] [] 系統準備關閉...
+[15:03:48 INF] [] 系統啟動中...
+[15:03:48 INF] [] 當前執行環境：Production
+[15:03:48 INF] [] 設定檔載入完成
+[15:03:48 INF] [] DI 容器建置完成
+[15:03:48 INF] [] 開始檢查並更新資料庫 Schema...
+[15:03:49 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:03:49 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:03:49 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:03:49 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:03:49 INF] [] 資料庫 Schema 更新完成
+[15:03:49 INF] [] 顯示 LoginWindow
+[15:03:55 INF] [] 系統準備關閉...
+[15:07:02 INF] [] 系統啟動中...
+[15:07:02 INF] [] 當前執行環境：Production
+[15:07:02 INF] [] 設定檔載入完成
+[15:07:02 INF] [] DI 容器建置完成
+[15:07:02 INF] [] 開始檢查並更新資料庫 Schema...
+[15:07:03 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:07:03 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:07:03 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:07:03 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:07:03 INF] [] 資料庫 Schema 更新完成
+[15:07:03 INF] [] 顯示 LoginWindow
+[15:07:08 INF] [] 系統準備關閉...
+[15:07:48 INF] [] 系統啟動中...
+[15:07:49 INF] [] 當前執行環境：Production
+[15:07:49 INF] [] 設定檔載入完成
+[15:07:49 INF] [] DI 容器建置完成
+[15:07:49 INF] [] 開始檢查並更新資料庫 Schema...
+[15:07:49 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:07:49 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:07:49 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:07:49 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:07:49 INF] [] 資料庫 Schema 更新完成
+[15:07:50 INF] [] 顯示 LoginWindow
+[15:08:15 INF] [] 系統啟動中...
+[15:08:15 INF] [] 當前執行環境：Production
+[15:08:15 INF] [] 設定檔載入完成
+[15:08:15 INF] [] DI 容器建置完成
+[15:08:15 INF] [] 開始檢查並更新資料庫 Schema...
+[15:08:16 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:08:16 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:08:16 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:08:16 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:08:16 INF] [] 資料庫 Schema 更新完成
+[15:08:16 INF] [] 顯示 LoginWindow
+[15:08:31 INF] [] 系統準備關閉...
+[15:10:56 INF] [] 系統啟動中...
+[15:10:56 INF] [] 當前執行環境：Production
+[15:10:56 INF] [] 設定檔載入完成
+[15:10:56 INF] [] DI 容器建置完成
+[15:10:56 INF] [] 開始檢查並更新資料庫 Schema...
+[15:10:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:10:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:10:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:10:57 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:10:57 INF] [] 資料庫 Schema 更新完成
+[15:10:57 INF] [] 顯示 LoginWindow
+[15:11:11 INF] [] 系統準備關閉...
+[15:11:47 INF] [] 系統啟動中...
+[15:11:47 INF] [] 當前執行環境：Production
+[15:11:47 INF] [] 設定檔載入完成
+[15:11:47 INF] [] DI 容器建置完成
+[15:11:47 INF] [] 開始檢查並更新資料庫 Schema...
+[15:11:48 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:11:48 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:11:48 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:11:48 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:11:48 INF] [] 資料庫 Schema 更新完成
+[15:11:48 INF] [] 顯示 LoginWindow
+[15:12:02 INF] [] 系統準備關閉...
+[15:14:37 INF] [] 系統啟動中...
+[15:14:37 INF] [] 當前執行環境：Production
+[15:14:37 INF] [] 設定檔載入完成
+[15:14:37 INF] [] DI 容器建置完成
+[15:14:37 INF] [] 開始檢查並更新資料庫 Schema...
+[15:14:38 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:14:38 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:14:38 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:14:38 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:14:38 INF] [] 資料庫 Schema 更新完成
+[15:14:38 INF] [] 顯示 LoginWindow
+[15:14:57 INF] [] 系統準備關閉...
