@@ -20,7 +20,9 @@ public partial class LoginWindow : Window
         _vm.CloseAction = () =>
         {
             var scope = App.ServiceProvider!.CreateScope();
-            var notesWindow = scope.ServiceProvider?.GetRequiredService<NotesWindow>();
+            var notesWindow = scope.ServiceProvider.GetRequiredService<NotesWindow>();
+
+            notesWindow.Closed += (s, e) => scope.Dispose();
             notesWindow?.Show();
             this.Close();
         };
