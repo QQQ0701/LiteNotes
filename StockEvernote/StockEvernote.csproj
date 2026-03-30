@@ -9,9 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="View\UserControls\**" />
+    <EmbeddedResource Remove="View\UserControls\**" />
+    <None Remove="View\UserControls\**" />
+    <Page Remove="View\UserControls\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Images\" />
     <Folder Include="Repositories\" />
-    <Folder Include="View\UserControls\" />
   </ItemGroup>
 
   <ItemGroup>

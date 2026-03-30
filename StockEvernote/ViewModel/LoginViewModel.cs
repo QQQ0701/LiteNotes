@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using Serilog.Core;
 using StockEvernote.Contracts;
 
 namespace StockEvernote.ViewModel;
@@ -16,9 +15,13 @@ public partial class LoginViewModel : ObservableObject
     private readonly IUserSession _userSession;
     private readonly ITelegramService _gramService;
     private readonly ILogger<LoginViewModel> _logger;
-    public Action? CloseAction { get; set; }
-    public LoginViewModel(IAuthService authService, IDialogService dialogService,
-        IUserSession userSession, ITelegramService gramService, ILogger<LoginViewModel> logger)
+
+    public LoginViewModel(
+        IAuthService authService, 
+        IDialogService dialogService,
+        IUserSession userSession, 
+        ITelegramService gramService, 
+        ILogger<LoginViewModel> logger)
     {
         _authService = authService ?? throw new ArgumentNullException(nameof(authService));
         _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
@@ -28,17 +31,20 @@ public partial class LoginViewModel : ObservableObject
     }
 
     // 輸入屬性
-    [ObservableProperty] private string email = string.Empty;
-    [ObservableProperty] private string password = string.Empty;
-    [ObservableProperty] private string confirmPassword = string.Empty;
-    [ObservableProperty] private string? firstName;
-    [ObservableProperty] private string? lastName;
+    [ObservableProperty] private string _email = string.Empty;
+    [ObservableProperty] private string _password = string.Empty;
+    [ObservableProperty] private string _confirmPassword = string.Empty;
+    [ObservableProperty] private string? _firstName;
+    [ObservableProperty] private string? _lastName;
 
     // 狀態屬性
-    [ObservableProperty] private bool isLoading = false;
-    [ObservableProperty] private string errorMessage = string.Empty;
-    [ObservableProperty] private bool isLoginMode = true;
+    [ObservableProperty] private bool _isLoading = false;
+    [ObservableProperty] private string _errorMessage = string.Empty;
+    [ObservableProperty] private bool _isLoginMode = true;
 
+    // 事件
+    public Action? CloseAction { get; set; }
+    public event Action? RequestClearPasswords;
 
     /// <summary>
     /// 切換登入/註冊模式指令。
@@ -53,6 +59,7 @@ public partial class LoginViewModel : ObservableObject
         ConfirmPassword = string.Empty;
         FirstName = string.Empty;
         LastName = string.Empty;
+        RequestClearPasswords?.Invoke();
     }
 
     /// <summary>
@@ -66,34 +73,42 @@ public partial class LoginViewModel : ObservableObject
         ErrorMessage = string.Empty;
         try
         {
-            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            if (string.IsNullOrWhiteSpace(Email))
             {
-                ErrorMessage = "請輸入電子郵件與密碼。";
+                ErrorMessage = "請輸入電子郵件。";
+                return;
+            }
+
+            if (!IsValidEmail(Email))
+            {
+                ErrorMessage = "電子郵件格式不正確，例如：example@gmail.com";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                ErrorMessage = "請輸入密碼。";
                 return;
             }
             var result = await _authService.LoginAsync(Email, Password);
 
             if (result.IsSuccess)
             {
-                // TODO: 可將 result.UserId 存入全域狀態或傳遞給 NotesWindow
                 _userSession.LocalId = result.UserId;
                 _userSession.IdToken = result.IdToken;
 
-                _logger.LogInformation($"使用者登入成功！LocalId: {result.UserId}");
+                _logger.LogInformation("使用者登入成功，LocalId：{LocalId}", result.UserId);
 
                 string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 _ = _gramService.SendMessageAsync($"*系統通知*\n您已於 `{time}` 成功登入 StockEvernote！");
 
-              //  _dialogService.ShowMessage("登入成功", "歡迎回來！");
-                
                 // 導向主畫面（NotesWindow）
                 CloseAction?.Invoke();
             }
             else
             {
                 ErrorMessage = result.ErrorMessage ?? "登入失敗";
-                _logger.LogWarning($"使用者登入失敗。Email: {Email}, 原因: {ErrorMessage}");
-                _dialogService.ShowMessage("錯誤", ErrorMessage);
+                _logger.LogWarning("使用者登入失敗，Email：{Email}，原因：{Reason}", Email, ErrorMessage);
             }
         }
         finally
@@ -113,36 +128,75 @@ public partial class LoginViewModel : ObservableObject
         ErrorMessage = string.Empty;
         try
         {
-            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(ConfirmPassword))
+            if (string.IsNullOrWhiteSpace(Email))
             {
-                ErrorMessage = "請完整填寫註冊資訊。";
+                ErrorMessage = "請輸入電子郵件。";
                 return;
             }
+
+            if (!IsValidEmail(Email))
+            {
+                ErrorMessage = "電子郵件格式不正確，例如：example@gmail.com";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                ErrorMessage = "請輸入密碼。";
+                return;
+            }
+
+            if (Password.Length < 6)
+            {
+                ErrorMessage = "密碼長度至少需要 6 個字元。";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(ConfirmPassword))
+            {
+                ErrorMessage = "請輸入確認密碼。";
+                return;
+            }
+
             if (Password != ConfirmPassword)
             {
                 ErrorMessage = "密碼與確認密碼不一致。";
                 return;
             }
-            _logger.LogInformation("使用者嘗試註冊新帳號。Email: {Email}", Email);//  記錄行為
+
+            _logger.LogInformation("使用者嘗試註冊新帳號，Email：{Email}", Email);
 
             var result = await _authService.RegisterAsync(Email, Password);
 
             if (result.IsSuccess)
             {
-                _logger.LogInformation($"帳號註冊成功！Email: {Email}");
-                _dialogService.ShowMessage("註冊成功", "帳號建立完成！");
-                CloseAction?.Invoke();
+                _logger.LogInformation("帳號註冊成功，Email：{Email}", Email);
+                _dialogService.ShowMessage("註冊成功", "帳號建立完成，請登入！");
+                Email = string.Empty;
+                IsLoginMode = true;
+                RequestClearPasswords?.Invoke();
             }
             else
             {
                 ErrorMessage = result.ErrorMessage ?? "註冊失敗";
-                _logger.LogWarning($"使用者註冊失敗。Email: {Email}, 原因: {ErrorMessage}" );
-                _dialogService.ShowMessage("錯誤", ErrorMessage);
+                _logger.LogWarning("使用者註冊失敗，Email：{Email}，原因：{Reason}", Email, ErrorMessage);
             }
         }
         finally
         {
             IsLoading = false;
+        }
+    }
+    private static bool IsValidEmail(string email)
+    {
+        try
+        {
+            var addr = new System.Net.Mail.MailAddress(email);
+            return addr.Address == email;
+        }
+        catch
+        {
+            return false;
         }
     }
 }

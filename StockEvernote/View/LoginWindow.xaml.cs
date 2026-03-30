@@ -17,6 +17,8 @@ public partial class LoginWindow : Window
         _vm = vm;
         DataContext = _vm;
 
+        _vm.RequestClearPasswords += () => ClearPasswordBoxes();
+
         _vm.CloseAction = () =>
         {
             var scope = App.ServiceProvider!.CreateScope();
@@ -42,5 +44,11 @@ public partial class LoginWindow : Window
         {
             _vm.Password = loginPasswordBox.Password;
         }
+    }
+    private void ClearPasswordBoxes()
+    {
+        loginPasswordBox.Clear();
+        registerPasswordBox.Clear();
+        registerConfirmPasswordBox.Clear();
     }
 }
