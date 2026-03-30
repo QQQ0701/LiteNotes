@@ -84,7 +84,7 @@ public partial class LoginViewModel : ObservableObject
                 string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 _ = _gramService.SendMessageAsync($"*系統通知*\n您已於 `{time}` 成功登入 StockEvernote！");
 
-                _dialogService.ShowMessage("登入成功", "歡迎回來！");
+              //  _dialogService.ShowMessage("登入成功", "歡迎回來！");
                 
                 // 導向主畫面（NotesWindow）
                 CloseAction?.Invoke();

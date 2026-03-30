@@ -22,7 +22,7 @@ public class NoteService : INoteService
             .OrderByDescending(n=>n.UpdatedAt)
             .ToListAsync();
     }
-    public async Task<Note> CreateNoteAsync(string notebookId, string name)
+    public async Task<Note> CreateNoteAsync(string name,string notebookId)
     {
         var newNote = new Note()
         {
@@ -44,7 +44,7 @@ public class NoteService : INoteService
             ??throw new KeyNotFoundException($"找不到 Notebook Id：{note.Id}");
 
         existing.Name = note.Name;
-        existing.Content = note.Content;
+        existing.Content = note.Content ?? string.Empty;
         existing.IsSynced = false;
         existing.UpdatedAt = DateTime.Now;
 

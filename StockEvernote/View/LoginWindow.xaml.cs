@@ -19,7 +19,8 @@ public partial class LoginWindow : Window
 
         _vm.CloseAction = () =>
         {
-            var notesWindow = App.ServiceProvider?.GetRequiredService<NotesWindow>();
+            var scope = App.ServiceProvider!.CreateScope();
+            var notesWindow = scope.ServiceProvider?.GetRequiredService<NotesWindow>();
             notesWindow?.Show();
             this.Close();
         };

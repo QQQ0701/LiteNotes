@@ -1,12 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StockEvernote.Model;
-public class Note
+public partial class Note: ObservableObject
 {
     [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public string NotebookId { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
+
+    [ObservableProperty] private string _name = string.Empty;
     public string Content { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
@@ -17,4 +20,9 @@ public class Note
 
     // 關聯屬性 (Navigation Property)：讓 EF Core 知道如何抓取對應的筆記本
     public Notebook? Notebook { get; set; }
+
+    [property: NotMapped]
+    [ObservableProperty] private bool _isEditing;
+    [property: NotMapped]
+    [ObservableProperty] private string? _editingName;
 }

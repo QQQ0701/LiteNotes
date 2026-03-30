@@ -1,0 +1,456 @@
+[07:04:26 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[07:04:26 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[07:04:26 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[07:04:26 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[07:04:38 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[07:04:38 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[07:04:38 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 379.5039ms - 200
+[07:04:38 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 394.0076ms - 200
+[07:04:38 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功！LocalId: YBxakWqoX7bL7AXswlM75UHVRUz2
+[07:04:38 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[07:04:38 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[07:04:38 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[07:04:39 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1361.0397ms - 200
+[07:04:39 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1364.2443ms - 200
+[07:04:39 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 07:04:38` 成功登入 StockEvernote！
+[07:04:41 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:04:43 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:04:44 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:04:45 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:04:50 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p3='?' (Size = 36), @p0='?' (Size = 314), @p1='?' (DbType = Boolean), @p2='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "Content" = @p0, "IsSynced" = @p1, "UpdatedAt" = @p2
+WHERE "Id" = @p3
+RETURNING 1;
+[07:04:53 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[07:04:53 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[07:04:53 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes/56ccce97-8bac-471a-a745-131a3b17e281
+[07:04:53 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes/56ccce97-8bac-471a-a745-131a3b17e281
+[07:04:53 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Received HTTP response headers after 75.4553ms - 400
+[07:04:53 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] End processing HTTP request after 78.9426ms - 400
+[07:07:53 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[07:07:53 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[07:07:53 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[07:07:53 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[07:08:12 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[07:08:12 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[07:08:12 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 369.0035ms - 200
+[07:08:12 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 382.6066ms - 200
+[07:08:12 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功！LocalId: YBxakWqoX7bL7AXswlM75UHVRUz2
+[07:08:12 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[07:08:12 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[07:08:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[07:08:14 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1354.2674ms - 200
+[07:08:14 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1357.8848ms - 200
+[07:08:14 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 07:08:12` 成功登入 StockEvernote！
+[07:08:15 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:08:17 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[07:08:17 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[07:08:17 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes/56ccce97-8bac-471a-a745-131a3b17e281
+[07:08:17 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes/56ccce97-8bac-471a-a745-131a3b17e281
+[07:08:17 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Received HTTP response headers after 45.292ms - 400
+[07:08:17 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] End processing HTTP request after 49.3945ms - 400
+[07:11:18 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[07:11:18 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[07:11:18 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes/56ccce97-8bac-471a-a745-131a3b17e281
+[07:11:18 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes/56ccce97-8bac-471a-a745-131a3b17e281
+[07:11:19 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Received HTTP response headers after 432.3273ms - 400
+[07:11:19 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] End processing HTTP request after 435.6373ms - 400
+[07:12:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[07:12:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[07:12:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[07:12:52 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[07:13:07 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[07:13:07 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[07:13:07 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 387.5114ms - 200
+[07:13:07 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 402.1095ms - 200
+[07:13:07 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功！LocalId: YBxakWqoX7bL7AXswlM75UHVRUz2
+[07:13:07 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[07:13:07 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[07:13:08 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (5ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[07:13:09 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1501.4867ms - 200
+[07:13:09 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1505.4464ms - 200
+[07:13:09 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 07:13:07` 成功登入 StockEvernote！
+[07:13:10 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:13:10 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:13:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[07:13:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[07:13:13 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes/56ccce97-8bac-471a-a745-131a3b17e281
+[07:13:13 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes/56ccce97-8bac-471a-a745-131a3b17e281
+[07:13:14 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Received HTTP response headers after 528.2549ms - 200
+[07:13:14 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] End processing HTTP request after 533.5479ms - 200
+[07:13:14 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "IsSynced" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[07:18:24 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p4='?' (Size = 36), @p0='?' (Size = 309), @p1='?' (DbType = Boolean), @p2='?' (Size = 7), @p3='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "Content" = @p0, "IsSynced" = @p1, "Name" = @p2, "UpdatedAt" = @p3
+WHERE "Id" = @p4
+RETURNING 1;
+[07:18:45 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p4='?' (Size = 36), @p0='?' (Size = 308), @p1='?' (DbType = Boolean), @p2='?' (Size = 2), @p3='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "Content" = @p0, "IsSynced" = @p1, "Name" = @p2, "UpdatedAt" = @p3
+WHERE "Id" = @p4
+RETURNING 1;
+[07:18:47 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:18:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p3='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (Size = 5), @p2='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsSynced" = @p0, "Name" = @p1, "UpdatedAt" = @p2
+WHERE "Id" = @p3
+RETURNING 1;
+[07:18:53 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:18:58 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p3='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (Size = 5), @p2='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsSynced" = @p0, "Name" = @p1, "UpdatedAt" = @p2
+WHERE "Id" = @p3
+RETURNING 1;
+[07:19:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "UpdatedAt" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[07:24:18 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[07:24:19 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[07:24:19 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[07:24:19 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[07:24:24 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[07:24:24 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[07:24:24 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 426.1318ms - 200
+[07:24:24 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 440.347ms - 200
+[07:24:24 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功！LocalId: YBxakWqoX7bL7AXswlM75UHVRUz2
+[07:24:24 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[07:24:24 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[07:24:25 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[07:24:26 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1401.7258ms - 200
+[07:24:26 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1405.6624ms - 200
+[07:24:26 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 07:24:24` 成功登入 StockEvernote！
+[07:24:27 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:24:27 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:24:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Received HTTP response headers after 140.2976ms - 200
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] End processing HTTP request after 143.2211ms - 200
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/830dac4a-bcbf-4ae1-aa38-5e62365f1f01
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/830dac4a-bcbf-4ae1-aa38-5e62365f1f01
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Received HTTP response headers after 63.827ms - 200
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] End processing HTTP request after 67.5938ms - 200
+[07:24:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsSynced" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[07:24:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsSynced" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[07:24:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+[07:24:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes/56ccce97-8bac-471a-a745-131a3b17e281
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes/56ccce97-8bac-471a-a745-131a3b17e281
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Received HTTP response headers after 57.4765ms - 200
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] End processing HTTP request after 60.5574ms - 200
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes/99f4b88f-133c-4b0a-aa59-50c954e26144
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes/99f4b88f-133c-4b0a-aa59-50c954e26144
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Received HTTP response headers after 106.1431ms - 200
+[07:24:31 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] End processing HTTP request after 109.0912ms - 200
+[07:24:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "IsSynced" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[07:24:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "IsSynced" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[07:24:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[07:25:16 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:25:30 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:25:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[07:25:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 36), @p1='?', @p2='?' (DbType = DateTime), @p3='?' (DbType = Boolean), @p4='?' (DbType = Boolean), @p5='?' (Size = 3), @p6='?' (Size = 36), @p7='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notes" ("Id", "Content", "CreatedAt", "IsDeleted", "IsSynced", "Name", "NotebookId", "UpdatedAt")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+[07:26:15 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (Size = 2), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "Name" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[07:26:20 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (Size = 307), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "Content" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[07:26:26 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[07:26:26 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+[07:26:26 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[07:26:26 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[07:26:26 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/830dac4a-bcbf-4ae1-aa38-5e62365f1f01/notes/22a3f277-b52f-41cf-a5ff-bda8ea338e88
+[07:26:26 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/830dac4a-bcbf-4ae1-aa38-5e62365f1f01/notes/22a3f277-b52f-41cf-a5ff-bda8ea338e88
+[07:26:27 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Received HTTP response headers after 123.0915ms - 200
+[07:26:27 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] End processing HTTP request after 126.0454ms - 200
+[07:26:27 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "IsSynced" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[08:15:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[08:15:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[08:15:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[08:15:28 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[08:15:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[08:15:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[08:15:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[08:15:37 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[08:15:49 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[08:15:49 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[08:15:49 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 413.9919ms - 200
+[08:15:49 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 428.0487ms - 200
+[08:15:49 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功！LocalId: YBxakWqoX7bL7AXswlM75UHVRUz2
+[08:15:49 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[08:15:49 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[08:15:49 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[08:15:50 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1314.4705ms - 200
+[08:15:50 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1317.4157ms - 200
+[08:15:50 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 08:15:49` 成功登入 StockEvernote！
+[08:15:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[08:15:54 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[08:15:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (Size = 4), @p5='?' (DbType = DateTime), @p6='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notebooks" ("Id", "CreatedAt", "IsDeleted", "IsSynced", "Name", "UpdatedAt", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+[08:15:55 INF] [StockEvernote.ViewModel.NotesViewModel] 新增筆記本：新筆記本
+[08:15:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[08:16:09 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[08:16:11 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[08:16:29 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (Size = 5), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "Name" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[08:16:29 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[08:16:30 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[08:16:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 36), @p1='?', @p2='?' (DbType = DateTime), @p3='?' (DbType = Boolean), @p4='?' (DbType = Boolean), @p5='?' (Size = 3), @p6='?' (Size = 36), @p7='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notes" ("Id", "Content", "CreatedAt", "IsDeleted", "IsSynced", "Name", "NotebookId", "UpdatedAt")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+[08:16:42 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (Size = 5), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "Name" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[08:16:47 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (Size = 319), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "Content" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[08:16:47 INF] [StockEvernote.ViewModel.NotesViewModel] 儲存筆記：又發現問題
+[08:17:40 INF] [StockEvernote.ViewModel.NotesViewModel] 開始同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[08:17:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[08:17:40 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/5f6ee631-908c-4b73-9411-21f001f3e281
+[08:17:40 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/5f6ee631-908c-4b73-9411-21f001f3e281
+[08:17:40 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Received HTTP response headers after 121.4715ms - 200
+[08:17:40 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] End processing HTTP request after 125.3587ms - 200
+[08:17:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsSynced" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[08:17:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+[08:17:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[08:17:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[08:17:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[08:17:40 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/5f6ee631-908c-4b73-9411-21f001f3e281/notes/fecc5d0a-9b8c-47cd-91ae-75a27d694a63
+[08:17:40 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/5f6ee631-908c-4b73-9411-21f001f3e281/notes/fecc5d0a-9b8c-47cd-91ae-75a27d694a63
+[08:17:40 INF] [System.Net.Http.HttpClient.Default.ClientHandler] Received HTTP response headers after 57.7257ms - 200
+[08:17:40 INF] [System.Net.Http.HttpClient.Default.LogicalHandler] End processing HTTP request after 60.4253ms - 200
+[08:17:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "IsSynced" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[08:17:40 INF] [StockEvernote.ViewModel.NotesViewModel] 同步成功

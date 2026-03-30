@@ -6,6 +6,8 @@ public static class DbInitializer
 {
     public static void Seed(EvernoteDbContext context)
     {
+       
+
         if (context.Notebooks.Any()) return; // 已經有資料就跳過，不重複塞
 
         context.Notebooks.AddRange(

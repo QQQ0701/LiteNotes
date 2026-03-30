@@ -81,7 +81,7 @@ public partial class App : Application
             services.AddDbContext<EvernoteDbContext>(options =>
             {
                 options.UseSqlite($"Data Source={dbPath}");
-            });
+            }, ServiceLifetime.Scoped);
 
             //  🌟 註冊微軟官方日誌系統(讓全公司都能寫 Log)
             //services.AddLogging(configure =>
@@ -104,8 +104,14 @@ public partial class App : Application
             // 🌐 外部 API 與業務邏輯註冊區 (Services)
             // ==========================================
 
-            services.AddTransient<INotebookService, NotebookService>();
-            services.AddTransient<INoteService, NoteService>();
+            services.AddScoped<INotebookService, NotebookService>();
+            services.AddScoped<INoteService, NoteService>();
+
+            services.AddHttpClient<IFirestoreService, FirestoreService>(client =>
+            {
+                client.Timeout = TimeSpan.FromSeconds(15);
+            });
+            services.AddScoped<IFirestoreService, FirestoreService>();
 
             services.AddHttpClient<ITelegramService, TelegramMessageServices>(client =>
             {
@@ -139,8 +145,8 @@ public partial class App : Application
             services.AddTransient<LoginViewModel>();
             services.AddTransient<LoginWindow>();
 
-            services.AddTransient<NotesViewModel>();
-            services.AddTransient<NotesWindow>();
+            services.AddScoped<NotesViewModel>();
+            services.AddScoped<NotesWindow>();
 
             // 4. ✅ 人事系統正式上線！(建置 ServiceProvider)
             ServiceProvider = services.BuildServiceProvider();
@@ -153,19 +159,23 @@ public partial class App : Application
                 // 命令它：去檢查 AppData 裡有沒有資料表，沒有的話立刻照著設計圖建出來！
                 dbContext.Database.Migrate();
 
-                DbInitializer.Seed(dbContext);//測試用
+                //DbInitializer.Seed(dbContext);//測試用
             }
 
             // 5. 自動解析並顯示 LoginWindow (DI 容器會幫我們把所有依賴組裝好)
-            //var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();
-            //loginWindow.Show();
-            var notesWindow = ServiceProvider.GetRequiredService<NotesWindow>();
-            notesWindow.Show();
+           
+         
+            var appScope = ServiceProvider.CreateScope();
+            var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();
+            loginWindow.Show();
+            //var notesWindow = appScope.ServiceProvider.GetRequiredService<NotesWindow>();
+            //notesWindow.Show();
         }
         catch (Exception ex)
         {
             // 🌟 萬一程式連啟動都失敗，Serilog 也能捕捉到！
             Log.Fatal(ex, "應用程式啟動時發生毀滅性錯誤！");
+            MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
         }
 
     }

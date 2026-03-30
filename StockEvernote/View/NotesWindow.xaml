@@ -14,12 +14,18 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem Header="+ 新增筆記本" Command="{Binding AddNotebookCommand}"/>
+                <MenuItem Header="新增筆記本" Command="{Binding AddNotebookCommand}"/>
+                <Separator/>
+                <MenuItem Header="☁ 同步到雲端" Command="{Binding SyncCommand}"/>
                 <Separator/>
                 <MenuItem Header="Exit" Click="MenuItem_Click"/>
             </MenuItem>
         </Menu>
-
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="{Binding SyncStatus}"/>
+            </StatusBarItem>
+        </StatusBar>
 
 
         <!-- ✅ ListView 要在這裡，Grid.Row="1" -->
@@ -43,17 +49,17 @@
 
                         <!-- 一般顯示模式 -->
                         <TextBlock Text="{Binding Name}" FontSize="15" Padding="5,8"
-                                       TextTrimming="CharacterEllipsis"
-                                       Visibility="{Binding IsEditing, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-                                       Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}">
-                                       
+                                   TextTrimming="CharacterEllipsis"
+                                   Visibility="{Binding IsEditing, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                   Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}">
+
                             <TextBlock.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Rename"
                                                   Command="{Binding PlacementTarget.Tag.EditCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                     <MenuItem Header="Delete"
-                                                  Command="{Binding PlacementTarget.Tag.DeleteCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                  Command="{Binding PlacementTarget.Tag.DeleteNotebookCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                 </ContextMenu>
                             </TextBlock.ContextMenu>
@@ -68,10 +74,10 @@
                                      LostFocus="RenameTextBox_LostFocus">
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Tag.ConfirmRenameCommand}"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Tag.ConfirmNotebookRenameCommand}"
                                                 CommandParameter="{Binding}"/>
                                 <KeyBinding Key="Escape"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Tag.CancelRenameCommand}"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Tag.CancelNotebookRenameCommand}"
                                                 CommandParameter="{Binding}"/>
                             </TextBox.InputBindings>
                         </TextBox>
@@ -80,6 +86,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
         <!-- ✅ 新增：中間筆記列表欄位，原本完全沒有這區塊 -->
         <DockPanel DockPanel.Dock="Left"
                    Width="220"
@@ -87,36 +94,15 @@
                    LastChildFill="True">
 
             <Border DockPanel.Dock="Top"
-                    BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <!-- 輸入框：IsAddingNote = true 時顯示 -->
-                    <TextBox Grid.Column="0"
-                             x:Name="NewNoteTextBox"
-                             Text="{Binding NewNoteName, UpdateSourceTrigger=PropertyChanged}"
-                             FontSize="14" Padding="10,12" BorderThickness="0"
-                             Background="Transparent"
-                             Visibility="{Binding IsAddingNote, Converter={StaticResource BoolToVisibilityConverter}}"
-                             LostFocus="NewNoteTextBox_LostFocus">
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding AddNoteCommand}"/>
-                            <KeyBinding Key="Escape" Command="{Binding CancelAddNoteCommand}"/>
-                        </TextBox.InputBindings>
-                    </TextBox>
-                    <!-- + New page 按鈕：IsAddingNote = false 時顯示 -->
-                        <Button Grid.Column="0"
-                            Content="＋  New page"
-                            Command="{Binding StartAddNoteCommand}"
-                            FontSize="14" Padding="10,12"
-                            BorderThickness="0" Background="Transparent"
-                            HorizontalContentAlignment="Left" Cursor="Hand"
-                            Visibility="{Binding IsAddingNote, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
-                   
-                </Grid>
+                    BorderBrush="#E0E0E0" 
+                    BorderThickness="0,0,0,1">
+                
+                <Button Content="＋  New page"
+                        Command="{Binding StartAddNoteCommand}"
+                        FontSize="14" Padding="10,12"
+                        BorderThickness="0" Background="Transparent"
+                        HorizontalContentAlignment="Left" Cursor="Hand"
+                        IsEnabled="{Binding SelectedNotebook, Converter={StaticResource NullToBoolConverter}}"/>
             </Border>
             <!-- ✅ 新增：筆記列表 -->
             <ListView ItemsSource="{Binding Notes}"
@@ -124,19 +110,90 @@
                       BorderThickness="0" 
                       Background="Transparent"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}" FontSize="14" Padding="10,8"
-                                   TextTrimming="CharacterEllipsis"/>
+                        <Grid Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}">
+
+                            <!-- 一般顯示模式 -->
+                            <TextBlock Text="{Binding Name}" FontSize="14" Padding="5,8"
+                                       TextTrimming="CharacterEllipsis"
+                                       Visibility="{Binding IsEditing, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}">
+
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu>
+                                          <MenuItem Header="Delete"
+                                                  Command="{Binding PlacementTarget.Tag.DeleteNoteCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                    </ContextMenu>
+                                </TextBlock.ContextMenu>
+
+                            </TextBlock>
+
+                            <!-- 編輯模式：跟 Notebook 一樣在原地輸入 -->
+                            <TextBox Text="{Binding EditingName, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="14" Padding="5,8" BorderThickness="0"
+                                     Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
+                                     Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
+                                     LostFocus="NoteRenameTextBox_LostFocus">
+
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Tag.ConfirmNoteRenameCommand}"
+                                        CommandParameter="{Binding}"/>
+                                    <KeyBinding Key="Escape"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Tag.CancelNoteRenameCommand}"
+                                        CommandParameter="{Binding}"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
+                        </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
         </DockPanel>
 
-        <Grid Grid.Column="1" Background="White">
-            <TextBlock Text="👉 請從左側選擇或新增一本筆記本"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                     Foreground="#AAAAAA" FontSize="18"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- 標題列：名稱 + 儲存按鈕 -->
+            <Grid Grid.Row="0" Margin="8,8,8,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- ✅ 綁定 SelectedNote.Name -->
+                <TextBox Grid.Column="0"
+                         Text="{Binding SelectedNote.Name, UpdateSourceTrigger=PropertyChanged}"
+                         FontSize="18" FontWeight="Bold"
+                         BorderThickness="0" Padding="4"
+                         IsEnabled="{Binding SelectedNote, Converter={StaticResource NullToBoolConverter}}"/>
+
+                <!-- ✅ 儲存按鈕 -->
+                <Button Grid.Column="1" Content="儲存"
+                        Click="SaveButton_Click"
+                        Padding="15,5" Margin="8,0,0,0"
+                        Background="#00A82D" Foreground="White" BorderThickness="0" Cursor="Hand"
+                        IsEnabled="{Binding SelectedNote, Converter={StaticResource NullToBoolConverter}}"/>
+            </Grid>
+
+            <RichTextBox Grid.Row="1"
+                         x:Name="contentRichTextBox"
+                         Margin="8,0,8,8"
+                         FontSize="16"
+                         BorderThickness="0"
+                         VerticalScrollBarVisibility="Auto"
+                         IsEnabled="{Binding SelectedNote, Converter={StaticResource NullToBoolConverter}}"/>
         </Grid>
     </DockPanel>
 </Window>
