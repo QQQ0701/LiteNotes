@@ -1120,3 +1120,625 @@ ORDER BY "MigrationId";
 [15:14:38 INF] [] 資料庫 Schema 更新完成
 [15:14:38 INF] [] 顯示 LoginWindow
 [15:14:57 INF] [] 系統準備關閉...
+[15:19:15 INF] [] 系統啟動中...
+[15:19:15 INF] [] 當前執行環境：Production
+[15:19:16 INF] [] 設定檔載入完成
+[15:19:16 INF] [] DI 容器建置完成
+[15:19:16 INF] [] 開始檢查並更新資料庫 Schema...
+[15:19:16 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:19:16 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:19:16 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:19:16 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:19:16 INF] [] 資料庫 Schema 更新完成
+[15:19:17 INF] [] 顯示 LoginWindow
+[15:19:27 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:19:27 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:19:27 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 423.6386ms - 200
+[15:19:27 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 437.6003ms - 200
+[15:19:27 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:19:27 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:19:27 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:19:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (3ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[15:19:29 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1728.2049ms - 200
+[15:19:29 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1731.0933ms - 200
+[15:19:29 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 15:19:27` 成功登入 StockEvernote！
+[15:19:38 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:19:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (Size = 4), @p5='?' (DbType = DateTime), @p6='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notebooks" ("Id", "CreatedAt", "IsDeleted", "IsSynced", "Name", "UpdatedAt", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+[15:19:57 INF] [StockEvernote.ViewModel.NotesViewModel] 新增筆記本：新筆記本
+[15:19:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:20:01 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (Size = 6), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "Name" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[15:20:01 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:20:03 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:20:04 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 36), @p1='?', @p2='?' (DbType = DateTime), @p3='?' (DbType = Boolean), @p4='?' (DbType = Boolean), @p5='?' (Size = 3), @p6='?' (Size = 36), @p7='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notes" ("Id", "Content", "CreatedAt", "IsDeleted", "IsSynced", "Name", "NotebookId", "UpdatedAt")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+[15:20:08 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (Size = 5), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "Name" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[15:20:11 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (Size = 330), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "Content" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[15:20:11 INF] [StockEvernote.ViewModel.NotesViewModel] 儲存筆記：55新筆記
+[15:20:39 INF] [] 系統準備關閉...
+[15:22:01 INF] [] 系統啟動中...
+[15:22:01 INF] [] 當前執行環境：Production
+[15:22:01 INF] [] 設定檔載入完成
+[15:22:01 INF] [] DI 容器建置完成
+[15:22:01 INF] [] 開始檢查並更新資料庫 Schema...
+[15:22:02 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:22:02 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:22:02 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:22:02 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:22:02 INF] [] 資料庫 Schema 更新完成
+[15:22:02 INF] [] 顯示 LoginWindow
+[15:22:24 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:22:24 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:22:25 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 423.8325ms - 200
+[15:22:25 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 438.3068ms - 200
+[15:22:25 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:22:25 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:22:25 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:22:25 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (3ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[15:22:26 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1331.671ms - 200
+[15:22:26 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1334.6695ms - 200
+[15:22:26 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 15:22:25` 成功登入 StockEvernote！
+[15:22:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:22:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:22:29 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:22:29 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:22:32 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:22:35 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:22:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:22:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:23:00 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:23:01 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:23:05 INF] [StockEvernote.ViewModel.NotesViewModel] 開始同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:23:05 INF] [StockEvernote.Services.FirestoreService] 開始全量同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:23:05 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[15:23:05 INF] [StockEvernote.Services.FirestoreService] 待同步筆記本數量：1
+[15:23:05 INF] [StockEvernote.Services.FirestoreService] 上傳筆記本：新筆記本55
+[15:23:05 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/b236a55d-b07a-4344-9244-54539f523e8a
+[15:23:05 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/b236a55d-b07a-4344-9244-54539f523e8a
+[15:23:06 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 204.1463ms - 200
+[15:23:06 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 207.5082ms - 200
+[15:23:06 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsSynced" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[15:23:06 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+[15:23:06 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:23:06 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：2eb0975a-fe25-4707-b8d3-22067cb06ced
+[15:23:06 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:23:06 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：830dac4a-bcbf-4ae1-aa38-5e62365f1f01
+[15:23:06 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:23:06 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：5f6ee631-908c-4b73-9411-21f001f3e281
+[15:23:06 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:23:06 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：3c50c8b8-d0ce-4527-ad17-282561b3cb3f
+[15:23:06 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:23:06 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：1，NotebookId：b236a55d-b07a-4344-9244-54539f523e8a
+[15:23:06 INF] [StockEvernote.Services.FirestoreService] 上傳筆記：55新筆記
+[15:23:06 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/b236a55d-b07a-4344-9244-54539f523e8a/notes/007a31d5-bfe1-498e-ad5d-da3cc061a060
+[15:23:06 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/b236a55d-b07a-4344-9244-54539f523e8a/notes/007a31d5-bfe1-498e-ad5d-da3cc061a060
+[15:23:06 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 91.7194ms - 200
+[15:23:06 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 94.6489ms - 200
+[15:23:06 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "IsSynced" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[15:23:06 INF] [StockEvernote.Services.FirestoreService] 全量同步完成，共同步 5 本筆記本
+[15:23:06 INF] [StockEvernote.ViewModel.NotesViewModel] 同步成功
+[15:24:39 INF] [] 系統準備關閉...
+[15:24:42 INF] [] 系統啟動中...
+[15:24:42 INF] [] 當前執行環境：Production
+[15:24:42 INF] [] 設定檔載入完成
+[15:24:42 INF] [] DI 容器建置完成
+[15:24:42 INF] [] 開始檢查並更新資料庫 Schema...
+[15:24:43 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:24:43 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:24:43 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:24:43 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:24:43 INF] [] 資料庫 Schema 更新完成
+[15:24:43 INF] [] 顯示 LoginWindow
+[15:26:08 INF] [] 系統準備關閉...
+[15:27:19 INF] [] 系統啟動中...
+[15:27:19 INF] [] 當前執行環境：Production
+[15:27:19 INF] [] 設定檔載入完成
+[15:27:19 INF] [] DI 容器建置完成
+[15:27:19 INF] [] 開始檢查並更新資料庫 Schema...
+[15:27:20 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:27:20 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:27:20 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:27:20 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:27:20 INF] [] 資料庫 Schema 更新完成
+[15:27:20 INF] [] 顯示 LoginWindow
+[15:27:30 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:27:30 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:27:31 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 384.3306ms - 200
+[15:27:31 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 398.6396ms - 200
+[15:27:31 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:27:31 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:27:31 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:27:31 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[15:27:32 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1327.4613ms - 200
+[15:27:32 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1330.4842ms - 200
+[15:27:32 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 15:27:31` 成功登入 StockEvernote！
+[15:27:46 INF] [] 系統準備關閉...
+[15:29:11 INF] [] 系統啟動中...
+[15:29:11 INF] [] 當前執行環境：Production
+[15:29:11 INF] [] 設定檔載入完成
+[15:29:11 INF] [] DI 容器建置完成
+[15:29:11 INF] [] 開始檢查並更新資料庫 Schema...
+[15:29:12 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:29:12 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:29:12 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:29:12 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:29:12 INF] [] 資料庫 Schema 更新完成
+[15:29:12 INF] [] 顯示 LoginWindow
+[15:29:50 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:29:50 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:29:51 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 689.1003ms - 200
+[15:29:51 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 703.479ms - 200
+[15:29:51 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:29:51 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:29:51 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:29:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[15:29:52 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1344.1317ms - 200
+[15:29:52 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1346.7837ms - 200
+[15:29:52 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 15:29:51` 成功登入 StockEvernote！
+[15:29:54 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:29:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:29:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:29:56 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:29:56 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:30:00 INF] [] 系統準備關閉...
+[15:33:54 INF] [] 系統啟動中...
+[15:33:54 INF] [] 當前執行環境：Production
+[15:33:54 INF] [] 設定檔載入完成
+[15:33:54 INF] [] DI 容器建置完成
+[15:33:54 INF] [] 開始檢查並更新資料庫 Schema...
+[15:33:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:33:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:33:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:33:55 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:33:55 INF] [] 資料庫 Schema 更新完成
+[15:33:55 INF] [] 顯示 LoginWindow
+[15:34:03 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:34:03 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:34:03 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 389.3004ms - 200
+[15:34:03 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 404.2097ms - 200
+[15:34:03 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:34:03 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:34:03 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:34:04 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[15:34:05 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1346.2078ms - 200
+[15:34:05 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1349.4388ms - 200
+[15:34:05 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 15:34:03` 成功登入 StockEvernote！
+[15:34:11 INF] [] 系統準備關閉...
+[15:34:24 INF] [] 系統啟動中...
+[15:34:25 INF] [] 當前執行環境：Production
+[15:34:25 INF] [] 設定檔載入完成
+[15:34:25 INF] [] DI 容器建置完成
+[15:34:25 INF] [] 開始檢查並更新資料庫 Schema...
+[15:34:25 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:34:25 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:34:25 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:34:25 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:34:25 INF] [] 資料庫 Schema 更新完成
+[15:34:26 INF] [] 顯示 LoginWindow
+[15:34:36 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:34:36 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:34:36 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 370.0234ms - 200
+[15:34:36 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 383.7884ms - 200
+[15:34:36 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:34:36 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:34:36 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:34:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[15:34:38 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1384.7864ms - 200
+[15:34:38 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1388.2635ms - 200
+[15:34:38 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 15:34:36` 成功登入 StockEvernote！
+[15:34:48 INF] [StockEvernote.ViewModel.NotesViewModel] 開始同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:34:48 INF] [StockEvernote.Services.FirestoreService] 開始全量同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:34:48 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[15:34:48 INF] [StockEvernote.Services.FirestoreService] 待同步筆記本數量：0
+[15:34:48 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+[15:34:48 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:34:48 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：2eb0975a-fe25-4707-b8d3-22067cb06ced
+[15:34:48 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:34:48 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：830dac4a-bcbf-4ae1-aa38-5e62365f1f01
+[15:34:48 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:34:48 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：5f6ee631-908c-4b73-9411-21f001f3e281
+[15:34:48 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:34:48 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：3c50c8b8-d0ce-4527-ad17-282561b3cb3f
+[15:34:48 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:34:48 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：b236a55d-b07a-4344-9244-54539f523e8a
+[15:34:48 INF] [StockEvernote.Services.FirestoreService] 全量同步完成，共同步 5 本筆記本
+[15:34:48 INF] [StockEvernote.ViewModel.NotesViewModel] 同步成功
+[15:34:52 INF] [] 系統準備關閉...
+[15:35:39 INF] [] 系統啟動中...
+[15:35:39 INF] [] 當前執行環境：Production
+[15:35:39 INF] [] 設定檔載入完成
+[15:35:39 INF] [] DI 容器建置完成
+[15:35:39 INF] [] 開始檢查並更新資料庫 Schema...
+[15:35:39 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:35:39 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:35:39 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:35:40 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:35:40 INF] [] 資料庫 Schema 更新完成
+[15:35:40 INF] [] 顯示 LoginWindow
+[15:35:53 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:35:53 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:35:54 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 370.6376ms - 200
+[15:35:54 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 384.9538ms - 200
+[15:35:54 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:35:54 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:35:54 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:35:54 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[15:35:55 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1360.5245ms - 200
+[15:35:55 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1364.3088ms - 200
+[15:35:55 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 15:35:54` 成功登入 StockEvernote！
+[15:35:57 INF] [StockEvernote.ViewModel.NotesViewModel] 開始同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:35:57 INF] [StockEvernote.Services.FirestoreService] 開始全量同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:35:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[15:35:57 INF] [StockEvernote.Services.FirestoreService] 待同步筆記本數量：0
+[15:35:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+[15:35:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:35:57 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：2eb0975a-fe25-4707-b8d3-22067cb06ced
+[15:35:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:35:57 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：830dac4a-bcbf-4ae1-aa38-5e62365f1f01
+[15:35:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:35:57 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：5f6ee631-908c-4b73-9411-21f001f3e281
+[15:35:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:35:57 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：3c50c8b8-d0ce-4527-ad17-282561b3cb3f
+[15:35:57 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[15:35:57 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：b236a55d-b07a-4344-9244-54539f523e8a
+[15:35:57 INF] [StockEvernote.Services.FirestoreService] 全量同步完成，共同步 5 本筆記本
+[15:35:57 INF] [StockEvernote.ViewModel.NotesViewModel] 同步成功
+[15:36:07 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:36:18 INF] [] 系統準備關閉...
+[15:49:11 INF] [] 系統啟動中...
+[15:49:12 INF] [] 當前執行環境：Production
+[15:49:12 INF] [] 設定檔載入完成
+[15:49:12 INF] [] DI 容器建置完成
+[15:49:12 INF] [] 開始檢查並更新資料庫 Schema...
+[15:49:12 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:49:12 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:49:12 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:49:12 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:49:12 INF] [] 資料庫 Schema 更新完成
+[15:49:13 INF] [] 顯示 LoginWindow
+[15:49:20 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:49:20 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:49:21 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 673.5596ms - 200
+[15:49:21 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 689.8633ms - 200
+[15:49:21 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:49:21 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:49:21 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:49:21 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[15:49:22 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1371.2153ms - 200
+[15:49:22 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1373.936ms - 200
+[15:49:22 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 15:49:21` 成功登入 StockEvernote！
+[15:49:26 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:49:29 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:49:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:49:39 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:49:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:49:41 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:49:41 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:49:45 INF] [] 系統準備關閉...
+[15:52:01 INF] [] 系統啟動中...
+[15:52:01 INF] [] 當前執行環境：Production
+[15:52:02 INF] [] 設定檔載入完成
+[15:52:02 INF] [] DI 容器建置完成
+[15:52:02 INF] [] 開始檢查並更新資料庫 Schema...
+[15:52:02 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:52:02 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:52:02 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:52:02 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:52:02 INF] [] 資料庫 Schema 更新完成
+[15:52:03 INF] [] 顯示 LoginWindow
+[15:52:27 INF] [] 系統啟動中...
+[15:52:27 INF] [] 當前執行環境：Production
+[15:52:27 INF] [] 設定檔載入完成
+[15:52:27 INF] [] DI 容器建置完成
+[15:52:27 INF] [] 開始檢查並更新資料庫 Schema...
+[15:52:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:52:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:52:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:52:28 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:52:28 INF] [] 資料庫 Schema 更新完成
+[15:52:28 INF] [] 顯示 LoginWindow
+[15:52:32 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:52:32 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[15:52:32 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 399.4219ms - 200
+[15:52:32 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 413.6674ms - 200
+[15:52:33 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[15:52:33 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:52:33 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[15:52:33 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[15:52:34 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1352.496ms - 200
+[15:52:34 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1354.6991ms - 200
+[15:52:34 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-30 15:52:33` 成功登入 StockEvernote！
+[15:52:35 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[15:52:40 INF] [] 系統準備關閉...
