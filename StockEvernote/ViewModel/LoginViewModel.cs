@@ -186,6 +186,39 @@ public partial class LoginViewModel : ObservableObject
             IsLoading = false;
         }
     }
+
+    [RelayCommand]
+    private async Task ForgotPasswordAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Email))
+        {
+            ErrorMessage = "請先輸入電子郵件。";
+            return;
+        }
+
+        if (!IsValidEmail(Email))
+        {
+            ErrorMessage = "電子郵件格式不正確。";
+            return;
+        }
+
+        IsLoading = true;
+        ErrorMessage = string.Empty;
+
+        try
+        {
+            var result = await _authService.ForgotPasswordAsync(Email);
+
+            if (result.IsSuccess)
+                _dialogService.ShowMessage("寄送成功", "密碼重設信已寄出，請檢查您的信箱。");
+            else
+                ErrorMessage = result.ErrorMessage ?? "發送失敗";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
     private static bool IsValidEmail(string email)
     {
         try

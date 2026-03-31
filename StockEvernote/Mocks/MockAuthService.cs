@@ -38,5 +38,10 @@ public class MockAuthService : IAuthService
         }
         return AuthResult.Success(Guid.NewGuid().ToString(), "fake_jwt_token");
     }
+    public Task<AuthResult> ForgotPasswordAsync(string email)
+    {
+        // Mock 環境直接回傳成功
+        return Task.FromResult(new AuthResult { IsSuccess = true });
+    }
 }
 

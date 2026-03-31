@@ -1064,3 +1064,138 @@ ORDER BY "MigrationId";
 [15:08:02 INF] [] 資料庫 Schema 更新完成
 [15:08:02 INF] [] 顯示 LoginWindow
 [15:08:04 INF] [] 系統準備關閉...
+[15:23:11 INF] [] 系統啟動中...
+[15:23:11 INF] [] 當前執行環境：Production
+[15:23:11 INF] [] 設定檔載入完成
+[15:23:12 INF] [] DI 容器建置完成
+[15:23:12 INF] [] 開始檢查並更新資料庫 Schema...
+[15:23:12 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:23:12 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:23:12 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:23:12 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:23:12 INF] [] 資料庫 Schema 更新完成
+[15:23:12 INF] [] 顯示 LoginWindow
+[15:24:10 INF] [] 系統準備關閉...
+[15:25:29 INF] [] 系統啟動中...
+[15:25:29 INF] [] 當前執行環境：Production
+[15:25:29 INF] [] 設定檔載入完成
+[15:25:29 INF] [] DI 容器建置完成
+[15:25:29 INF] [] 開始檢查並更新資料庫 Schema...
+[15:25:30 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:25:30 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:25:30 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:25:30 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:25:30 INF] [] 資料庫 Schema 更新完成
+[15:25:30 INF] [] 顯示 LoginWindow
+[15:25:41 INF] [] 系統準備關閉...
+[15:27:12 INF] [] 系統啟動中...
+[15:27:12 INF] [] 當前執行環境：Production
+[15:27:12 INF] [] 設定檔載入完成
+[15:27:12 INF] [] DI 容器建置完成
+[15:27:12 INF] [] 開始檢查並更新資料庫 Schema...
+[15:27:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:27:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:27:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:27:13 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:27:13 INF] [] 資料庫 Schema 更新完成
+[15:27:13 INF] [] 顯示 LoginWindow
+[15:27:15 INF] [] 系統準備關閉...
+[17:12:34 INF] [] 系統啟動中...
+[17:12:34 INF] [] 當前執行環境：Production
+[17:12:34 INF] [] 設定檔載入完成
+[17:12:35 INF] [] DI 容器建置完成
+[17:12:35 INF] [] 開始檢查並更新資料庫 Schema...
+[17:12:35 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[17:12:35 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[17:12:35 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[17:12:35 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[17:12:35 INF] [] 資料庫 Schema 更新完成
+[17:12:36 INF] [] 顯示 LoginWindow
+[17:12:40 INF] [] 系統準備關閉...
+[17:20:32 INF] [] 系統啟動中...
+[17:20:32 INF] [] 當前執行環境：Production
+[17:20:32 INF] [] 設定檔載入完成
+[17:20:32 INF] [] DI 容器建置完成
+[17:20:32 INF] [] 開始檢查並更新資料庫 Schema...
+[17:20:33 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[17:20:33 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[17:20:33 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[17:20:33 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[17:20:33 INF] [] 資料庫 Schema 更新完成
+[17:20:33 INF] [] 顯示 LoginWindow
+[17:21:10 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?*
+[17:21:10 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?*
+[17:21:11 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 786.8889ms - 200
+[17:21:11 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 801.6215ms - 200
+[17:21:34 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?*
+[17:21:34 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?*
+[17:21:35 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 790.2264ms - 200
+[17:21:35 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 799.4987ms - 200
+[17:24:37 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者嘗試註冊新帳號，Email：jianwei2526056@gmail.com
+[17:24:37 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signUp?*
+[17:24:37 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signUp?*
+[17:24:38 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 514.351ms - 200
+[17:24:38 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 518.2774ms - 200
+[17:24:38 INF] [StockEvernote.ViewModel.LoginViewModel] 帳號註冊成功，Email：jianwei2526056@gmail.com
+[17:24:54 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?*
+[17:24:54 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?*
+[17:24:55 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 509.08ms - 200
+[17:24:55 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 513.0004ms - 200
+[17:25:35 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[17:25:35 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[17:25:35 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 247.0455ms - 200
+[17:25:35 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 250.0646ms - 200
+[17:25:35 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：qVyn8jEwZPh4yPDwcS8SRKedZ7D2
+[17:25:35 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[17:25:35 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[17:25:35 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[17:25:36 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1230.1907ms - 200
+[17:25:36 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1233.1749ms - 200
+[17:25:36 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-31 17:25:35` 成功登入 StockEvernote！
+[17:25:38 INF] [] 系統準備關閉...
+[17:27:03 INF] [] 系統啟動中...
+[17:27:03 INF] [] 當前執行環境：Production
+[17:27:03 INF] [] 設定檔載入完成
+[17:27:03 INF] [] DI 容器建置完成
+[17:27:03 INF] [] 開始檢查並更新資料庫 Schema...
+[17:27:04 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[17:27:04 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[17:27:04 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[17:27:04 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[17:27:04 INF] [] 資料庫 Schema 更新完成
+[17:27:04 INF] [] 顯示 LoginWindow

@@ -81,6 +81,29 @@ public class FirebaseAuthService : IAuthService
             return AuthResult.Fail($"發生未預期的錯誤：{ex.Message}");
         }
     }
+
+    public async Task<AuthResult> ForgotPasswordAsync(string email)
+    {
+        var requestBody = new
+        {
+            requestType = "PASSWORD_RESET",
+            email = email
+        };
+
+        var response = await _httpClient.PostAsJsonAsync(
+            $"v1/accounts:sendOobCode?key={_apiKey}", requestBody);
+
+        if (response.IsSuccessStatusCode)
+            return new AuthResult { IsSuccess = true };
+
+        var error = await response.Content.ReadFromJsonAsync<FirebaseErrorResponse>();
+        return new AuthResult
+        {
+            IsSuccess = false,
+            ErrorMessage = error?.Error?.Message ?? "發送失敗"
+        };
+    }
+
     /// <summary>
     /// 將 Firebase 英文錯誤代碼轉譯為使用者友善的中文訊息
     /// </summary>

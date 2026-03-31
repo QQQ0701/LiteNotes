@@ -26,13 +26,13 @@
                         Width="80" Height="80"
                         HorizontalAlignment="Center"
                         Margin="0,0,0,16">
-                    
-                <TextBlock Text="📈"
+
+                    <TextBlock Text="📈"
                            FontSize="48"
                            HorizontalAlignment="Center"
                            Margin="0,0,0,12"/>
                 </Border>
-                
+
                 <TextBlock Text="StockEvernote"
                            FontSize="24" FontWeight="Bold"
                            Foreground="#1A1A1A"
@@ -60,12 +60,12 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
-                
+
                 <TextBlock Text="{Binding ErrorMessage}"
                            Foreground="#C53030" FontSize="13"
                            TextWrapping="Wrap"/>
-                
-                
+
+
             </Border>
 
             <!-- ===== 登入模式 ===== -->
@@ -153,6 +153,41 @@
                     </Button.Style>
                 </Button>
 
+                <Button Command="{Binding ForgotPasswordCommand}"
+                        Height="32" Margin="0,8,0,0"
+                        Background="Transparent" BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalAlignment="Right">
+
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Right"
+                                  VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+
+                    <Button.Content>
+                        <TextBlock FontSize="12" VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="#9B9B9B"/>
+                                    <Setter Property="TextDecorations" Value="None"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Foreground" Value="#1A1A1A"/>
+                                            <Setter Property="TextDecorations" Value="Underline"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                                 忘記密碼？
+                        </TextBlock>
+                    </Button.Content>
+
+                </Button>
+
                 <!-- 分隔線 -->
                 <Grid Margin="0,20,0,20">
                     <Separator/>
@@ -168,7 +203,7 @@
                         Background="White" Foreground="#1A1A1A"
                         BorderBrush="#E2E2E2" BorderThickness="1"
                         Cursor="Hand"/>
-                
+
             </StackPanel>
 
             <!-- ===== 註冊模式 ===== -->
