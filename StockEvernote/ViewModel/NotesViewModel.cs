@@ -55,6 +55,25 @@ public partial class NotesViewModel : ObservableObject
             SyncStatus = "❌ 同步失敗";
         }
     }
+    [RelayCommand]
+    private async Task RestoreFromCloudAsync()
+    {
+        try
+        {
+            SyncStatus = "⏳ 從雲端還原中...";
+            _logger.LogInformation("開始從雲端還原，UserId：{UserId}", CurrentUserId);
+
+            await _firestoreService.RestoreFromCloudAsync(CurrentUserId);
+            await LoadNotebooksAsync(); // 還原後重新載入畫面
+
+            SyncStatus = $"✅ 還原成功 {DateTime.Now:HH:mm:ss}";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "從雲端還原失敗");
+            SyncStatus = "❌ 還原失敗";
+        }
+    }
 
     [RelayCommand]
     private async Task LoadNotebooksAsync()

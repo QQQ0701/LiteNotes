@@ -600,3 +600,467 @@ WHERE "Id" = @p1
 RETURNING 1;
 [13:45:51 INF] [StockEvernote.Services.FirestoreService] 全量同步完成，共同步 6 本筆記本
 [13:45:51 INF] [StockEvernote.ViewModel.NotesViewModel] 同步成功
+[14:17:14 INF] [] 系統啟動中...
+[14:17:14 INF] [] 當前執行環境：Production
+[14:17:14 INF] [] 設定檔載入完成
+[14:17:14 INF] [] DI 容器建置完成
+[14:17:14 INF] [] 開始檢查並更新資料庫 Schema...
+[14:17:15 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:17:15 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:17:15 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:17:15 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[14:17:15 INF] [] 資料庫 Schema 更新完成
+[14:17:15 INF] [] 顯示 LoginWindow
+[14:17:27 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[14:17:27 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[14:17:28 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 433.2295ms - 200
+[14:17:28 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 447.6326ms - 200
+[14:17:28 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[14:17:28 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[14:17:28 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[14:17:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (3ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[14:17:29 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1367.7738ms - 200
+[14:17:29 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1371.4268ms - 200
+[14:17:29 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-31 14:17:28` 成功登入 StockEvernote！
+[14:17:32 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[14:17:33 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p3='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (DbType = Boolean), @p2='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsDeleted" = @p0, "IsSynced" = @p1, "UpdatedAt" = @p2
+WHERE "Id" = @p3
+RETURNING 1;
+[14:17:33 INF] [StockEvernote.ViewModel.NotesViewModel] 刪除筆記本：新筆記本66
+[14:17:36 INF] [StockEvernote.ViewModel.NotesViewModel] 開始從雲端還原，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[14:17:36 INF] [StockEvernote.Services.FirestoreService] 開始從雲端還原，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 140.8827ms - 200
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 143.9466ms - 200
+[14:17:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__chunk_0='?' (Size = 235)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."Id" IN (
+    SELECT "c"."value"
+    FROM json_each(@__chunk_0) AS "c"
+)
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/3c50c8b8-d0ce-4527-ad17-282561b3cb3f/notes
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/3c50c8b8-d0ce-4527-ad17-282561b3cb3f/notes
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/5f6ee631-908c-4b73-9411-21f001f3e281/notes
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/5f6ee631-908c-4b73-9411-21f001f3e281/notes
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/830dac4a-bcbf-4ae1-aa38-5e62365f1f01/notes
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/830dac4a-bcbf-4ae1-aa38-5e62365f1f01/notes
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/b236a55d-b07a-4344-9244-54539f523e8a/notes
+[14:17:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/b236a55d-b07a-4344-9244-54539f523e8a/notes
+[14:17:37 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 43.6261ms - 200
+[14:17:37 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 46.286ms - 200
+[14:17:37 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 83.7068ms - 200
+[14:17:37 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 90.0071ms - 200
+[14:17:37 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 87.3752ms - 200
+[14:17:37 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 93.9687ms - 200
+[14:17:37 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 87.1674ms - 200
+[14:17:37 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 89.37ms - 200
+[14:17:37 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 386.2244ms - 200
+[14:17:37 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 389.2877ms - 200
+[14:17:37 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 1002.0736ms - 200
+[14:17:37 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 1006.2421ms - 200
+[14:17:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__chunk_0='?' (Size = 313)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notes" AS "n"
+WHERE "n"."Id" IN (
+    SELECT "c"."value"
+    FROM json_each(@__chunk_0) AS "c"
+)
+[14:17:37 INF] [StockEvernote.Services.FirestoreService] 從雲端還原成功
+[14:17:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[14:17:51 INF] [] 系統準備關閉...
+[14:17:55 INF] [] 系統啟動中...
+[14:17:55 INF] [] 當前執行環境：Production
+[14:17:55 INF] [] 設定檔載入完成
+[14:17:55 INF] [] DI 容器建置完成
+[14:17:55 INF] [] 開始檢查並更新資料庫 Schema...
+[14:17:56 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:17:56 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:17:56 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:17:56 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[14:17:56 INF] [] 資料庫 Schema 更新完成
+[14:17:56 INF] [] 顯示 LoginWindow
+[14:18:03 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[14:18:03 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[14:18:03 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 364.4627ms - 200
+[14:18:03 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 378.373ms - 200
+[14:18:03 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[14:18:03 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[14:18:03 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[14:18:04 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[14:18:05 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1361.9597ms - 200
+[14:18:05 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1364.6744ms - 200
+[14:18:05 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-31 14:18:03` 成功登入 StockEvernote！
+[14:18:07 INF] [StockEvernote.ViewModel.NotesViewModel] 開始從雲端還原，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[14:18:07 INF] [StockEvernote.Services.FirestoreService] 開始從雲端還原，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[14:18:07 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks
+[14:18:07 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 111.5515ms - 200
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 119.0622ms - 200
+[14:18:08 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__chunk_0='?' (Size = 235)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."Id" IN (
+    SELECT "c"."value"
+    FROM json_each(@__chunk_0) AS "c"
+)
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/3c50c8b8-d0ce-4527-ad17-282561b3cb3f/notes
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/3c50c8b8-d0ce-4527-ad17-282561b3cb3f/notes
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/5f6ee631-908c-4b73-9411-21f001f3e281/notes
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/5f6ee631-908c-4b73-9411-21f001f3e281/notes
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/830dac4a-bcbf-4ae1-aa38-5e62365f1f01/notes
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/830dac4a-bcbf-4ae1-aa38-5e62365f1f01/notes
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/b236a55d-b07a-4344-9244-54539f523e8a/notes
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/b236a55d-b07a-4344-9244-54539f523e8a/notes
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 23.6591ms - 200
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 25.9262ms - 200
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 50.061ms - 200
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 55.2862ms - 200
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 58.8673ms - 200
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 61.0148ms - 200
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 84.9187ms - 200
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 89.759ms - 200
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 374.466ms - 200
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 377.5862ms - 200
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 375.8877ms - 200
+[14:18:08 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 378.2212ms - 200
+[14:18:08 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__chunk_0='?' (Size = 313)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notes" AS "n"
+WHERE "n"."Id" IN (
+    SELECT "c"."value"
+    FROM json_each(@__chunk_0) AS "c"
+)
+[14:18:08 INF] [StockEvernote.Services.FirestoreService] 從雲端還原成功
+[14:18:08 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[14:19:23 INF] [] 系統準備關閉...
+[14:20:28 INF] [] 系統啟動中...
+[14:20:28 INF] [] 當前執行環境：Production
+[14:20:28 INF] [] 設定檔載入完成
+[14:20:28 INF] [] DI 容器建置完成
+[14:20:28 INF] [] 開始檢查並更新資料庫 Schema...
+[14:20:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:20:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:20:28 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:20:28 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[14:20:28 INF] [] 資料庫 Schema 更新完成
+[14:20:29 INF] [] 顯示 LoginWindow
+[14:20:38 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[14:20:38 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[14:20:38 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 374.3787ms - 200
+[14:20:38 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 388.4529ms - 200
+[14:20:38 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[14:20:38 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[14:20:38 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[14:20:39 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[14:20:40 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1345.9357ms - 200
+[14:20:40 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1348.9335ms - 200
+[14:20:40 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-31 14:20:38` 成功登入 StockEvernote！
+[14:20:43 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[14:20:44 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[14:20:45 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[14:20:46 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[14:20:47 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[14:20:51 INF] [StockEvernote.ViewModel.NotesViewModel] 開始從雲端還原，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[14:20:51 INF] [StockEvernote.Services.FirestoreService] 開始從雲端還原，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 90.174ms - 200
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 93.664ms - 200
+[14:20:51 INF] [StockEvernote.Services.FirestoreService] 雲端筆記本文件數量：6
+[14:20:51 INF] [StockEvernote.Services.FirestoreService] 解析出筆記本數量：6
+[14:20:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__chunk_0='?' (Size = 235)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."Id" IN (
+    SELECT "c"."value"
+    FROM json_each(@__chunk_0) AS "c"
+)
+[14:20:51 INF] [StockEvernote.Services.FirestoreService] 本地已存在筆記本數量：6
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/3c50c8b8-d0ce-4527-ad17-282561b3cb3f/notes
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/3c50c8b8-d0ce-4527-ad17-282561b3cb3f/notes
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/5f6ee631-908c-4b73-9411-21f001f3e281/notes
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/5f6ee631-908c-4b73-9411-21f001f3e281/notes
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/830dac4a-bcbf-4ae1-aa38-5e62365f1f01/notes
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/830dac4a-bcbf-4ae1-aa38-5e62365f1f01/notes
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/b236a55d-b07a-4344-9244-54539f523e8a/notes
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/b236a55d-b07a-4344-9244-54539f523e8a/notes
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 58.6552ms - 200
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 61.4194ms - 200
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 71.2476ms - 200
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 74.3473ms - 200
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 89.6148ms - 200
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 92.2395ms - 200
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 93.4751ms - 200
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 95.603ms - 200
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 86.3408ms - 200
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 88.4945ms - 200
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 369.4236ms - 200
+[14:20:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 375.806ms - 200
+[14:20:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__chunk_0='?' (Size = 313)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notes" AS "n"
+WHERE "n"."Id" IN (
+    SELECT "c"."value"
+    FROM json_each(@__chunk_0) AS "c"
+)
+[14:20:51 INF] [StockEvernote.Services.FirestoreService] 從雲端還原成功
+[14:20:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[14:23:17 INF] [] 系統啟動中...
+[14:23:17 INF] [] 當前執行環境：Production
+[14:23:17 INF] [] 設定檔載入完成
+[14:23:18 INF] [] DI 容器建置完成
+[14:23:18 INF] [] 開始檢查並更新資料庫 Schema...
+[14:23:18 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:23:18 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:23:18 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:23:18 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[14:23:18 INF] [] 資料庫 Schema 更新完成
+[14:23:19 INF] [] 顯示 LoginWindow
+[14:23:21 INF] [] 系統準備關閉...
+[14:33:21 INF] [] 系統啟動中...
+[14:33:21 INF] [] 當前執行環境：Production
+[14:33:21 INF] [] 設定檔載入完成
+[14:33:21 INF] [] DI 容器建置完成
+[14:33:21 INF] [] 開始檢查並更新資料庫 Schema...
+[14:33:22 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:33:22 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[14:33:22 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:33:22 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[14:33:22 INF] [] 資料庫 Schema 更新完成
+[14:33:22 INF] [] 顯示 LoginWindow
+[14:33:33 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[14:33:33 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[14:33:33 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 372.3413ms - 200
+[14:33:33 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 386.6435ms - 200
+[14:33:33 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[14:33:33 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[14:33:33 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[14:33:33 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[14:33:34 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1349.6826ms - 200
+[14:33:34 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1353.299ms - 200
+[14:33:34 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-31 14:33:33` 成功登入 StockEvernote！
+[14:33:36 INF] [StockEvernote.ViewModel.NotesViewModel] 開始從雲端還原，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[14:33:36 INF] [StockEvernote.Services.FirestoreService] 開始從雲端還原，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 112.8153ms - 200
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 116.408ms - 200
+[14:33:36 INF] [StockEvernote.Services.FirestoreService] 雲端筆記本文件數量：6
+[14:33:36 INF] [StockEvernote.Services.FirestoreService] 解析出筆記本數量：6
+[14:33:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__chunk_0='?' (Size = 235)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."Id" IN (
+    SELECT "c"."value"
+    FROM json_each(@__chunk_0) AS "c"
+) AND NOT ("n"."IsDeleted")
+[14:33:36 INF] [StockEvernote.Services.FirestoreService] 本地已存在筆記本數量：5
+[14:33:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__maybeDeletedIds_0='?' (Size = 40)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."Id" IN (
+    SELECT "m"."value"
+    FROM json_each(@__maybeDeletedIds_0) AS "m"
+) AND "n"."IsDeleted"
+[14:33:36 INF] [StockEvernote.Services.FirestoreService] 還原軟刪除筆記本：新筆記本66
+[14:33:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__chunk_0='?' (Size = 235)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."Id" IN (
+    SELECT "c"."value"
+    FROM json_each(@__chunk_0) AS "c"
+)
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/2eb0975a-fe25-4707-b8d3-22067cb06ced/notes
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/3c50c8b8-d0ce-4527-ad17-282561b3cb3f/notes
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/3c50c8b8-d0ce-4527-ad17-282561b3cb3f/notes
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/5f6ee631-908c-4b73-9411-21f001f3e281/notes
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/5f6ee631-908c-4b73-9411-21f001f3e281/notes
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/830dac4a-bcbf-4ae1-aa38-5e62365f1f01/notes
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/830dac4a-bcbf-4ae1-aa38-5e62365f1f01/notes
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/b236a55d-b07a-4344-9244-54539f523e8a/notes
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request GET https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/b236a55d-b07a-4344-9244-54539f523e8a/notes
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 75.066ms - 200
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 78.2556ms - 200
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 76.4667ms - 200
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 78.6725ms - 200
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 83.2509ms - 200
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 87.1391ms - 200
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 88.6471ms - 200
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 90.7632ms - 200
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 370.7379ms - 200
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 373.8292ms - 200
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 400.8285ms - 200
+[14:33:36 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 404.1594ms - 200
+[14:33:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__chunk_0='?' (Size = 313)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notes" AS "n"
+WHERE "n"."Id" IN (
+    SELECT "c"."value"
+    FROM json_each(@__chunk_0) AS "c"
+) AND NOT ("n"."IsDeleted")
+[14:33:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__maybeDeletedIds_0='?' (Size = 2)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."Id" IN (
+    SELECT "m"."value"
+    FROM json_each(@__maybeDeletedIds_0) AS "m"
+) AND "n"."IsDeleted"
+[14:33:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__chunk_0='?' (Size = 313)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notes" AS "n"
+WHERE "n"."Id" IN (
+    SELECT "c"."value"
+    FROM json_each(@__chunk_0) AS "c"
+)
+[14:33:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (DbType = Boolean), @p1='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsDeleted" = @p0, "IsSynced" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[14:33:36 INF] [StockEvernote.Services.FirestoreService] 從雲端還原成功
+[14:33:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[14:33:38 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[14:33:44 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[14:33:44 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[14:33:45 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[14:33:45 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[14:33:51 INF] [] 系統準備關閉...
+[15:08:01 INF] [] 系統啟動中...
+[15:08:01 INF] [] 當前執行環境：Production
+[15:08:02 INF] [] 設定檔載入完成
+[15:08:02 INF] [] DI 容器建置完成
+[15:08:02 INF] [] 開始檢查並更新資料庫 Schema...
+[15:08:02 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:08:02 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[15:08:02 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[15:08:02 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[15:08:02 INF] [] 資料庫 Schema 更新完成
+[15:08:02 INF] [] 顯示 LoginWindow
+[15:08:04 INF] [] 系統準備關閉...
