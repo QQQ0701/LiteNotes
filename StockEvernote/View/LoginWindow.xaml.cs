@@ -19,7 +19,7 @@ public partial class LoginWindow : Window
 
         _vm.RequestClearPasswords += () => ClearPasswordBoxes();
 
-        _vm.CloseAction = () =>
+        _vm.NavigateToNotes = () =>
         {
             var scope = App.ServiceProvider!.CreateScope();
             var notesWindow = scope.ServiceProvider.GetRequiredService<NotesWindow>();

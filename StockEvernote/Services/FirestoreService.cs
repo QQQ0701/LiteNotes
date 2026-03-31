@@ -7,6 +7,7 @@ using StockEvernote.Model;
 using StockEvernote.Model.Firestore;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Security.Policy;
 
 namespace StockEvernote.Services;
 
@@ -18,10 +19,12 @@ public class FirestoreService : IFirestoreService
     private readonly string _projectId;
     private readonly ILogger<FirestoreService> _logger;
     private const string BaseUrl = "https://firestore.googleapis.com/v1";
+    private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(5, 5);
 
-    public FirestoreService(HttpClient httpClient,
+    public FirestoreService(
+        HttpClient httpClient,
         EvernoteDbContext dbContext,
-        IUserSession userSession, 
+        IUserSession userSession,
         IConfiguration configuration,
         ILogger<FirestoreService> logger)
     {
@@ -46,10 +49,9 @@ public class FirestoreService : IFirestoreService
             .ToListAsync();
 
         // 3. 對每本筆記本同步 Note
-        foreach (var notebookId in allNotebookIds)
-        {
-            await SyncNotesAsync(notebookId, userId);
-        }
+        var syncTasks = allNotebookIds.Select(id => SyncNotesAsync(id, userId));
+        await Task.WhenAll(syncTasks);
+
         _logger.LogInformation("全量同步完成，共同步 {Count} 本筆記本", allNotebookIds.Count);
     }
     // ===== Notebook 同步 =====
@@ -63,22 +65,34 @@ public class FirestoreService : IFirestoreService
 
         _logger.LogInformation("待同步筆記本數量：{Count}", unsynced.Count);
 
-        foreach (var notebook in unsynced)
-        {
-            if (notebook.IsDeleted)
-                await DeleteFirestoreDocumentAsync($"users/{userId}/notebooks/{notebook.Id}");
-            else
-                await UpsertNotebookAsync(userId, notebook);
+        if (!unsynced.Any()) return;
 
-            // 2. 標記為已同步
-            notebook.IsSynced = true;
-        }
+        var syncTasks = unsynced.Select(async notebook =>
+        {
+            await _semaphore.WaitAsync();
+            try
+            {
+                if (notebook.IsDeleted)
+                    await DeleteFirestoreDocumentAsync($"users/{userId}/notebooks/{notebook.Id}");
+                else
+                    await UpsertNotebookAsync(userId, notebook);
+
+                notebook.IsSynced = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "筆記本同步失敗：{Name}", notebook.Name);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        });
+        await Task.WhenAll(syncTasks);
         await _dbContext.SaveChangesAsync();
     }
-
     private async Task UpsertNotebookAsync(string userId, Notebook notebook)
     {
-        SetAuthHeader(); // ✅ 設定 Bearer Token
         _logger.LogInformation("上傳筆記本：{Name}", notebook.Name);
 
         var url = $"{BaseUrl}/projects/{_projectId}/databases/(default)/documents/users/{userId}/notebooks/{notebook.Id}";
@@ -90,16 +104,24 @@ public class FirestoreService : IFirestoreService
                 ["name"] = new { stringValue = notebook.Name },
                 ["userId"] = new { stringValue = notebook.UserId },
                 ["isDeleted"] = new { booleanValue = notebook.IsDeleted },
-                ["createdAt"] = new { timestampValue = notebook.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") },
-                ["updatedAt"] = new { timestampValue = notebook.UpdatedAt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") }
+                ["createdAt"] = new { timestampValue = notebook.CreatedAt.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ") },
+                ["updatedAt"] = new { timestampValue = notebook.UpdatedAt.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ") }
             }
         };
 
-        var response = await _httpClient.PatchAsJsonAsync(url, body);
+        var request = new HttpRequestMessage(HttpMethod.Patch, url)
+        {
+            Content = JsonContent.Create(body)
+        };
+
+        request.Headers.Authorization =
+           new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _userSession.IdToken);
+
+        var response = await _httpClient.SendAsync(request);
         if (!response.IsSuccessStatusCode)
         {
             var error = await response.Content.ReadAsStringAsync();
-            _logger.LogError("Notebook 寫入失敗：{Status} - {Error}", response.StatusCode, error); 
+            _logger.LogError("Notebook 寫入失敗：{Status} - {Error}", response.StatusCode, error);
             throw new Exception($"Notebook 寫入失敗：{response.StatusCode} - {error}");
         }
     }
@@ -114,22 +136,39 @@ public class FirestoreService : IFirestoreService
 
         _logger.LogInformation("待同步筆記數量：{Count}，NotebookId：{NotebookId}", unsynced.Count, notebookId);
 
-        foreach (var note in unsynced)
+        if (!unsynced.Any()) return;
+
+        var syncTakes = unsynced.Select(async note =>
         {
-            if (note.IsDeleted)
-                await DeleteFirestoreDocumentAsync($"users/{userId}/notebooks/{notebookId}/notes/{note.Id}");
-            else
-                await UpsertNoteAsync(userId, notebookId, note);
+            await _semaphore.WaitAsync();
 
-            note.IsSynced = true;
-        }
+            try
+            {
+                if (note.IsDeleted)
 
+                    await DeleteFirestoreDocumentAsync($"users/{userId}/notebooks/{notebookId}/notes/{note.Id}");
+                else
+                    await UpsertNoteAsync(userId, notebookId, note);
+
+                note.IsSynced = true;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "筆記同步失敗：{Name}", note.Name);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        });
+
+        await Task.WhenAll(syncTakes);
         await _dbContext.SaveChangesAsync();
     }
 
     private async Task UpsertNoteAsync(string userId, string notebookId, Note note)
     {
-        SetAuthHeader(); 
         _logger.LogInformation("上傳筆記：{Name}", note.Name);
 
         var url = $"{BaseUrl}/projects/{_projectId}/databases/(default)/documents/users/{userId}/notebooks/{notebookId}/notes/{note.Id}";
@@ -141,16 +180,23 @@ public class FirestoreService : IFirestoreService
                 ["content"] = new { stringValue = note.Content ?? string.Empty },
                 ["notebookId"] = new { stringValue = note.NotebookId },
                 ["isDeleted"] = new { booleanValue = note.IsDeleted },
-                ["createdAt"] = new { timestampValue = note.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") },
-                ["updatedAt"] = new { timestampValue = note.UpdatedAt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") }
+                ["createdAt"] = new { timestampValue = note.CreatedAt.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ") },
+                ["updatedAt"] = new { timestampValue = note.UpdatedAt.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ") }
             }
         };
 
-        var response = await _httpClient.PatchAsJsonAsync(url, body);
+        var request = new HttpRequestMessage(HttpMethod.Patch, url)
+        {
+            Content = JsonContent.Create(body)
+        };
+        request.Headers.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _userSession.IdToken);
+
+        var response = await _httpClient.SendAsync(request);
         if (!response.IsSuccessStatusCode)
         {
             var error = await response.Content.ReadAsStringAsync();
-            _logger.LogError("Note 寫入失敗：{Status} - {Error}", response.StatusCode, error); 
+            _logger.LogError("Note 寫入失敗：{Status} - {Error}", response.StatusCode, error);
             throw new Exception($"Note 寫入失敗：{response.StatusCode} - {error}");
         }
     }
@@ -159,22 +205,27 @@ public class FirestoreService : IFirestoreService
 
     private async Task DeleteFirestoreDocumentAsync(string path)
     {
-        SetAuthHeader();
         _logger.LogInformation("刪除雲端文件：{Path}", path);
 
         var url = $"{BaseUrl}/projects/{_projectId}/databases/(default)/documents/{path}";
-        var response = await _httpClient.DeleteAsync(url);
 
+        var request = new HttpRequestMessage(HttpMethod.Delete, url);
+        request.Headers.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _userSession.IdToken);
+
+        var response = await _httpClient.SendAsync(request);
         if (!response.IsSuccessStatusCode)
         {
             var error = await response.Content.ReadAsStringAsync();
-            _logger.LogError("刪除失敗：{Status} - {Error}", response.StatusCode, error); 
+            _logger.LogError("刪除失敗：{Status} - {Error}", response.StatusCode, error);
             throw new Exception($"刪除失敗：{response.StatusCode} - {error}");
         }
     }
-    private void SetAuthHeader()
+
+    public async Task RestoreFromCloudAsync(string userId)
     {
-        _httpClient.DefaultRequestHeaders.Authorization =
-            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _userSession.IdToken);
+
     }
 }
+
+    

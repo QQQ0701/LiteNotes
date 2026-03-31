@@ -1,0 +1,602 @@
+[08:46:53 INF] [] 系統啟動中...
+[08:46:53 INF] [] 當前執行環境：Production
+[08:46:53 INF] [] 設定檔載入完成
+[08:46:53 INF] [] DI 容器建置完成
+[08:46:53 INF] [] 開始檢查並更新資料庫 Schema...
+[08:46:54 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[08:46:54 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[08:46:54 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[08:46:54 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[08:46:54 INF] [] 資料庫 Schema 更新完成
+[08:46:54 INF] [] 顯示 LoginWindow
+[08:47:08 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[08:47:08 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[08:47:09 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 386.5765ms - 200
+[08:47:09 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 401.1238ms - 200
+[08:47:09 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[08:47:09 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[08:47:09 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[08:47:09 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[08:47:10 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1346.5582ms - 200
+[08:47:10 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1351.9573ms - 200
+[08:47:10 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-31 08:47:09` 成功登入 StockEvernote！
+[08:47:12 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[08:47:13 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[11:51:24 INF] [] 系統啟動中...
+[11:51:24 INF] [] 當前執行環境：Production
+[11:51:24 INF] [] 設定檔載入完成
+[11:51:24 INF] [] DI 容器建置完成
+[11:51:24 INF] [] 開始檢查並更新資料庫 Schema...
+[11:51:25 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[11:51:25 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[11:51:25 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[11:51:25 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[11:51:25 INF] [] 資料庫 Schema 更新完成
+[11:51:25 INF] [] 顯示 LoginWindow
+[11:51:33 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[11:51:33 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[11:51:34 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 461.0011ms - 200
+[11:51:34 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 475.8781ms - 200
+[11:51:34 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[11:51:34 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[11:51:34 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[11:51:34 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[11:51:35 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1850.3013ms - 200
+[11:51:35 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1854.517ms - 200
+[11:51:35 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-31 11:51:34` 成功登入 StockEvernote！
+[11:51:36 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[11:51:40 INF] [StockEvernote.ViewModel.NotesViewModel] 開始同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[11:51:40 INF] [StockEvernote.Services.FirestoreService] 開始全量同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[11:51:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[11:51:40 INF] [StockEvernote.Services.FirestoreService] 待同步筆記本數量：0
+[11:51:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+[11:51:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[11:51:40 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：2eb0975a-fe25-4707-b8d3-22067cb06ced
+[11:51:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[11:51:40 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：830dac4a-bcbf-4ae1-aa38-5e62365f1f01
+[11:51:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[11:51:40 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：5f6ee631-908c-4b73-9411-21f001f3e281
+[11:51:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[11:51:40 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：3c50c8b8-d0ce-4527-ad17-282561b3cb3f
+[11:51:40 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[11:51:40 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：b236a55d-b07a-4344-9244-54539f523e8a
+[11:51:40 INF] [StockEvernote.Services.FirestoreService] 全量同步完成，共同步 5 本筆記本
+[11:51:40 INF] [StockEvernote.ViewModel.NotesViewModel] 同步成功
+[13:38:18 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = DateTime), @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (Size = 4), @p5='?' (DbType = DateTime), @p6='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notebooks" ("Id", "CreatedAt", "IsDeleted", "IsSynced", "Name", "UpdatedAt", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+[13:38:18 INF] [StockEvernote.ViewModel.NotesViewModel] 新增筆記本：新筆記本
+[13:38:18 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."UpdatedAt" DESC
+[13:38:25 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (Size = 6), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "Name" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[13:38:25 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 36), @p1='?', @p2='?' (DbType = DateTime), @p3='?' (DbType = Boolean), @p4='?' (DbType = Boolean), @p5='?' (Size = 3), @p6='?' (Size = 36), @p7='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notes" ("Id", "Content", "CreatedAt", "IsDeleted", "IsSynced", "Name", "NotebookId", "UpdatedAt")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+[13:38:30 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (Size = 5), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "Name" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[13:38:30 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 36), @p1='?', @p2='?' (DbType = DateTime), @p3='?' (DbType = Boolean), @p4='?' (DbType = Boolean), @p5='?' (Size = 3), @p6='?' (Size = 36), @p7='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notes" ("Id", "Content", "CreatedAt", "IsDeleted", "IsSynced", "Name", "NotebookId", "UpdatedAt")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+[13:38:35 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (Size = 329), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "Content" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[13:38:35 INF] [StockEvernote.ViewModel.NotesViewModel] 儲存筆記：新筆記66
+[13:38:42 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p2='?' (Size = 36), @p0='?' (Size = 272), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "Content" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2
+RETURNING 1;
+[13:38:42 INF] [StockEvernote.ViewModel.NotesViewModel] 儲存筆記：新筆記
+[13:38:52 INF] [StockEvernote.ViewModel.NotesViewModel] 開始同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[13:38:52 INF] [StockEvernote.Services.FirestoreService] 開始全量同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[13:38:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[13:38:52 INF] [StockEvernote.Services.FirestoreService] 待同步筆記本數量：1
+[13:38:52 INF] [StockEvernote.Services.FirestoreService] 上傳筆記本：新筆記本66
+[13:38:52 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0
+[13:38:52 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0
+[13:38:52 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 173.4782ms - 401
+[13:38:52 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 176.6939ms - 401
+[13:38:52 ERR] [StockEvernote.Services.FirestoreService] Notebook 寫入失敗："Unauthorized" - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+[13:38:52 ERR] [StockEvernote.Services.FirestoreService] 筆記本同步失敗：新筆記本66
+System.Exception: Notebook 寫入失敗：Unauthorized - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+   at StockEvernote.Services.FirestoreService.UpsertNotebookAsync(String userId, Notebook notebook) in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 125
+   at StockEvernote.Services.FirestoreService.<>c__DisplayClass9_0.<<SyncNotebooksAsync>b__0>d.MoveNext() in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 78
+[13:38:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+[13:38:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:38:52 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：2eb0975a-fe25-4707-b8d3-22067cb06ced
+[13:38:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:38:52 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：830dac4a-bcbf-4ae1-aa38-5e62365f1f01
+[13:38:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:38:52 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：5f6ee631-908c-4b73-9411-21f001f3e281
+[13:38:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:38:52 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：3c50c8b8-d0ce-4527-ad17-282561b3cb3f
+[13:38:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:38:52 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：b236a55d-b07a-4344-9244-54539f523e8a
+[13:38:52 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:38:52 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：2，NotebookId：7df95e00-7278-4e11-8b91-ef54898824c0
+[13:38:52 INF] [StockEvernote.Services.FirestoreService] 上傳筆記：新筆記66
+[13:38:52 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/ad658dd0-18b5-40bc-b834-216941bc5737
+[13:38:52 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/ad658dd0-18b5-40bc-b834-216941bc5737
+[13:38:52 INF] [StockEvernote.Services.FirestoreService] 上傳筆記：新筆記
+[13:38:52 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/0d525668-d4c4-45e2-86fd-678dd75c8fca
+[13:38:52 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/0d525668-d4c4-45e2-86fd-678dd75c8fca
+[13:38:52 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 80.2652ms - 401
+[13:38:52 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 83.2722ms - 401
+[13:38:52 ERR] [StockEvernote.Services.FirestoreService] Note 寫入失敗："Unauthorized" - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+[13:38:52 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 91.4011ms - 401
+[13:38:52 ERR] [StockEvernote.Services.FirestoreService] 筆記同步失敗：新筆記66
+System.Exception: Note 寫入失敗：Unauthorized - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+   at StockEvernote.Services.FirestoreService.UpsertNoteAsync(String userId, String notebookId, Note note) in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 200
+   at StockEvernote.Services.FirestoreService.<>c__DisplayClass11_0.<<SyncNotesAsync>b__0>d.MoveNext() in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 151
+[13:38:52 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 105.6636ms - 401
+[13:38:52 ERR] [StockEvernote.Services.FirestoreService] Note 寫入失敗："Unauthorized" - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+[13:38:52 ERR] [StockEvernote.Services.FirestoreService] 筆記同步失敗：新筆記
+System.Exception: Note 寫入失敗：Unauthorized - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+   at StockEvernote.Services.FirestoreService.UpsertNoteAsync(String userId, String notebookId, Note note) in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 200
+   at StockEvernote.Services.FirestoreService.<>c__DisplayClass11_0.<<SyncNotesAsync>b__0>d.MoveNext() in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 151
+[13:38:52 INF] [StockEvernote.Services.FirestoreService] 全量同步完成，共同步 6 本筆記本
+[13:38:52 INF] [StockEvernote.ViewModel.NotesViewModel] 同步成功
+[13:39:37 INF] [StockEvernote.ViewModel.NotesViewModel] 開始同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[13:39:37 INF] [StockEvernote.Services.FirestoreService] 開始全量同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[13:39:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[13:39:37 INF] [StockEvernote.Services.FirestoreService] 待同步筆記本數量：1
+[13:39:37 INF] [StockEvernote.Services.FirestoreService] 上傳筆記本：新筆記本66
+[13:39:37 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0
+[13:39:37 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0
+[13:39:37 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 350.9601ms - 401
+[13:39:37 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 357.4255ms - 401
+[13:39:37 ERR] [StockEvernote.Services.FirestoreService] Notebook 寫入失敗："Unauthorized" - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+[13:39:37 ERR] [StockEvernote.Services.FirestoreService] 筆記本同步失敗：新筆記本66
+System.Exception: Notebook 寫入失敗：Unauthorized - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+   at StockEvernote.Services.FirestoreService.UpsertNotebookAsync(String userId, Notebook notebook) in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 125
+   at StockEvernote.Services.FirestoreService.<>c__DisplayClass9_0.<<SyncNotebooksAsync>b__0>d.MoveNext() in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 78
+[13:39:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+[13:39:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:39:37 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：2eb0975a-fe25-4707-b8d3-22067cb06ced
+[13:39:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:39:37 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：830dac4a-bcbf-4ae1-aa38-5e62365f1f01
+[13:39:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:39:37 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：5f6ee631-908c-4b73-9411-21f001f3e281
+[13:39:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:39:37 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：3c50c8b8-d0ce-4527-ad17-282561b3cb3f
+[13:39:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:39:37 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：b236a55d-b07a-4344-9244-54539f523e8a
+[13:39:37 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:39:37 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：2，NotebookId：7df95e00-7278-4e11-8b91-ef54898824c0
+[13:39:37 INF] [StockEvernote.Services.FirestoreService] 上傳筆記：新筆記66
+[13:39:37 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/ad658dd0-18b5-40bc-b834-216941bc5737
+[13:39:37 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/ad658dd0-18b5-40bc-b834-216941bc5737
+[13:39:37 INF] [StockEvernote.Services.FirestoreService] 上傳筆記：新筆記
+[13:39:37 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/0d525668-d4c4-45e2-86fd-678dd75c8fca
+[13:39:37 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/0d525668-d4c4-45e2-86fd-678dd75c8fca
+[13:39:37 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 29.0085ms - 401
+[13:39:37 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 31.6948ms - 401
+[13:39:37 ERR] [StockEvernote.Services.FirestoreService] Note 寫入失敗："Unauthorized" - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+[13:39:38 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 61.2034ms - 401
+[13:39:38 ERR] [StockEvernote.Services.FirestoreService] 筆記同步失敗：新筆記66
+System.Exception: Note 寫入失敗：Unauthorized - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+   at StockEvernote.Services.FirestoreService.UpsertNoteAsync(String userId, String notebookId, Note note) in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 200
+   at StockEvernote.Services.FirestoreService.<>c__DisplayClass11_0.<<SyncNotesAsync>b__0>d.MoveNext() in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 151
+[13:39:38 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 75.7754ms - 401
+[13:39:38 ERR] [StockEvernote.Services.FirestoreService] Note 寫入失敗："Unauthorized" - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+[13:39:38 ERR] [StockEvernote.Services.FirestoreService] 筆記同步失敗：新筆記
+System.Exception: Note 寫入失敗：Unauthorized - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+   at StockEvernote.Services.FirestoreService.UpsertNoteAsync(String userId, String notebookId, Note note) in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 200
+   at StockEvernote.Services.FirestoreService.<>c__DisplayClass11_0.<<SyncNotesAsync>b__0>d.MoveNext() in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 151
+[13:39:38 INF] [StockEvernote.Services.FirestoreService] 全量同步完成，共同步 6 本筆記本
+[13:39:38 INF] [StockEvernote.ViewModel.NotesViewModel] 同步成功
+[13:39:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "UpdatedAt" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[13:39:51 INF] [StockEvernote.ViewModel.NotesViewModel] 儲存筆記：新筆記
+[13:39:55 INF] [StockEvernote.ViewModel.NotesViewModel] 開始同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[13:39:55 INF] [StockEvernote.Services.FirestoreService] 開始全量同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[13:39:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[13:39:55 INF] [StockEvernote.Services.FirestoreService] 待同步筆記本數量：1
+[13:39:55 INF] [StockEvernote.Services.FirestoreService] 上傳筆記本：新筆記本66
+[13:39:55 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0
+[13:39:55 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0
+[13:39:55 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 78.3229ms - 401
+[13:39:55 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 81.1437ms - 401
+[13:39:55 ERR] [StockEvernote.Services.FirestoreService] Notebook 寫入失敗："Unauthorized" - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+[13:39:55 ERR] [StockEvernote.Services.FirestoreService] 筆記本同步失敗：新筆記本66
+System.Exception: Notebook 寫入失敗：Unauthorized - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+   at StockEvernote.Services.FirestoreService.UpsertNotebookAsync(String userId, Notebook notebook) in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 125
+   at StockEvernote.Services.FirestoreService.<>c__DisplayClass9_0.<<SyncNotebooksAsync>b__0>d.MoveNext() in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 78
+[13:39:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+[13:39:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:39:55 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：2eb0975a-fe25-4707-b8d3-22067cb06ced
+[13:39:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:39:55 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：830dac4a-bcbf-4ae1-aa38-5e62365f1f01
+[13:39:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:39:55 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：5f6ee631-908c-4b73-9411-21f001f3e281
+[13:39:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:39:55 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：3c50c8b8-d0ce-4527-ad17-282561b3cb3f
+[13:39:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:39:55 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：b236a55d-b07a-4344-9244-54539f523e8a
+[13:39:55 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:39:55 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：2，NotebookId：7df95e00-7278-4e11-8b91-ef54898824c0
+[13:39:55 INF] [StockEvernote.Services.FirestoreService] 上傳筆記：新筆記66
+[13:39:55 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/ad658dd0-18b5-40bc-b834-216941bc5737
+[13:39:55 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/ad658dd0-18b5-40bc-b834-216941bc5737
+[13:39:55 INF] [StockEvernote.Services.FirestoreService] 上傳筆記：新筆記
+[13:39:55 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/0d525668-d4c4-45e2-86fd-678dd75c8fca
+[13:39:55 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/0d525668-d4c4-45e2-86fd-678dd75c8fca
+[13:39:55 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 42.5869ms - 401
+[13:39:55 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 45.6323ms - 401
+[13:39:55 ERR] [StockEvernote.Services.FirestoreService] Note 寫入失敗："Unauthorized" - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+[13:39:55 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 54.4441ms - 401
+[13:39:55 ERR] [StockEvernote.Services.FirestoreService] 筆記同步失敗：新筆記66
+System.Exception: Note 寫入失敗：Unauthorized - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+   at StockEvernote.Services.FirestoreService.UpsertNoteAsync(String userId, String notebookId, Note note) in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 200
+   at StockEvernote.Services.FirestoreService.<>c__DisplayClass11_0.<<SyncNotesAsync>b__0>d.MoveNext() in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 151
+[13:39:55 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 68.1758ms - 401
+[13:39:55 ERR] [StockEvernote.Services.FirestoreService] Note 寫入失敗："Unauthorized" - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+[13:39:55 ERR] [StockEvernote.Services.FirestoreService] 筆記同步失敗：新筆記
+System.Exception: Note 寫入失敗：Unauthorized - {
+  "error": {
+    "code": 401,
+    "message": "Missing or invalid authentication.",
+    "status": "UNAUTHENTICATED"
+  }
+}
+
+   at StockEvernote.Services.FirestoreService.UpsertNoteAsync(String userId, String notebookId, Note note) in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 200
+   at StockEvernote.Services.FirestoreService.<>c__DisplayClass11_0.<<SyncNotesAsync>b__0>d.MoveNext() in C:\Users\USER\Desktop\C#\StockEvernote\StockEvernote\Services\FirestoreService.cs:line 151
+[13:39:55 INF] [StockEvernote.Services.FirestoreService] 全量同步完成，共同步 6 本筆記本
+[13:39:55 INF] [StockEvernote.ViewModel.NotesViewModel] 同步成功
+[13:45:26 INF] [] 系統啟動中...
+[13:45:26 INF] [] 當前執行環境：Production
+[13:45:26 INF] [] 設定檔載入完成
+[13:45:26 INF] [] DI 容器建置完成
+[13:45:26 INF] [] 開始檢查並更新資料庫 Schema...
+[13:45:26 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[13:45:26 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+[13:45:26 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[13:45:26 INF] [Microsoft.EntityFrameworkCore.Migrations] No migrations were applied. The database is already up to date.
+[13:45:26 INF] [] 資料庫 Schema 更新完成
+[13:45:27 INF] [] 顯示 LoginWindow
+[13:45:37 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[13:45:37 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
+[13:45:38 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 407.297ms - 200
+[13:45:38 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 421.8609ms - 200
+[13:45:38 INF] [StockEvernote.ViewModel.LoginViewModel] 使用者登入成功，LocalId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[13:45:38 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] Start processing HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[13:45:38 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Sending HTTP request POST https://api.telegram.org/bot8614261531:AAFzYGknmrQ0sq215MwQKmo-TKxbULADlbE/sendMessage
+[13:45:38 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+ORDER BY "n"."CreatedAt" DESC
+[13:45:39 INF] [System.Net.Http.HttpClient.ITelegramService.ClientHandler] Received HTTP response headers after 1359.6287ms - 200
+[13:45:39 INF] [System.Net.Http.HttpClient.ITelegramService.LogicalHandler] End processing HTTP request after 1363.2576ms - 200
+[13:45:39 INF] [StockEvernote.Services.TelegramMessageServices] Telegram 訊息發送成功！內容：*系統通知*
+您已於 `2026-03-31 13:45:38` 成功登入 StockEvernote！
+[13:45:50 INF] [StockEvernote.ViewModel.NotesViewModel] 開始同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[13:45:50 INF] [StockEvernote.Services.FirestoreService] 開始全量同步，UserId：YBxakWqoX7bL7AXswlM75UHVRUz2
+[13:45:50 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."UpdatedAt", "n"."UserId"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsSynced")
+[13:45:50 INF] [StockEvernote.Services.FirestoreService] 待同步筆記本數量：1
+[13:45:50 INF] [StockEvernote.Services.FirestoreService] 上傳筆記本：新筆記本66
+[13:45:50 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0
+[13:45:50 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0
+[13:45:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 555.7736ms - 200
+[13:45:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 559.4202ms - 200
+[13:45:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (1ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notebooks" SET "IsSynced" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[13:45:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 28)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id"
+FROM "Notebooks" AS "n"
+WHERE "n"."UserId" = @__userId_0 AND NOT ("n"."IsDeleted")
+[13:45:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:45:51 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：2eb0975a-fe25-4707-b8d3-22067cb06ced
+[13:45:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:45:51 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：830dac4a-bcbf-4ae1-aa38-5e62365f1f01
+[13:45:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:45:51 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：5f6ee631-908c-4b73-9411-21f001f3e281
+[13:45:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:45:51 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：3c50c8b8-d0ce-4527-ad17-282561b3cb3f
+[13:45:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:45:51 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：0，NotebookId：b236a55d-b07a-4344-9244-54539f523e8a
+[13:45:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@__notebookId_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "n"."Id", "n"."Content", "n"."CreatedAt", "n"."IsDeleted", "n"."IsSynced", "n"."Name", "n"."NotebookId", "n"."UpdatedAt"
+FROM "Notes" AS "n"
+WHERE "n"."NotebookId" = @__notebookId_0 AND NOT ("n"."IsSynced")
+[13:45:51 INF] [StockEvernote.Services.FirestoreService] 待同步筆記數量：2，NotebookId：7df95e00-7278-4e11-8b91-ef54898824c0
+[13:45:51 INF] [StockEvernote.Services.FirestoreService] 上傳筆記：新筆記66
+[13:45:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/ad658dd0-18b5-40bc-b834-216941bc5737
+[13:45:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/ad658dd0-18b5-40bc-b834-216941bc5737
+[13:45:51 INF] [StockEvernote.Services.FirestoreService] 上傳筆記：新筆記
+[13:45:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] Start processing HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/0d525668-d4c4-45e2-86fd-678dd75c8fca
+[13:45:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Sending HTTP request PATCH https://firestore.googleapis.com/v1/projects/notes-app-wpf-207f7/databases/(default)/documents/users/YBxakWqoX7bL7AXswlM75UHVRUz2/notebooks/7df95e00-7278-4e11-8b91-ef54898824c0/notes/0d525668-d4c4-45e2-86fd-678dd75c8fca
+[13:45:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 56.237ms - 200
+[13:45:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 59.3857ms - 200
+[13:45:51 INF] [System.Net.Http.HttpClient.IFirestoreService.ClientHandler] Received HTTP response headers after 74.852ms - 200
+[13:45:51 INF] [System.Net.Http.HttpClient.IFirestoreService.LogicalHandler] End processing HTTP request after 79.0034ms - 200
+[13:45:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "IsSynced" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[13:45:51 INF] [Microsoft.EntityFrameworkCore.Database.Command] Executed DbCommand (0ms) [Parameters=[@p1='?' (Size = 36), @p0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Notes" SET "IsSynced" = @p0
+WHERE "Id" = @p1
+RETURNING 1;
+[13:45:51 INF] [StockEvernote.Services.FirestoreService] 全量同步完成，共同步 6 本筆記本
+[13:45:51 INF] [StockEvernote.ViewModel.NotesViewModel] 同步成功

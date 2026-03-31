@@ -28,6 +28,10 @@
                           Command="{Binding SyncCommand}"
                           Padding="8,6"/>
                 <Separator/>
+                <MenuItem Header="⬇ 從雲端還原"
+                          Command="{Binding RestoreFromCloudCommand}"
+                          Padding="8,6"/>
+                <Separator/>
                 <MenuItem Header="退出"
                           Click="MenuItem_Click"
                           Padding="8,6"/>

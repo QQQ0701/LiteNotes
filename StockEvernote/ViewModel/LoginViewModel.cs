@@ -43,7 +43,7 @@ public partial class LoginViewModel : ObservableObject
     [ObservableProperty] private bool _isLoginMode = true;
 
     // 事件
-    public Action? CloseAction { get; set; }
+    public Action? NavigateToNotes { get; set; }
     public event Action? RequestClearPasswords;
 
     /// <summary>
@@ -102,8 +102,7 @@ public partial class LoginViewModel : ObservableObject
                 string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 _ = _gramService.SendMessageAsync($"*系統通知*\n您已於 `{time}` 成功登入 StockEvernote！");
 
-                // 導向主畫面（NotesWindow）
-                CloseAction?.Invoke();
+                NavigateToNotes?.Invoke();
             }
             else
             {
