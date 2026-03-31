@@ -15,29 +15,82 @@
     <DockPanel>
 
         <!-- ===== Menu ===== -->
-        <Menu DockPanel.Dock="Top"
-              Background="White"
-              BorderBrush="#E8E8E8" BorderThickness="0,0,0,1"
-              Padding="8,4">
-            <MenuItem Header="📚 筆記本" Padding="8,4">
-                <MenuItem Header="＋ 新增筆記本"
-                          Command="{Binding AddNotebookCommand}"
-                          Padding="8,6"/>
-                <Separator/>
-                <MenuItem Header="☁ 同步到雲端"
-                          Command="{Binding SyncCommand}"
-                          Padding="8,6"/>
-                <Separator/>
-                <MenuItem Header="⬇ 從雲端還原"
-                          Command="{Binding RestoreFromCloudCommand}"
-                          Padding="8,6"/>
-                <Separator/>
-                <MenuItem Header="退出"
-                          Click="MenuItem_Click"
-                          Padding="8,6"/>
-            </MenuItem>
-        </Menu>
+        <Border DockPanel.Dock="Top"
+                Background="White"
+                BorderBrush="#E8E8E8"
+                BorderThickness="0,0,0,1"
+                Height="48">
 
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Menu Grid.Column="0"
+                      Background="Transparent"
+                      VerticalAlignment="Center"
+                      Padding="8,0">
+                    <MenuItem Header="📚 筆記本" Padding="8,4">
+                        <MenuItem Header="新增筆記本"
+                                  Command="{Binding AddNotebookCommand}"
+                                  Padding="8,6"/>
+                        <Separator/>
+                        <MenuItem Header="同步到雲端"
+                                  Command="{Binding SyncCommand}"
+                                  Padding="8,6"/>
+                        <Separator/>
+                        <MenuItem Header="從雲端還原"
+                                  Command="{Binding RestoreFromCloudCommand}"
+                                  Padding="8,6"/>
+                        <Separator/>
+                        <MenuItem Header="退出"
+                                  Click="MenuItem_Click"
+                                  Padding="8,6"/>
+                    </MenuItem>
+                </Menu>
+
+                <!-- 右上角登出按鈕 -->
+                <Button Grid.Column="1"
+                        Command="{Binding LogoutCommand}"
+                        Margin="0,0,16,0"
+                        Height="32" Padding="16,0"
+                        VerticalAlignment="Center"
+                        Cursor="Hand"
+                        Foreground="White"
+                       BorderThickness="0">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🚪" FontSize="13"
+                                       Margin="0,0,6,0"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="登出" FontSize="13"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button.Content>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    CornerRadius="6"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#1A1A1A"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#333333"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Border>
         <!-- ===== StatusBar ===== -->
         <StatusBar DockPanel.Dock="Bottom"
                    Background="#F7F7F7"
@@ -308,6 +361,7 @@
                     <!-- 筆記標題 -->
                     <TextBox Grid.Column="0"
                              Text="{Binding SelectedNote.Name, UpdateSourceTrigger=PropertyChanged}"
+                             TextChanged="TitleTextBox_TextChanged"
                              FontSize="20" FontWeight="Bold"
                              BorderThickness="0" Padding="0"
                              VerticalContentAlignment="Center"
@@ -315,39 +369,12 @@
                              Foreground="#1A1A1A"
                              IsEnabled="{Binding SelectedNote, Converter={StaticResource NullToBoolConverter}}"/>
 
-                    <!-- 儲存按鈕 -->
-                    <Button Grid.Column="1"
-                            Click="SaveButton_Click"
-                            Height="34" Padding="16,0"
-                            Foreground="White" BorderThickness="0"
-                            Cursor="Hand"
-                            IsEnabled="{Binding SelectedNote, Converter={StaticResource NullToBoolConverter}}">
-                        <Button.Content>
-                            <TextBlock Text="儲存" FontSize="13" FontWeight="SemiBold"/>
-                        </Button.Content>
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}"
-                                        CornerRadius="6" Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="#1A1A1A"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#333333"/>
-                                    </Trigger>
-                                    <Trigger Property="IsEnabled" Value="False">
-                                        <Setter Property="Background" Value="#CCCCCC"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                    <!-- ✅ 儲存狀態取代儲存按鈕 -->
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding SaveStatus}"
+                               FontSize="12" Foreground="#9B9B9B"
+                               VerticalAlignment="Center"
+                               Margin="8,0"/>
                 </Grid>
             </Border>
 
@@ -359,6 +386,7 @@
                          BorderThickness="0"
                          VerticalScrollBarVisibility="Auto"
                          Foreground="#1A1A1A"
+                         TextChanged="ContentRichTextBox_TextChanged"
                          IsEnabled="{Binding SelectedNote, Converter={StaticResource NullToBoolConverter}}"/>
         </Grid>
 

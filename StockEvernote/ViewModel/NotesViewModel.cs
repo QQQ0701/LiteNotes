@@ -15,7 +15,9 @@ public partial class NotesViewModel : ObservableObject
     private readonly IUserSession _userSession;
     private readonly IFirestoreService _firestoreService;
     private readonly ILogger<NotesViewModel> _logger;
+    private readonly SemaphoreSlim _saveLock = new SemaphoreSlim(1, 1);
     private string CurrentUserId => _userSession.LocalId ?? string.Empty;
+    public Action? LogoutAction { get; set; }
     public NotesViewModel(INotebookService notebookService,
         INoteService noteService,
         IUserSession userSession,
@@ -35,8 +37,35 @@ public partial class NotesViewModel : ObservableObject
     [ObservableProperty] private string _newNotebookName = string.Empty;
     [ObservableProperty] private Notebook? _selectedNotebook;
     [ObservableProperty] private Note? _selectedNote;
-    [ObservableProperty] private string _noteContent = string.Empty;
+ //   [ObservableProperty] private string _noteContent = string.Empty;
     [ObservableProperty] private string _syncStatus = string.Empty;
+    [ObservableProperty] private string _saveStatus = string.Empty;
+
+    [RelayCommand]
+    private async Task SaveSpecificNoteAsync(Note note)
+    {
+        if (note is null) return;
+
+        await _saveLock.WaitAsync();
+        try
+        {
+            await _noteService.UpdateNoteAsync(note);
+            SaveStatus = $"自動儲存 {DateTime.Now:HH:mm:ss}";
+            _logger.LogInformation("儲存筆記：{Name}", note.Name);
+        }
+        finally
+        {
+            _saveLock.Release();
+        }
+    }
+
+    [RelayCommand]
+    private void Logout()
+    {
+        _userSession.Clear();
+        _logger.LogInformation("使用者登出");
+        LogoutAction?.Invoke();
+    }
 
     [RelayCommand]
     private async Task SyncAsync()
@@ -194,18 +223,6 @@ public partial class NotesViewModel : ObservableObject
         note.EditingName = string.Empty;
     }
 
-
-    // ✅ 儲存 Command（名稱 + 內容一起存）
-    [RelayCommand]
-    private async Task SaveNoteAsync()
-    {
-        if (SelectedNote is null) return;
-        SelectedNote.Content = NoteContent;
-        await _noteService.UpdateNoteAsync(SelectedNote);
-        _logger.LogInformation("儲存筆記：{Name}", SelectedNote.Name);
-    }
-
-
     [RelayCommand]
     private async Task DeleteNoteAsync(Note note)
     {
@@ -218,4 +235,17 @@ public partial class NotesViewModel : ObservableObject
             SelectedNote = null;
 
     }
+
+    //手動儲存功能
+
+    //[RelayCommand]
+    //private async Task SaveNoteAsync()
+    //{
+    //    if (SelectedNote is null) return;
+
+    //    SelectedNote.Content = NoteContent;
+    //    await _noteService.UpdateNoteAsync(SelectedNote);
+    //    SaveStatus = $"已儲存 {DateTime.Now:HH:mm:ss}";
+    //    _logger.LogInformation("儲存筆記：{Name}", SelectedNote.Name);
+    //}
 }
