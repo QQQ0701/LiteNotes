@@ -181,6 +181,7 @@
                                          Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
                                          Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
                                          LostFocus="NotebookRenameTextBox_LostFocus"
+                                         Loaded="AutoSelectTextBox_Loaded"
                                          IsVisibleChanged="AutoSelectTextBox_IsVisibleChanged">
                                     <TextBox.InputBindings>
                                         <KeyBinding Key="Enter"
@@ -304,6 +305,7 @@
                                          Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
                                          Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
                                          LostFocus="NoteRenameTextBox_LostFocus"
+                                         Loaded="AutoSelectTextBox_Loaded"
                                          IsVisibleChanged="AutoSelectTextBox_IsVisibleChanged">
                                     <TextBox.InputBindings>
                                         <KeyBinding Key="Enter"

@@ -191,6 +191,7 @@ public partial class NotesWindow : Window
             clicked = VisualTreeHelper.GetParent(clicked);
         }
         Keyboard.ClearFocus();
+        FocusManager.SetFocusedElement(this, null);
 
         // 3. 執行確認指令
         if (editingNotebook != null)
@@ -289,6 +290,20 @@ public partial class NotesWindow : Window
         {
             // 如果使用者有乖乖打上新名字，就更新我們的記憶
             _originalNoteTitle = _vm.SelectedNote.Name;
+        }
+    }
+
+    private void AutoSelectTextBox_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb && tb.IsVisible)
+        {
+            // ContextIdle：保證 WPF 把畫面上的東西都排版完、渲染完，才執行這段
+            tb.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                tb.Focus();
+                Keyboard.Focus(tb);
+                tb.SelectAll();
+            }), System.Windows.Threading.DispatcherPriority.ContextIdle);
         }
     }
 
