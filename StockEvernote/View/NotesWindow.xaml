@@ -58,7 +58,7 @@
                         VerticalAlignment="Center"
                         Cursor="Hand"
                         Foreground="White"
-                       BorderThickness="0">
+                        BorderThickness="0">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="🚪" FontSize="13"
@@ -157,7 +157,7 @@
 
                                 <!-- 一般顯示模式 -->
                                 <TextBlock Text="{Binding Name}"
-                                           FontSize="14" Padding="8,6"
+                                           FontSize="14" Padding="8,6" 
                                            TextTrimming="CharacterEllipsis"
                                            Foreground="#1A1A1A"
                                            Visibility="{Binding IsEditing, Converter={StaticResource InverseBoolToVisibilityConverter}}"
@@ -180,7 +180,8 @@
                                          Background="White"
                                          Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
                                          Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
-                                         LostFocus="RenameTextBox_LostFocus">
+                                         LostFocus="NotebookRenameTextBox_LostFocus"
+                                         IsVisibleChanged="AutoSelectTextBox_IsVisibleChanged">
                                     <TextBox.InputBindings>
                                         <KeyBinding Key="Enter"
                                                     Command="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Tag.ConfirmNotebookRenameCommand}"
@@ -302,7 +303,8 @@
                                          Background="White"
                                          Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
                                          Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
-                                         LostFocus="NoteRenameTextBox_LostFocus">
+                                         LostFocus="NoteRenameTextBox_LostFocus"
+                                         IsVisibleChanged="AutoSelectTextBox_IsVisibleChanged">
                                     <TextBox.InputBindings>
                                         <KeyBinding Key="Enter"
                                                     Command="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Tag.ConfirmNoteRenameCommand}"

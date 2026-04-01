@@ -1,14 +1,15 @@
-﻿using StockEvernote.Model;
+﻿using Microsoft.Extensions.DependencyInjection;
+using StockEvernote.Model;
 using StockEvernote.ViewModel;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace StockEvernote.View;
 
@@ -41,7 +42,7 @@ public partial class NotesWindow : Window
             this.Close();
         };
     }
-   
+
 
     // 自動儲存
     private void ContentRichTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -134,39 +135,103 @@ public partial class NotesWindow : Window
 
         base.OnClosing(e);
     }
-    private void RenameTextBox_LostFocus(object sender, RoutedEventArgs e)
-    {
-        if (sender is TextBox tb && tb.DataContext is Notebook notebook)
-        {
-            // 檢查新的焦點是否還在同一個 TextBox 內，避免重複觸發
-            var focusedElement = FocusManager.GetFocusedElement(this);
-            if (focusedElement == tb) return;
 
-            _vm.ConfirmNotebookRenameCommand.Execute(notebook);
+    // 負責 1：當 TextBox 出現時，強制把游標塞進去並全選文字
+    private void AutoSelectTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is TextBox tb && (bool)e.NewValue == true)
+        {
+            tb.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (tb.IsVisible) // 再次確認還是可見的（防止快速切換）
+                {
+                    tb.Focus();
+                    Keyboard.Focus(tb);
+                    tb.SelectAll();
+                }
+            }), System.Windows.Threading.DispatcherPriority.Input);
         }
     }
+    // ──────────────────────────────────────────────
+    // 全域焦點守衛：只負責「強制失焦」，不碰任何業務邏輯
+    // ──────────────────────────────────────────────
     private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
-        var editingNotebook = _vm.Notebooks.FirstOrDefault(n => n.IsEditing);
-        if (editingNotebook is null) return;
+        // 1. Fail-fast：找出所有正在編輯的項目
+        var editingNotebook = _vm.Notebooks?.FirstOrDefault(n => n.IsEditing);
+        Note? editingNote = null;
 
+        if (editingNotebook == null)
+            editingNote = _vm.Notes?.FirstOrDefault(n => n.IsEditing);
+
+        if (editingNotebook == null && editingNote == null) return;
+
+        // 2. 檢查點擊目標是否為「正在編輯的那個 TextBox」
         var clicked = e.OriginalSource as DependencyObject;
         while (clicked != null)
         {
-            if (clicked is TextBox) return;
+            if (clicked is not Visual && clicked is not System.Windows.Media.Media3D.Visual3D)
+                break;
+
+            if (clicked is TextBox tb)
+            {
+                // 精確比對 DataContext：只有點到自己正在編輯的 TextBox 才放行
+                var dc = tb.DataContext;
+                if (dc == editingNotebook || dc == editingNote)
+                {
+                    return; // 點的是正在編輯的 TextBox，不介入
+                }
+                break; // 點到其他 TextBox（搜尋列、標題等），跳出迴圈執行確認
+            }
             clicked = VisualTreeHelper.GetParent(clicked);
         }
-        _vm.ConfirmNotebookRenameCommand.Execute(editingNotebook);
+
+        // 3. 執行確認指令
+        if (editingNotebook != null)
+        {
+            _vm.ConfirmNotebookRenameCommand.Execute(editingNotebook);
+        }
+
+        if (editingNote != null)
+        {
+            _vm.ConfirmNoteRenameCommand.Execute(editingNote);
+        }
     }
+
+    // ──────────────────────────────────────────────
+    // Notebook 重新命名：LostFocus 事件處理
+    // ──────────────────────────────────────────────
+    private void NotebookRenameTextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb && tb.DataContext is Notebook notebook)
+        {
+            if (!notebook.IsEditing) return;
+
+            if (tb.Tag is NotesViewModel vm &&
+                vm.ConfirmNotebookRenameCommand.CanExecute(notebook))
+            {
+                vm.ConfirmNotebookRenameCommand.Execute(notebook);
+            }
+        }
+    }
+
+    // ──────────────────────────────────────────────
+    // Note 重新命名：LostFocus 事件處理
+    // ──────────────────────────────────────────────
     private void NoteRenameTextBox_LostFocus(object sender, RoutedEventArgs e)
     {
         if (sender is TextBox tb && tb.DataContext is Note note)
         {
-            var focusedElement = FocusManager.GetFocusedElement(this);
-            if (focusedElement == tb) return;
-            _vm.ConfirmNoteRenameCommand.Execute(note);
+            if (!note.IsEditing) return;
+
+            if (tb.Tag is NotesViewModel vm &&
+                vm.ConfirmNoteRenameCommand.CanExecute(note))
+            {
+                vm.ConfirmNoteRenameCommand.Execute(note);
+            }
         }
     }
+    //----------------------------------------------------------------------
     private async void NotesWindow_Loaded(object sender, RoutedEventArgs e)
     {
         await _vm.LoadNotebooksCommand.ExecuteAsync(null);

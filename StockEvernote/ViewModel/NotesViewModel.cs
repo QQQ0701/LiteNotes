@@ -37,7 +37,7 @@ public partial class NotesViewModel : ObservableObject
     [ObservableProperty] private string _newNotebookName = string.Empty;
     [ObservableProperty] private Notebook? _selectedNotebook;
     [ObservableProperty] private Note? _selectedNote;
- //   [ObservableProperty] private string _noteContent = string.Empty;
+    //   [ObservableProperty] private string _noteContent = string.Empty;
     [ObservableProperty] private string _syncStatus = string.Empty;
     [ObservableProperty] private string _saveStatus = string.Empty;
 
@@ -144,7 +144,12 @@ public partial class NotesViewModel : ObservableObject
     [RelayCommand]
     private async Task ConfirmNotebookRenameAsync(Notebook notebook)
     {
-        if (string.IsNullOrWhiteSpace(notebook.EditingName)) return;
+        if (string.IsNullOrWhiteSpace(notebook.EditingName))
+        {
+            notebook.EditingName = notebook.Name;
+            notebook.IsEditing = false;
+            return;
+        }
 
         var newName = notebook.EditingName.Trim();
         notebook.IsEditing = false;
@@ -167,13 +172,16 @@ public partial class NotesViewModel : ObservableObject
     {
         await _notebookService.DeleteNotebookAsync(notebook.Id);
         _logger.LogInformation("刪除筆記本：{Name}", notebook.Name);
+
+        bool isSelected = SelectedNotebook == notebook;
         Notebooks.Remove(notebook);
 
         // 如果刪的是目前選中的筆記本，清空右側筆記列表
-        if (SelectedNotebook == notebook)
+        if (isSelected)
         {
-            SelectedNotebook = null;
+            SelectedNote = null;
             Notes.Clear();
+            SelectedNotebook = null;
         }
     }
 
@@ -203,7 +211,12 @@ public partial class NotesViewModel : ObservableObject
     [RelayCommand]
     private async Task ConfirmNoteRenameAsync(Note note)
     {
-        if (string.IsNullOrWhiteSpace(note.EditingName)) return;
+        if (string.IsNullOrWhiteSpace(note.EditingName)) 
+        {
+            note.EditingName = note.Name;
+            note.IsEditing = false;
+            return;
+        }
 
         var newName = note.EditingName.Trim();
         note.IsEditing = false;
