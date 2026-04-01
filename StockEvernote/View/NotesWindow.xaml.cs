@@ -22,6 +22,7 @@ public partial class NotesWindow : Window
     private readonly NotesViewModel _vm;
     private Note? _previousNote;
     private bool _isInternalLoading = false;
+    private string _originalNoteTitle = string.Empty;
 
     public NotesWindow(NotesViewModel viewModel)
     {
@@ -164,7 +165,10 @@ public partial class NotesWindow : Window
         if (editingNotebook == null)
             editingNote = _vm.Notes?.FirstOrDefault(n => n.IsEditing);
 
-        if (editingNotebook == null && editingNote == null) return;
+        var focusedElement = Keyboard.FocusedElement as TextBox;
+
+        if (editingNotebook == null && editingNote == null
+            && focusedElement == null) return;
 
         // 2. 檢查點擊目標是否為「正在編輯的那個 TextBox」
         var clicked = e.OriginalSource as DependencyObject;
@@ -177,7 +181,8 @@ public partial class NotesWindow : Window
             {
                 // 精確比對 DataContext：只有點到自己正在編輯的 TextBox 才放行
                 var dc = tb.DataContext;
-                if (dc == editingNotebook || dc == editingNote)
+                if (dc == editingNotebook || dc == editingNote ||
+                    tb == focusedElement)
                 {
                     return; // 點的是正在編輯的 TextBox，不介入
                 }
@@ -185,6 +190,7 @@ public partial class NotesWindow : Window
             }
             clicked = VisualTreeHelper.GetParent(clicked);
         }
+        Keyboard.ClearFocus();
 
         // 3. 執行確認指令
         if (editingNotebook != null)
@@ -243,7 +249,47 @@ public partial class NotesWindow : Window
 
     private void TitleTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
+        if (_vm.SelectedNote is null || _isInternalLoading) return;
+
+        // 1. 攔截：如果使用者把標題刪光了，立刻銷毀計時器，絕對不准啟動自動儲存！
+        if (string.IsNullOrWhiteSpace(_vm.SelectedNote.Name))
+        {
+            _autoSaveTimer?.Dispose();
+            _autoSaveTimer = null;
+            return;
+        }
+
+        // 2. 放行：如果標題不是空白的（使用者有打字），才去呼叫下方的方法啟動 1.5 秒存檔
         ContentRichTextBox_TextChanged(sender, e);
+    }
+
+  
+    private void TitleTextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        if (_vm.SelectedNote != null)
+        {
+            _originalNoteTitle = _vm.SelectedNote.Name;
+        }
+    }
+
+    private void TitleTextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (_vm.SelectedNote == null) return;
+
+        // 🌟 核心防呆：如果名字變成空白的，直接拿剛才背起來的原名覆蓋回去！
+        if (string.IsNullOrWhiteSpace(_vm.SelectedNote.Name))
+        {
+            _vm.SelectedNote.Name = _originalNoteTitle;
+
+            // 順便把 1.5 秒的存檔計時器停掉，避免存入空白資料
+            _autoSaveTimer?.Dispose();
+            _autoSaveTimer = null;
+        }
+        else if (_vm.SelectedNote.Name != _originalNoteTitle)
+        {
+            // 如果使用者有乖乖打上新名字，就更新我們的記憶
+            _originalNoteTitle = _vm.SelectedNote.Name;
+        }
     }
 
 

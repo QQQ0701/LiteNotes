@@ -363,6 +363,8 @@
                     <!-- 筆記標題 -->
                     <TextBox Grid.Column="0"
                              Text="{Binding SelectedNote.Name, UpdateSourceTrigger=PropertyChanged}"
+                             GotFocus="TitleTextBox_GotFocus"
+                             LostFocus="TitleTextBox_LostFocus"
                              TextChanged="TitleTextBox_TextChanged"
                              FontSize="20" FontWeight="Bold"
                              BorderThickness="0" Padding="0"
