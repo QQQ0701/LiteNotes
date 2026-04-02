@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using StockEvernote.Contracts;
 using StockEvernote.Data;
 using StockEvernote.Model;
@@ -11,37 +12,45 @@ namespace StockEvernote.Services;
 public class NoteService : INoteService
 {
     private readonly EvernoteDbContext _dbContext;
-    public NoteService(EvernoteDbContext dbContext)
+    private readonly ILogger<NoteService> _logger;
+
+    public NoteService(EvernoteDbContext dbContext, ILogger<NoteService> logger)
     {
         _dbContext = dbContext;
+        _logger = logger;
     }
     public async Task<List<Note>> GetNotesAsync(string notebookId)
     {
-        return await _dbContext.Notes
-            .Where(n=>n.NotebookId == notebookId && n.IsDeleted == false)
-            .OrderByDescending(n=>n.UpdatedAt)
+        var result = await _dbContext.Notes
+           .Where(n => n.NotebookId == notebookId && n.IsDeleted == false)
+            .OrderByDescending(n => n.UpdatedAt)
             .ToListAsync();
+
+        _logger.LogDebug("查詢筆記，NotebookId：{NotebookId}，共 {Count} 篇", notebookId, result.Count);
+        return result;
     }
-    public async Task<Note> CreateNoteAsync(string name,string notebookId)
+    public async Task<Note> CreateNoteAsync(string name, string notebookId)
     {
         var newNote = new Note()
         {
             NotebookId = notebookId,
             Name = name,
             Content = string.Empty,
-            IsSynced = false,   
+            IsSynced = false,
             IsDeleted = false
         };
 
         _dbContext.Notes.Add(newNote);
         await _dbContext.SaveChangesAsync();
+
+        _logger.LogInformation("建立筆記：{Name}，Id：{Id}，NotebookId：{NotebookId}", name, newNote.Id, notebookId);
         return newNote;
     }
 
     public async Task<Note> UpdateNoteAsync(Note note)
     {
         var existing = await _dbContext.Notes.FindAsync(note.Id)
-            ??throw new KeyNotFoundException($"找不到 Notebook Id：{note.Id}");
+            ?? throw new KeyNotFoundException($"找不到 Notebook Id：{note.Id}");
 
         existing.Name = note.Name;
         existing.Content = note.Content ?? string.Empty;
@@ -49,6 +58,8 @@ public class NoteService : INoteService
         existing.UpdatedAt = DateTime.Now;
 
         await _dbContext.SaveChangesAsync();
+
+        _logger.LogInformation("更新筆記：{Name}，Id：{Id}", existing.Name, existing.Id);
         return existing;
     }
     public async Task DeleteNoteAsync(string noteId)
@@ -62,5 +73,6 @@ public class NoteService : INoteService
 
         await _dbContext.SaveChangesAsync();
 
+        _logger.LogInformation("軟刪除筆記：{Name}，Id：{Id}", existing.Name, existing.Id);
     }
 }

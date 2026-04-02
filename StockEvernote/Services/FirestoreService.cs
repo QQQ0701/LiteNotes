@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Serilog.Core;
 using StockEvernote.Contracts;
 using StockEvernote.Data;
 using StockEvernote.Model;
@@ -290,7 +291,12 @@ public class FirestoreService : IFirestoreService
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _userSession.IdToken);
 
         var response = await _httpClient.SendAsync(request);
-        if (!response.IsSuccessStatusCode) return null;
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogWarning("拉取雲端文件失敗，Path：{Path}，Status：{Status}", path, response.StatusCode);
+
+            return null;
+        }
 
         var json = await response.Content.ReadAsStringAsync();
         return System.Text.Json.JsonSerializer.Deserialize<FirestoreListResponse>(json,
@@ -457,6 +463,8 @@ public class FirestoreService : IFirestoreService
             await _dbContext.Notes.AddRangeAsync(newNotes);
             _logger.LogInformation("新增筆記數量：{Count}", newNotes.Count);
         }
+        _logger.LogInformation("還原筆記完成，軟刪除還原：{Restored} 篇，新增：{New} 篇",
+        softDeleted.Count, newNotes.Count);
     }
 }
 

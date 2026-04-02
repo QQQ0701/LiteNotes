@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using StockEvernote.Contracts;
 using StockEvernote.Data;
 using StockEvernote.Model;
@@ -7,9 +8,11 @@ namespace StockEvernote.Services;
 public class NotebookService : INotebookService
 {
     private readonly EvernoteDbContext _dbContext;
-    public NotebookService(EvernoteDbContext dbContext)
+    private readonly ILogger<NotebookService> _logger;
+    public NotebookService(EvernoteDbContext dbContext, ILogger<NotebookService> logger)
     {
         _dbContext = dbContext;
+        _logger = logger;
     }
     public async Task<Notebook> CreateNotebookAsync(string name, string userId)
     {
@@ -24,14 +27,18 @@ public class NotebookService : INotebookService
         _dbContext.Notebooks.Add(newnotebook);
         await _dbContext.SaveChangesAsync();
 
+        _logger.LogInformation("建立筆記本：{Name}，Id：{Id}", name, newnotebook.Id);
         return newnotebook;
     }
     public async Task<List<Notebook>> GetNotebooksAsync(string userId)
     {
-        return await _dbContext.Notebooks
+        var result = await _dbContext.Notebooks
                         .Where(n => n.UserId == userId && n.IsDeleted == false) // 💡 順便過濾掉被軟刪除的
                         .OrderByDescending(n => n.CreatedAt) // 💡 貼心小設計：最新的排在最上面
                         .ToListAsync();
+
+        _logger.LogDebug("查詢筆記本，UserId：{UserId}，共 {Count} 本", userId, result.Count);
+        return result;
     }
     public async Task<Notebook> UpdateNotebookAsync(Notebook notebook)
     {
@@ -42,6 +49,8 @@ public class NotebookService : INotebookService
         existing.IsSynced = false; // 修改後標記為未同步
         existing.UpdatedAt = DateTime.Now;
         await _dbContext.SaveChangesAsync();
+
+        _logger.LogInformation("更新筆記本：{Name}，Id：{Id}", existing.Name, existing.Id);
         return existing;
     }
 
@@ -55,5 +64,7 @@ public class NotebookService : INotebookService
         existing.IsSynced = false;  // 標記為未同步，等待雲端同步刪除
 
         await _dbContext.SaveChangesAsync();
+
+        _logger.LogInformation("軟刪除筆記本：{Name}，Id：{Id}", existing.Name, existing.Id);
     }
 }

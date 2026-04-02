@@ -35,16 +35,14 @@ public class TelegramMessageServices:ITelegramService
 
             if (response.IsSuccessStatusCode)
             {
-                _logger.LogInformation($"Telegram 訊息發送成功！內容：{message}");
+                _logger.LogInformation("Telegram 訊息發送成功，內容：{Message}", message);
                 return true;
             }
 
             string errorContent = await response.Content.ReadAsStringAsync();
-            _logger.LogWarning($"Telegram 發送失敗！HTTP 狀態碼: {response.StatusCode}, 伺服器回應: {errorContent}");
+            _logger.LogWarning("Telegram 發送失敗，HTTP 狀態碼：{StatusCode}，伺服器回應：{Error}", response.StatusCode, errorContent);
 
             return false;
-            //_logger.LogWarning("Telegram 發送失敗，錯誤碼：{ErrorCode}，原因：{Description}",
-            //       response?.ErrorCode, response?.Description);
 
         }
         catch (Exception ex)

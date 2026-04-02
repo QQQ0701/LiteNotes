@@ -11,7 +11,6 @@ public partial class NotesViewModel : ObservableObject
 {
     private readonly INotebookService _notebookService;
     private readonly INoteService _noteService;
-    //  private readonly string _currentUserId = "TestUser123";
     private readonly IUserSession _userSession;
     private readonly IFirestoreService _firestoreService;
     private readonly ILogger<NotesViewModel> _logger;
@@ -31,15 +30,17 @@ public partial class NotesViewModel : ObservableObject
         _logger = logger;
     }
 
-    // ★ WPF 的魔法集合：當裡面的資料增加或減少時，畫面會「自動」更新！
     [ObservableProperty] private ObservableCollection<Notebook> _notebooks = new();
     [ObservableProperty] private ObservableCollection<Note> _notes = new();
     [ObservableProperty] private string _newNotebookName = string.Empty;
     [ObservableProperty] private Notebook? _selectedNotebook;
     [ObservableProperty] private Note? _selectedNote;
-    //   [ObservableProperty] private string _noteContent = string.Empty;
     [ObservableProperty] private string _syncStatus = string.Empty;
     [ObservableProperty] private string _saveStatus = string.Empty;
+
+    //---------------------正式要刪除-------------------------------
+    [ObservableProperty] private bool _isAutoSyncEnabled = false;
+    //---------------------正式要刪除-------------------------------
 
     [RelayCommand]
     private async Task SaveSpecificNoteAsync(Note note)
@@ -96,6 +97,7 @@ public partial class NotesViewModel : ObservableObject
             await LoadNotebooksAsync(); // 還原後重新載入畫面
 
             SyncStatus = $"✅ 還原成功 {DateTime.Now:HH:mm:ss}";
+            _logger.LogInformation("從雲端還原成功，共 {Count} 本筆記本", Notebooks.Count);
         }
         catch (Exception ex)
         {
@@ -112,7 +114,10 @@ public partial class NotesViewModel : ObservableObject
 
         foreach (var item in data)
             Notebooks.Add(item);
+
+        _logger.LogInformation("載入筆記本，共 {Count} 本", Notebooks.Count);
     }
+
     // 當選擇的筆記本改變時，自動載入該本的筆記
     partial void OnSelectedNotebookChanged(Notebook? value)
     {
@@ -156,6 +161,8 @@ public partial class NotesViewModel : ObservableObject
 
         if (notebook.Name == newName) return;
 
+        _logger.LogInformation("筆記本重新命名：{OldName} → {NewName}", notebook.Name, newName);
+
         notebook.Name = newName;
         await _notebookService.UpdateNotebookAsync(notebook);
     }
@@ -163,6 +170,8 @@ public partial class NotesViewModel : ObservableObject
     [RelayCommand]
     private void CancelNotebookRename(Notebook notebook)
     {
+        _logger.LogInformation("取消筆記本重新命名：{Name}", notebook.Name);
+
         notebook.IsEditing = false;
         notebook.EditingName = string.Empty;
     }
@@ -195,6 +204,9 @@ public partial class NotesViewModel : ObservableObject
 
         foreach (var item in data)
             Notes.Add(item);
+
+        _logger.LogInformation("載入筆記，NotebookId：{NotebookId}，共 {Count} 篇", 
+            notebookId, Notes.Count);
     }
 
     [RelayCommand]
@@ -206,6 +218,8 @@ public partial class NotesViewModel : ObservableObject
         Notes.Insert(0, created);
         created.EditingName = created.Name;
         created.IsEditing = true;
+
+        _logger.LogInformation("新增筆記：{Name}，NotebookId：{NotebookId}", created.Name, SelectedNotebook.Id);
     }
 
     [RelayCommand]
@@ -223,6 +237,8 @@ public partial class NotesViewModel : ObservableObject
 
         if (note.Name == newName) return;
 
+        _logger.LogInformation("筆記重新命名：{OldName} → {NewName}", note.Name, newName);
+
         note.Name = newName;
         await _noteService.UpdateNoteAsync(note);
     }
@@ -230,8 +246,10 @@ public partial class NotesViewModel : ObservableObject
     [RelayCommand]
     private void CancelNoteRename(Note note)
     {
+        _logger.LogInformation("取消筆記重新命名：{Name}", note.Name);
+
         if (note.Name == "新筆記")
-            Notes.Remove(note); // 取消時直接刪掉新增的空白筆記
+            Notes.Remove(note); 
         note.IsEditing = false;
         note.EditingName = string.Empty;
     }

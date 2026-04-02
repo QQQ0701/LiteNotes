@@ -6,7 +6,6 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -43,14 +42,73 @@ public partial class NotesWindow : Window
             this.Close();
         };
     }
+    // ══════════════════════════════════════════════════════════
+    //  啟動載入 + 雲端同步
+    // ══════════════════════════════════════════════════════════
 
+    private async void NotesWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        // 🔧 開發階段：透過開關控制是否啟動同步
+        // 📌 正式上線：刪除 if 判斷，讓 try-catch 區塊直接執行
+        if (_vm.IsAutoSyncEnabled)
+        {
+            try
+            {
+                // 先推本地變更 → 再拉雲端最新（順序不能反，避免已刪除的資料被復活）
+                _vm.SyncStatus = "⏳ 上傳本地變更...";
+                await _vm.SyncCommand.ExecuteAsync(null);
 
-    // 自動儲存
+                _vm.SyncStatus = "⏳ 從雲端同步中...";
+                await _vm.RestoreFromCloudCommand.ExecuteAsync(null);
+            }
+            catch
+            {
+                _vm.SyncStatus = "❌ 啟動同步失敗，使用本地資料";
+            }
+        }
+
+        await _vm.LoadNotebooksCommand.ExecuteAsync(null);
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  關閉視窗：儲存 + 雲端同步
+    // ══════════════════════════════════════════════════════════
+
+    protected override async void OnClosing(CancelEventArgs e)
+    {
+        // 強制儲存當前正在編輯的筆記
+        if (_autoSaveTimer != null && _vm.SelectedNote != null)
+        {
+            _autoSaveTimer.Dispose();
+            _autoSaveTimer = null;
+            SaveNote(_vm.SelectedNote);
+        }
+
+        // 🔧 開發階段：透過開關控制是否關閉前同步
+        // 📌 正式上線：刪除 if 判斷，讓 try-catch 區塊直接執行
+        if (_vm.IsAutoSyncEnabled)
+        {
+            try
+            {
+                _vm.SyncStatus = "⏳ 關閉前同步中...";
+                await _vm.SyncCommand.ExecuteAsync(null);
+            }
+            catch
+            {
+                // 同步失敗不阻擋關閉，下次啟動會再同步
+            }
+        }
+
+        base.OnClosing(e);
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  自動儲存（停止輸入 1.5 秒後觸發）
+    // ══════════════════════════════════════════════════════════
     private void ContentRichTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         if (_vm.SelectedNote is null || _isInternalLoading) return;
 
-        // 每次輸入都重置計時器，停止輸入 1.5 秒後才儲存
         _autoSaveTimer?.Dispose();
         _autoSaveTimer = new System.Threading.Timer(_ =>
         {
@@ -73,7 +131,9 @@ public partial class NotesWindow : Window
         _ = _vm.SaveSpecificNoteCommand.ExecuteAsync(note);
     }
 
-    // 切換筆記
+    // ══════════════════════════════════════════════════════════
+    //  切換筆記 & 載入內容
+    // ══════════════════════════════════════════════════════════
     private void NotesViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(_vm.SelectedNote))
@@ -122,22 +182,56 @@ public partial class NotesWindow : Window
             _isInternalLoading = false;
         }
     }
-
-    // ❌ 關閉視窗
-    protected override void OnClosing(CancelEventArgs e)
+    // ══════════════════════════════════════════════════════════
+    //  筆記標題編輯：防空白 + 自動儲存
+    // ══════════════════════════════════════════════════════════
+    private void TitleTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
-        // ✅ 關閉前強制儲存
-        if (_autoSaveTimer != null && _vm.SelectedNote != null)
-        {
-            _autoSaveTimer.Dispose();
-            _autoSaveTimer = null;
-            SaveNote(_vm.SelectedNote);
-        }
+        if (_vm.SelectedNote is null || _isInternalLoading) return;
 
-        base.OnClosing(e);
+        // 1. 攔截：如果使用者把標題刪光了，立刻銷毀計時器，絕對不准啟動自動儲存！
+        if (string.IsNullOrWhiteSpace(_vm.SelectedNote.Name))
+        {
+            _autoSaveTimer?.Dispose();
+            _autoSaveTimer = null;
+            return;
+        }
+        // 2. 放行：如果標題不是空白的（使用者有打字），才去呼叫下方的方法啟動 1.5 秒存檔
+        ContentRichTextBox_TextChanged(sender, e);
+    }
+    private void TitleTextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        if (_vm.SelectedNote != null)
+        {
+            _originalNoteTitle = _vm.SelectedNote.Name;
+        }
     }
 
-    // 負責 1：當 TextBox 出現時，強制把游標塞進去並全選文字
+    private void TitleTextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (_vm.SelectedNote == null) return;
+
+        // 🌟 核心防呆：如果名字變成空白的，直接拿剛才背起來的原名覆蓋回去！
+        if (string.IsNullOrWhiteSpace(_vm.SelectedNote.Name))
+        {
+            _vm.SelectedNote.Name = _originalNoteTitle;
+
+            // 順便把 1.5 秒的存檔計時器停掉，避免存入空白資料
+            _autoSaveTimer?.Dispose();
+            _autoSaveTimer = null;
+        }
+        else if (_vm.SelectedNote.Name != _originalNoteTitle)
+        {
+            // 如果使用者有乖乖打上新名字，就更新我們的記憶
+            _originalNoteTitle = _vm.SelectedNote.Name;
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  重新命名 TextBox 自動聚焦
+    // ══════════════════════════════════════════════════════════
+
+    /// <summary>TextBox 變成可見時聚焦（右鍵重新命名用）</summary>
     private void AutoSelectTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
         if (sender is TextBox tb && (bool)e.NewValue == true)
@@ -153,9 +247,27 @@ public partial class NotesWindow : Window
             }), System.Windows.Threading.DispatcherPriority.Input);
         }
     }
-    // ──────────────────────────────────────────────
-    // 全域焦點守衛：只負責「強制失焦」，不碰任何業務邏輯
-    // ──────────────────────────────────────────────
+
+    /// <summary>TextBox Loaded 時聚焦（新增項目用，優先級更低確保贏過 ListView）</summary>
+    private void AutoSelectTextBox_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb && tb.IsVisible)
+        {
+            // ContextIdle：保證 WPF 把畫面上的東西都排版完、渲染完，才執行這段
+            tb.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                tb.Focus();
+                Keyboard.Focus(tb);
+                tb.SelectAll();
+            }), System.Windows.Threading.DispatcherPriority.ContextIdle);
+        }
+    }
+
+
+    // ══════════════════════════════════════════════════════════
+    //  點擊空白處確認重新命名
+    // ══════════════════════════════════════════════════════════
+
     private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
         // 1. Fail-fast：找出所有正在編輯的項目
@@ -205,9 +317,9 @@ public partial class NotesWindow : Window
         }
     }
 
-    // ──────────────────────────────────────────────
-    // Notebook 重新命名：LostFocus 事件處理
-    // ──────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════════
+    //  LostFocus 備援確認（焦點自然轉移時觸發）
+    // ══════════════════════════════════════════════════════════
     private void NotebookRenameTextBox_LostFocus(object sender, RoutedEventArgs e)
     {
         if (sender is TextBox tb && tb.DataContext is Notebook notebook)
@@ -222,9 +334,6 @@ public partial class NotesWindow : Window
         }
     }
 
-    // ──────────────────────────────────────────────
-    // Note 重新命名：LostFocus 事件處理
-    // ──────────────────────────────────────────────
     private void NoteRenameTextBox_LostFocus(object sender, RoutedEventArgs e)
     {
         if (sender is TextBox tb && tb.DataContext is Note note)
@@ -238,124 +347,25 @@ public partial class NotesWindow : Window
             }
         }
     }
-    //----------------------------------------------------------------------
-    private async void NotesWindow_Loaded(object sender, RoutedEventArgs e)
-    {
-        await _vm.LoadNotebooksCommand.ExecuteAsync(null);
-    }
+
+    // ══════════════════════════════════════════════════════════
+    //  其他
+    // ══════════════════════════════════════════════════════════
+
     private void MenuItem_Click(object sender, RoutedEventArgs e)
     {
         Application.Current.Shutdown();
     }
 
-    private void TitleTextBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        if (_vm.SelectedNote is null || _isInternalLoading) return;
+    // ══════════════════════════════════════════════════════════════
+    //  📌 正式上線 Checklist
+    // ══════════════════════════════════════════════════════════════
+    //
+    //  1. ViewModel：刪除 [ObservableProperty] private bool _isAutoSyncEnabled
+    //  2. Code-Behind：NotesWindow_Loaded → 刪除 if (_vm.IsAutoSyncEnabled)，保留 try-catch 內容
+    //  3. Code-Behind：OnClosing → 刪除 if (_vm.IsAutoSyncEnabled)，保留 try-catch 內容
+    //  4. XAML：StatusBar → 刪除自動同步的 CheckBox
+    //
+    // ══════════════════════════════════════════════════════════════
 
-        // 1. 攔截：如果使用者把標題刪光了，立刻銷毀計時器，絕對不准啟動自動儲存！
-        if (string.IsNullOrWhiteSpace(_vm.SelectedNote.Name))
-        {
-            _autoSaveTimer?.Dispose();
-            _autoSaveTimer = null;
-            return;
-        }
-
-        // 2. 放行：如果標題不是空白的（使用者有打字），才去呼叫下方的方法啟動 1.5 秒存檔
-        ContentRichTextBox_TextChanged(sender, e);
-    }
-
-  
-    private void TitleTextBox_GotFocus(object sender, RoutedEventArgs e)
-    {
-        if (_vm.SelectedNote != null)
-        {
-            _originalNoteTitle = _vm.SelectedNote.Name;
-        }
-    }
-
-    private void TitleTextBox_LostFocus(object sender, RoutedEventArgs e)
-    {
-        if (_vm.SelectedNote == null) return;
-
-        // 🌟 核心防呆：如果名字變成空白的，直接拿剛才背起來的原名覆蓋回去！
-        if (string.IsNullOrWhiteSpace(_vm.SelectedNote.Name))
-        {
-            _vm.SelectedNote.Name = _originalNoteTitle;
-
-            // 順便把 1.5 秒的存檔計時器停掉，避免存入空白資料
-            _autoSaveTimer?.Dispose();
-            _autoSaveTimer = null;
-        }
-        else if (_vm.SelectedNote.Name != _originalNoteTitle)
-        {
-            // 如果使用者有乖乖打上新名字，就更新我們的記憶
-            _originalNoteTitle = _vm.SelectedNote.Name;
-        }
-    }
-
-    private void AutoSelectTextBox_Loaded(object sender, RoutedEventArgs e)
-    {
-        if (sender is TextBox tb && tb.IsVisible)
-        {
-            // ContextIdle：保證 WPF 把畫面上的東西都排版完、渲染完，才執行這段
-            tb.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                tb.Focus();
-                Keyboard.Focus(tb);
-                tb.SelectAll();
-            }), System.Windows.Threading.DispatcherPriority.ContextIdle);
-        }
-    }
-
-
-
-
-
-    // ✅ 新增：Note 的 LostFocus
-
-
-
-
-    //private async void SaveButton_Click(object sender, RoutedEventArgs e)
-    //{
-    //    _vm.NoteContent = GetRichTextContent();
-    //    await _vm.SaveNoteCommand.ExecuteAsync(null);
-    //    MessageBox.Show("儲存成功", "提示" ,MessageBoxButton.OK, MessageBoxImage.Information);
-    //}
-    //private string GetRichTextContent()
-    //{
-    //    var textRange = new System.Windows.Documents.TextRange(
-    //        contentRichTextBox.Document.ContentStart,
-    //        contentRichTextBox.Document.ContentEnd);
-
-    //    using var stream = new System.IO.MemoryStream();
-    //    textRange.Save(stream, System.Windows.DataFormats.Rtf);
-
-    //    stream.Position = 0; // 把讀取游標拉回起點
-    //    using var reader = new System.IO.StreamReader(stream);
-    //    return reader.ReadToEnd(); // 這樣讀最安全，絕對沒有編碼亂碼！
-    //}
-
-    //private void LoadRichTextContent(string content)
-    //{
-    //    contentRichTextBox.Document.Blocks.Clear();
-    //    if (string.IsNullOrEmpty(content)) return;
-
-    //    try
-    //    {
-    //        var textRange = new System.Windows.Documents.TextRange(
-    //            contentRichTextBox.Document.ContentStart,
-    //            contentRichTextBox.Document.ContentEnd);
-
-    //        using var stream = new System.IO.MemoryStream(
-    //            System.Text.Encoding.ASCII.GetBytes(content)); // ✅ RTF 用 ASCII
-
-    //        textRange.Load(stream, System.Windows.DataFormats.Rtf);
-    //    }
-    //    catch
-    //    {
-    //        // 舊資料不是 RTF 格式就當純文字顯示
-    //        contentRichTextBox.AppendText(content);
-    //    }
-    //}
 }

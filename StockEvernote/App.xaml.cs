@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Serilog.Events;
 using StockEvernote.Contracts;
 using StockEvernote.Data;
 using StockEvernote.Services;
@@ -36,7 +37,9 @@ public partial class App : Application
         // 1. 初始化 Serilog
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information() // 設定只記錄 Information 以上的層級
-            .WriteTo.Console()          // 燈泡 1：寫入 Console (給工程師看)
+            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+            .MinimumLevel.Override("System.Net.Http", LogEventLevel.Warning)
+            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")// 燈泡 1：寫入 Console (給工程師看)
             .WriteTo.File(              // 燈泡 2：寫入實體檔案 (給客訴查修用)
               path: "Logs/StockEvernote-.txt", // 檔案名稱，Serilog 會自動在後面加上日期
               rollingInterval: RollingInterval.Day, // 🌟 每天自動開一個新檔案！
