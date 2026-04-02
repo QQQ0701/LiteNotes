@@ -36,20 +36,32 @@ public class FirestoreService : IFirestoreService
         _projectId = configuration["Firebase:ProjectId"]
             ?? throw new InvalidOperationException("找不到 Firebase:ProjectId");
     }
+
+    /// <summary>
+    /// 執行全量雲端同步作業，依序將本地端未同步的筆記本與筆記推送至 Firestore。
+    /// </summary>
+    /// <remarks>
+    /// 同步順序具有嚴格相依性：必須先確保筆記本 (Notebook) 實體存在於雲端，才能推送其轄下的筆記 (Note)。
+    /// 資料來源直接依賴本地 SQLite 資料庫，而非 UI 層的資料綁定集合，以確保背景同步的絕對完整性。
+    /// </remarks>
+    /// <param name="userId">當前經授權驗證的使用者唯一識別碼 (Firebase UID)</param>
+    /// <returns>代表非同步操作的 Task，執行完畢即代表單向 (本地推至雲端) 同步完成</returns>
+    /// <exception cref="System.Net.Http.HttpRequestException">網路異常或 Firestore 伺服器拒絕連線時拋出</exception>
     public async Task SyncAllAsync(string userId)
     {
         _logger.LogInformation("開始全量同步，UserId：{UserId}", userId);
 
-        // 1. 同步所有筆記本
+        // 1. 確保外鍵關聯的父實體 (Notebook) 優先上傳，避免 Firestore 寫入孤兒筆記
         await SyncNotebooksAsync(userId);
 
-        // 2. 從資料庫撈所有筆記本 Id，不依賴畫面集合
+        // 2. 直接查詢實體資料庫取得所有活躍的 NotebookId
+        // 防坑 (Why)：嚴禁使用 ViewModel.Notebooks，防止 UI 尚未渲染或資料過濾導致同步清單缺漏
         var allNotebookIds = await _dbContext.Notebooks
             .Where(n => n.UserId == userId && n.IsDeleted == false)
             .Select(n => n.Id)
             .ToListAsync();
 
-        // 3. 對每本筆記本同步 Note
+        // 3. 遍歷所有有效筆記本，批次執行筆記實體的 Upsert 或 Delete 操作
         foreach (var notebookId in allNotebookIds)
         {
             await SyncNotesAsync(notebookId, userId);
@@ -57,6 +69,7 @@ public class FirestoreService : IFirestoreService
 
         _logger.LogInformation("全量同步完成，共同步 {Count} 本筆記本", allNotebookIds.Count);
     }
+
     // ===== Notebook 同步 =====
 
     public async Task SyncNotebooksAsync(string userId)

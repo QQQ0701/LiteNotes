@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using StockEvernote.Contracts;
 using StockEvernote.Model;
+using StockEvernote.Services;
 using System.Collections.ObjectModel;
 
 namespace StockEvernote.ViewModel;
@@ -15,19 +16,22 @@ public partial class NotesViewModel : ObservableObject
     private readonly IFirestoreService _firestoreService;
     private readonly ILogger<NotesViewModel> _logger;
     private readonly SemaphoreSlim _saveLock = new SemaphoreSlim(1, 1);
+    private readonly ISearchService _searchService;
     private string CurrentUserId => _userSession.LocalId ?? string.Empty;
     public Action? LogoutAction { get; set; }
     public NotesViewModel(INotebookService notebookService,
         INoteService noteService,
         IUserSession userSession,
         IFirestoreService firestoreService,
-        ILogger<NotesViewModel> logger)
+        ILogger<NotesViewModel> logger,
+        ISearchService searchService)
     {
         _notebookService = notebookService;
         _noteService = noteService;
         _userSession = userSession;
         _firestoreService = firestoreService;
         _logger = logger;
+        _searchService = searchService;
     }
 
     [ObservableProperty] private ObservableCollection<Notebook> _notebooks = new();
