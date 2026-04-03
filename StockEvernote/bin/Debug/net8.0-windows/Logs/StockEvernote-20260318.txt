@@ -1,4 +1,0 @@
-[15:33:26 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] Start processing HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
-[15:33:26 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Sending HTTP request POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*
-[15:33:26 INF] [System.Net.Http.HttpClient.IAuthService.ClientHandler] Received HTTP response headers after 351.3486ms - 400
-[15:33:26 INF] [System.Net.Http.HttpClient.IAuthService.LogicalHandler] End processing HTTP request after 402.3902ms - 400
