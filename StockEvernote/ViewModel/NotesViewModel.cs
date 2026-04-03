@@ -5,6 +5,8 @@ using StockEvernote.Contracts;
 using StockEvernote.Model;
 using StockEvernote.Services;
 using System.Collections.ObjectModel;
+using System.DirectoryServices;
+using SearchResult = StockEvernote.Model.SearchResult;
 
 namespace StockEvernote.ViewModel;
 
@@ -42,10 +44,85 @@ public partial class NotesViewModel : ObservableObject
     [ObservableProperty] private string _syncStatus = string.Empty;
     [ObservableProperty] private string _saveStatus = string.Empty;
 
+    [ObservableProperty] private string _searchKeyword = string.Empty;
+    [ObservableProperty] private ObservableCollection<SearchResult> _searchResults = new();
+    [ObservableProperty] private bool _isSearchMode = false;
+    [ObservableProperty] private bool _isSearchGlobal = true;  // true=全域, false=當前筆記本
+    [ObservableProperty] private SearchResult? _selectedSearchResult;
+
     //---------------------正式要刪除-------------------------------
     [ObservableProperty] private bool _isAutoSyncEnabled = false;
     //---------------------正式要刪除-------------------------------
 
+    [RelayCommand]
+    private async Task SearchAsync()
+    {
+        if (string.IsNullOrWhiteSpace(SearchKeyword))
+        {
+            SearchResults.Clear();
+            IsSearchMode = false;
+            return;
+        }
+
+        IsSearchMode = true;
+
+        var notebookId = IsSearchGlobal ? null : SelectedNotebook?.Id;
+        var results = await _searchService.SearchAsync(SearchKeyword, CurrentUserId, notebookId);
+
+        SearchResults.Clear();
+        foreach (var result in results)
+            SearchResults.Add(result);
+
+        _logger.LogInformation("搜尋「{Keyword}」，結果 {Count} 筆", SearchKeyword, SearchResults.Count);
+    }
+
+    [RelayCommand]
+    private void ClearSearch()
+    {
+        SearchKeyword = string.Empty;
+        SearchResults.Clear();
+        IsSearchMode = false;
+    }
+    /// <summary>點擊搜尋結果：跳到對應筆記本和筆記</summary>
+    partial void OnSelectedSearchResultChanged(SearchResult? value)
+    {
+        if (value is null) return;
+
+        // 切換到對應筆記本
+        var targetNotebook = Notebooks.FirstOrDefault(n => n.Id == value.NotebookId);
+        if (targetNotebook != null && SelectedNotebook != targetNotebook)
+        {
+            SelectedNotebook = targetNotebook;
+        }
+
+        // 等筆記載入完後選中對應筆記（需要延遲，因為 OnSelectedNotebookChanged 是 async）
+        _ = SelectNoteAfterLoadAsync(value.NoteId);
+    }
+
+    /// <summary>
+    /// 延遲等待 LoadNotesAsync 完成後再選中筆記。
+    /// OnSelectedNotebookChanged 會觸發 async 載入，直接選中會找不到目標筆記。
+    /// </summary>
+    private async Task SelectNoteAfterLoadAsync(string noteId)
+    {
+        // 等一下讓 LoadNotesAsync 跑完
+        await Task.Delay(200);
+
+        var targetNote = Notes.FirstOrDefault(n => n.Id == noteId);
+        if (targetNote != null)
+        {
+            SelectedNote = targetNote;
+        }
+    }
+
+    [RelayCommand]
+    private async Task InitializeSearchAsync()
+    {
+        await _searchService.InitializeAsync();
+        await _searchService.RebuildIndexAsync(CurrentUserId);
+        _logger.LogInformation("搜尋索引初始化完成");
+    }
+    //-------------------------------------------------------------------
     [RelayCommand]
     private async Task SaveSpecificNoteAsync(Note note)
     {
@@ -56,6 +133,15 @@ public partial class NotesViewModel : ObservableObject
         {
             await _noteService.UpdateNoteAsync(note);
             SaveStatus = $"自動儲存 {DateTime.Now:HH:mm:ss}";
+
+            // 更新搜尋索引
+            if (SelectedNotebook != null)
+            {
+                await _searchService.IndexNoteAsync(
+                    note.Id, note.Name, note.Content ?? string.Empty,
+                    note.NotebookId, SelectedNotebook.Name);
+            }
+
             _logger.LogInformation("儲存筆記：{Name}", note.Name);
         }
         finally
@@ -99,6 +185,9 @@ public partial class NotesViewModel : ObservableObject
 
             await _firestoreService.RestoreFromCloudAsync(CurrentUserId);
             await LoadNotebooksAsync(); // 還原後重新載入畫面
+
+            // 雲端還原後重建索引
+            await _searchService.RebuildIndexAsync(CurrentUserId);
 
             SyncStatus = $"✅ 還原成功 {DateTime.Now:HH:mm:ss}";
             _logger.LogInformation("從雲端還原成功，共 {Count} 本筆記本", Notebooks.Count);
@@ -189,6 +278,11 @@ public partial class NotesViewModel : ObservableObject
         bool isSelected = SelectedNotebook == notebook;
         Notebooks.Remove(notebook);
 
+        // 移除該筆記本下所有筆記的索引
+        var notesToRemove = await _noteService.GetNotesAsync(notebook.Id);
+        foreach (var note in notesToRemove)
+            await _searchService.RemoveNoteIndexAsync(note.Id);
+
         // 如果刪的是目前選中的筆記本，清空右側筆記列表
         if (isSelected)
         {
@@ -245,6 +339,14 @@ public partial class NotesViewModel : ObservableObject
 
         note.Name = newName;
         await _noteService.UpdateNoteAsync(note);
+
+        if (SelectedNotebook != null)
+        {
+            var existingNote = Notes.FirstOrDefault(n => n.Id == note.Id);
+            await _searchService.IndexNoteAsync(
+                note.Id, newName, existingNote?.Content ?? string.Empty,
+                note.NotebookId, SelectedNotebook.Name);
+        }
     }
 
     [RelayCommand]
@@ -264,6 +366,8 @@ public partial class NotesViewModel : ObservableObject
         await _noteService.DeleteNoteAsync(note.Id);
         _logger.LogInformation("刪除筆記：{Name}", note.Name);
         Notes.Remove(note);
+
+        await _searchService.RemoveNoteIndexAsync(note.Id);
 
         //如果刪的是目前選中的筆記本，清空右側筆記列表
         if (SelectedNote == note)

@@ -91,6 +91,98 @@
                 </Button>
             </Grid>
         </Border>
+
+        <!-- ===== 搜尋列 ===== -->
+        <Border DockPanel.Dock="Top"
+        Background="White"
+        BorderBrush="#E8E8E8"
+        BorderThickness="0,0,0,1"
+        Padding="12,6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- 搜尋輸入框 -->
+                <TextBox Grid.Column="0"
+                 Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
+                 TextChanged="SearchTextBox_TextChanged"
+                 FontSize="14" Padding="8,6"
+                 BorderThickness="1" BorderBrush="#D0D0D0"
+                 Background="#FAFAFA"
+                 VerticalContentAlignment="Center">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Return"
+                            Command="{Binding SearchCommand}"/>
+                        <KeyBinding Key="Escape"
+                            Command="{Binding ClearSearchCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+
+                <!-- 全域/當前切換 -->
+                <ToggleButton Grid.Column="1"
+                      IsChecked="{Binding IsSearchGlobal}"
+                      Content="{Binding IsSearchGlobal, Converter={StaticResource BoolToSearchScopeConverter}}"
+                      FontSize="12" Padding="8,6" Margin="6,0,0,0"
+                      BorderThickness="1" BorderBrush="#D0D0D0"
+                      Background="White" Foreground="#555555"
+                      Cursor="Hand"/>
+
+                <!-- 清除按鈕 -->
+                <Button Grid.Column="2"
+                Command="{Binding ClearSearchCommand}"
+                Content="✕" FontSize="14"
+                Padding="8,6" Margin="4,0,0,0"
+                BorderThickness="0" Background="Transparent"
+                Foreground="#999999" Cursor="Hand"
+                Visibility="{Binding IsSearchMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </Grid>
+        </Border>
+
+        <!-- ===== 搜尋結果面板（覆蓋在筆記本+筆記列表上方） ===== -->
+        <!-- 放在左側筆記本列表的 Border 之前 -->
+        <Border DockPanel.Dock="Left" Width="440"
+        Background="White"
+        BorderBrush="#E8E8E8" BorderThickness="0,0,1,0"
+        Visibility="{Binding IsSearchMode, Converter={StaticResource BoolToVisibilityConverter}}">
+            <DockPanel>
+                <Border DockPanel.Dock="Top" Padding="12,8"
+                BorderBrush="#E8E8E8" BorderThickness="0,0,0,1">
+                    <TextBlock FontSize="13" Foreground="#888888">
+                <Run Text="搜尋結果："/>
+                <Run Text="{Binding SearchResults.Count, Mode=OneWay}"/>
+                <Run Text=" 筆"/>
+                    </TextBlock>
+                </Border>
+
+                <ListView ItemsSource="{Binding SearchResults}"
+                  SelectedItem="{Binding SelectedSearchResult}"
+                  BorderThickness="0" Background="Transparent"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  Padding="8,4">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="4,6">
+                                <TextBlock Text="{Binding NoteName}"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="#1A1A1A"
+                                   TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="{Binding NotebookName}"
+                                   FontSize="11" Foreground="#999999"
+                                   Margin="0,2,0,0"/>
+                                <TextBlock Text="{Binding MatchSnippet}"
+                                   FontSize="12" Foreground="#666666"
+                                   TextWrapping="Wrap" MaxHeight="40"
+                                   Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </DockPanel>
+        </Border>
+
         <!-- ===== StatusBar ===== -->
         <StatusBar DockPanel.Dock="Bottom"
                    Background="#F7F7F7"

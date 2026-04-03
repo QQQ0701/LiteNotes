@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using StockEvernote.Contracts;
 using StockEvernote.Model;
 using StockEvernote.ViewModel;
 using System.ComponentModel;
@@ -42,6 +43,24 @@ public partial class NotesWindow : Window
             this.Close();
         };
     }
+
+    private System.Threading.Timer? _searchTimer;
+
+    /// <summary>搜尋列文字變更：延遲 300ms 後觸發搜尋</summary>
+    private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        _searchTimer?.Dispose();
+        _searchTimer = new System.Threading.Timer(_ =>
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (_vm.SearchCommand.CanExecute(null))
+                    _vm.SearchCommand.Execute(null);
+            });
+        }, null, 300, System.Threading.Timeout.Infinite);
+    }
+
+
     // ══════════════════════════════════════════════════════════
     //  啟動載入 + 雲端同步
     // ══════════════════════════════════════════════════════════
@@ -68,6 +87,10 @@ public partial class NotesWindow : Window
         }
 
         await _vm.LoadNotebooksCommand.ExecuteAsync(null);
+
+        // 初始化搜尋索引
+  
+        await _vm.InitializeSearchCommand.ExecuteAsync(null);
     }
 
     // ══════════════════════════════════════════════════════════

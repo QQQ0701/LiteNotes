@@ -102,6 +102,7 @@ public partial class App : Application
         services.AddSingleton(configuration);
         services.AddSingleton<IDialogService, WpfDialogService>();
         services.AddSingleton<IUserSession, UserSession>();
+        services.AddSingleton<ISearchService, SearchService>();
 
         // --- 資料庫 (Database) ---
 

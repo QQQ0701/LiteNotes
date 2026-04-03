@@ -120,8 +120,6 @@ public class SearchService : ISearchService
         _logger.LogInformation("搜尋索引重建完成，共索引 {Count} 篇筆記", notes.Count);
     }
 
-   
-
     public async Task<List<SearchResult>> SearchAsync(string keyword, string userId, string? notebookId = null)
     {
         if (string.IsNullOrWhiteSpace(keyword))
