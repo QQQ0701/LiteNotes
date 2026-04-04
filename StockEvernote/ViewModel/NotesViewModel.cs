@@ -3,24 +3,36 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using StockEvernote.Contracts;
 using StockEvernote.Model;
-using StockEvernote.Services;
 using System.Collections.ObjectModel;
-using System.DirectoryServices;
 using SearchResult = StockEvernote.Model.SearchResult;
 
 namespace StockEvernote.ViewModel;
 
+/// <summary>
+/// 筆記本與筆記管理之核心 ViewModel，負責處理 CRUD 操作、全文檢索連動與雲端同步狀態。
+/// </summary>
 public partial class NotesViewModel : ObservableObject
 {
+    #region 注入服務與私有欄位
+
     private readonly INotebookService _notebookService;
     private readonly INoteService _noteService;
     private readonly IUserSession _userSession;
     private readonly IFirestoreService _firestoreService;
     private readonly ILogger<NotesViewModel> _logger;
-    private readonly SemaphoreSlim _saveLock = new SemaphoreSlim(1, 1);
+    private readonly SemaphoreSlim _saveLock = new(1, 1);
     private readonly ISearchService _searchService;
+
+    /// <summary>
+    /// 搜尋跳轉期間抑制 OnSelectedNotebookChanged 的自動載入，防止 Double Fetching。
+    /// </summary>
+    private bool _isNavigatingFromSearch = false;
     private string CurrentUserId => _userSession.LocalId ?? string.Empty;
     public Action? LogoutAction { get; set; }
+
+    #endregion
+
+    #region 建構函式
     public NotesViewModel(INotebookService notebookService,
         INoteService noteService,
         IUserSession userSession,
@@ -35,25 +47,46 @@ public partial class NotesViewModel : ObservableObject
         _logger = logger;
         _searchService = searchService;
     }
+    #endregion
+
+    #region 可觀察屬性
 
     [ObservableProperty] private ObservableCollection<Notebook> _notebooks = new();
     [ObservableProperty] private ObservableCollection<Note> _notes = new();
-    [ObservableProperty] private string _newNotebookName = string.Empty;
+    [ObservableProperty] private ObservableCollection<SearchResult> _searchResults = new();
+
     [ObservableProperty] private Notebook? _selectedNotebook;
     [ObservableProperty] private Note? _selectedNote;
-    [ObservableProperty] private string _syncStatus = string.Empty;
-    [ObservableProperty] private string _saveStatus = string.Empty;
-
-    [ObservableProperty] private string _searchKeyword = string.Empty;
-    [ObservableProperty] private ObservableCollection<SearchResult> _searchResults = new();
-    [ObservableProperty] private bool _isSearchMode = false;
-    [ObservableProperty] private bool _isSearchGlobal = true;  // true=全域, false=當前筆記本
     [ObservableProperty] private SearchResult? _selectedSearchResult;
 
+    [ObservableProperty] private string _newNotebookName = string.Empty;
+    [ObservableProperty] private string _syncStatus = string.Empty;
+    [ObservableProperty] private string _saveStatus = string.Empty;
+    [ObservableProperty] private string _searchKeyword = string.Empty;
+
+    [ObservableProperty] private bool _isSearchMode = false;
+    [ObservableProperty] private bool _isSearchGlobal = true;  // true=全域, false=當前筆記本
+
+    #endregion
     //---------------------正式要刪除-------------------------------
     [ObservableProperty] private bool _isAutoSyncEnabled = false;
     //---------------------正式要刪除-------------------------------
 
+    #region 搜尋系統 (Search Subsystem)
+    /// <summary>
+    /// 初始化 FTS5 虛擬資料表並重建當前使用者的全文檢索索引。
+    /// </summary>
+    [RelayCommand]
+    private async Task InitializeSearchAsync()
+    {
+        await _searchService.InitializeAsync();
+        await _searchService.RebuildIndexAsync(CurrentUserId);
+        _logger.LogInformation("搜尋索引初始化完成");
+    }
+
+    /// <summary>
+    /// 執行全文檢索，依據 IsSearchGlobal 決定搜尋範圍。
+    /// </summary>
     [RelayCommand]
     private async Task SearchAsync()
     {
@@ -83,81 +116,37 @@ public partial class NotesViewModel : ObservableObject
         SearchResults.Clear();
         IsSearchMode = false;
     }
-    /// <summary>點擊搜尋結果：跳到對應筆記本和筆記</summary>
+
+    /// <summary>
+    /// 點擊搜尋結果時，跳轉至對應筆記本並選中目標筆記。
+    /// 透過 _isNavigatingFromSearch 旗標避免觸發 OnSelectedNotebookChanged 的重複載入。
+    /// </summary>
     partial void OnSelectedSearchResultChanged(SearchResult? value)
     {
         if (value is null) return;
 
         // 切換到對應筆記本
         var targetNotebook = Notebooks.FirstOrDefault(n => n.Id == value.NotebookId);
-        if (targetNotebook != null && SelectedNotebook != targetNotebook)
+        if (targetNotebook != null)
         {
-            SelectedNotebook = targetNotebook;
-        }
-
-        // 等筆記載入完後選中對應筆記（需要延遲，因為 OnSelectedNotebookChanged 是 async）
-        _ = SelectNoteAfterLoadAsync(value.NoteId);
-    }
-
-    /// <summary>
-    /// 延遲等待 LoadNotesAsync 完成後再選中筆記。
-    /// OnSelectedNotebookChanged 會觸發 async 載入，直接選中會找不到目標筆記。
-    /// </summary>
-    private async Task SelectNoteAfterLoadAsync(string noteId)
-    {
-        // 等一下讓 LoadNotesAsync 跑完
-        await Task.Delay(200);
-
-        var targetNote = Notes.FirstOrDefault(n => n.Id == noteId);
-        if (targetNote != null)
-        {
-            SelectedNote = targetNote;
-        }
-    }
-
-    [RelayCommand]
-    private async Task InitializeSearchAsync()
-    {
-        await _searchService.InitializeAsync();
-        await _searchService.RebuildIndexAsync(CurrentUserId);
-        _logger.LogInformation("搜尋索引初始化完成");
-    }
-    //-------------------------------------------------------------------
-    [RelayCommand]
-    private async Task SaveSpecificNoteAsync(Note note)
-    {
-        if (note is null) return;
-
-        await _saveLock.WaitAsync();
-        try
-        {
-            await _noteService.UpdateNoteAsync(note);
-            SaveStatus = $"自動儲存 {DateTime.Now:HH:mm:ss}";
-
-            // 更新搜尋索引
-            if (SelectedNotebook != null)
+            if (SelectedNotebook != targetNotebook)
             {
-                await _searchService.IndexNoteAsync(
-                    note.Id, note.Name, note.Content ?? string.Empty,
-                    note.NotebookId, SelectedNotebook.Name);
+                _isNavigatingFromSearch = true;
+                SelectedNotebook = targetNotebook;
+                _isNavigatingFromSearch = false;
+
+                _ = ExecuteLoadNotesAsync(targetNotebook.Id, value.NoteId);
             }
-
-            _logger.LogInformation("儲存筆記：{Name}", note.Name);
-        }
-        finally
-        {
-            _saveLock.Release();
+            else
+            {
+                // 因為已經載入過了，直接切換選取狀態即可
+                SelectedNote = Notes.FirstOrDefault(n => n.Id == value.NoteId);
+            }
         }
     }
+    #endregion
 
-    [RelayCommand]
-    private void Logout()
-    {
-        _userSession.Clear();
-        _logger.LogInformation("使用者登出");
-        LogoutAction?.Invoke();
-    }
-
+    #region 雲端同步與帳號操作 (Cloud Sync & Session)
     [RelayCommand]
     private async Task SyncAsync()
     {
@@ -175,6 +164,10 @@ public partial class NotesViewModel : ObservableObject
             SyncStatus = "❌ 同步失敗";
         }
     }
+
+    /// <summary>
+    /// 從雲端還原資料後重新載入畫面並全量重建 FTS5 索引。
+    /// </summary>
     [RelayCommand]
     private async Task RestoreFromCloudAsync()
     {
@@ -200,6 +193,24 @@ public partial class NotesViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void Logout()
+    {
+        _userSession.Clear();
+        _logger.LogInformation("使用者登出");
+        LogoutAction?.Invoke();
+    }
+    #endregion
+
+    #region 筆記本管理 (Notebook Management)
+    // 當選擇的筆記本改變時，自動載入該本的筆記
+    partial void OnSelectedNotebookChanged(Notebook? value)
+    {
+        if (value is null) return;
+        if (_isNavigatingFromSearch) return;
+        _ = ExecuteLoadNotesAsync(value.Id);
+    }
+
+    [RelayCommand]
     private async Task LoadNotebooksAsync()
     {
         var data = await _notebookService.GetNotebooksAsync(CurrentUserId);
@@ -209,13 +220,6 @@ public partial class NotesViewModel : ObservableObject
             Notebooks.Add(item);
 
         _logger.LogInformation("載入筆記本，共 {Count} 本", Notebooks.Count);
-    }
-
-    // 當選擇的筆記本改變時，自動載入該本的筆記
-    partial void OnSelectedNotebookChanged(Notebook? value)
-    {
-        if (value is null) return;
-        _ = LoadNotesAsync(value.Id);
     }
 
     [RelayCommand]
@@ -239,6 +243,9 @@ public partial class NotesViewModel : ObservableObject
         notebook.IsEditing = true;
     }
 
+    /// <summary>
+    /// 確認筆記本重新命名，並更新該筆記本下所有筆記的 FTS5 索引。
+    /// </summary>
     [RelayCommand]
     private async Task ConfirmNotebookRenameAsync(Notebook notebook)
     {
@@ -258,6 +265,15 @@ public partial class NotesViewModel : ObservableObject
 
         notebook.Name = newName;
         await _notebookService.UpdateNotebookAsync(notebook);
+
+        // 精準更新此筆記本下的所有筆記索引，避免大重置
+        var childNotes = await _noteService.GetNotesAsync(notebook.Id);
+        foreach (var note in childNotes)
+        {
+            await _searchService.IndexNoteAsync(
+                note.Id, note.Name, note.Content ?? string.Empty,
+                notebook.Id, newName); // 傳入新的筆記本名稱
+        }
     }
 
     [RelayCommand]
@@ -269,9 +285,15 @@ public partial class NotesViewModel : ObservableObject
         notebook.EditingName = string.Empty;
     }
 
+    /// <summary>
+    /// 刪除筆記本及其所有子筆記的 FTS5 索引。
+    /// 索引清理為次要操作，失敗不影響刪除本身。
+    /// </summary>
     [RelayCommand]
     private async Task DeleteNotebookAsync(Notebook notebook)
     {
+        var notesToRemove = await _noteService.GetNotesAsync(notebook.Id);
+
         await _notebookService.DeleteNotebookAsync(notebook.Id);
         _logger.LogInformation("刪除筆記本：{Name}", notebook.Name);
 
@@ -279,9 +301,19 @@ public partial class NotesViewModel : ObservableObject
         Notebooks.Remove(notebook);
 
         // 移除該筆記本下所有筆記的索引
-        var notesToRemove = await _noteService.GetNotesAsync(notebook.Id);
-        foreach (var note in notesToRemove)
-            await _searchService.RemoveNoteIndexAsync(note.Id);
+        try
+        {
+            foreach (var note in notesToRemove)
+            {
+                await _searchService.RemoveNoteIndexAsync(note.Id);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "刪除筆記本時，清理索引發生錯誤。");
+            // 未來可加入自動修復機制，或依靠 RebuildIndexAsync 解決
+        }
 
         // 如果刪的是目前選中的筆記本，清空右側筆記列表
         if (isSelected)
@@ -292,10 +324,19 @@ public partial class NotesViewModel : ObservableObject
         }
     }
 
-    //----------------------------Note-----------------------------------------------
+    #endregion
+
+    #region 筆記管理 (Note Management)
 
     [RelayCommand]
     private async Task LoadNotesAsync(string notebookId)
+    {
+        await ExecuteLoadNotesAsync(notebookId, null);
+    }
+    /// <summary>
+    /// 載入筆記清單的核心方法。支援載入完畢後選中指定筆記（搜尋跳轉用）。
+    /// </summary>
+    private async Task ExecuteLoadNotesAsync(string notebookId, string? targetNoteIdToSelect = null)
     {
         var data = await _noteService.GetNotesAsync(notebookId);
         Notes.Clear();
@@ -303,8 +344,13 @@ public partial class NotesViewModel : ObservableObject
         foreach (var item in data)
             Notes.Add(item);
 
-        _logger.LogInformation("載入筆記，NotebookId：{NotebookId}，共 {Count} 篇", 
+        _logger.LogInformation("載入筆記，NotebookId：{NotebookId}，共 {Count} 篇",
             notebookId, Notes.Count);
+
+        if (!string.IsNullOrEmpty(targetNoteIdToSelect))
+        {
+            SelectedNote = Notes.FirstOrDefault(n => n.Id == targetNoteIdToSelect);
+        }
     }
 
     [RelayCommand]
@@ -320,10 +366,13 @@ public partial class NotesViewModel : ObservableObject
         _logger.LogInformation("新增筆記：{Name}，NotebookId：{NotebookId}", created.Name, SelectedNotebook.Id);
     }
 
+    /// <summary>
+    /// 確認筆記重新命名，並更新 FTS5 索引。
+    /// </summary>
     [RelayCommand]
     private async Task ConfirmNoteRenameAsync(Note note)
     {
-        if (string.IsNullOrWhiteSpace(note.EditingName)) 
+        if (string.IsNullOrWhiteSpace(note.EditingName))
         {
             note.EditingName = note.Name;
             note.IsEditing = false;
@@ -355,7 +404,7 @@ public partial class NotesViewModel : ObservableObject
         _logger.LogInformation("取消筆記重新命名：{Name}", note.Name);
 
         if (note.Name == "新筆記")
-            Notes.Remove(note); 
+            Notes.Remove(note);
         note.IsEditing = false;
         note.EditingName = string.Empty;
     }
@@ -367,24 +416,69 @@ public partial class NotesViewModel : ObservableObject
         _logger.LogInformation("刪除筆記：{Name}", note.Name);
         Notes.Remove(note);
 
-        await _searchService.RemoveNoteIndexAsync(note.Id);
+        try
+        {
+            await _searchService.RemoveNoteIndexAsync(note.Id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "刪除筆記時，清理索引發生錯誤");
+        }
 
-        //如果刪的是目前選中的筆記本，清空右側筆記列表
         if (SelectedNote == note)
             SelectedNote = null;
-
     }
 
-    //手動儲存功能
+    /// <summary>
+    /// 自動儲存筆記內容至資料庫，完成後於鎖外更新 FTS5 索引。
+    /// 索引更新獨立於儲存鎖之外，避免延長鎖的持有時間影響下一次自動儲存。
+    /// </summary>
+    [RelayCommand]
+    private async Task SaveSpecificNoteAsync(Note note)
+    {
+        if (note is null) return;
 
-    //[RelayCommand]
-    //private async Task SaveNoteAsync()
-    //{
-    //    if (SelectedNote is null) return;
+        await _saveLock.WaitAsync();
+        try
+        {
+            await _noteService.UpdateNoteAsync(note);
+            SaveStatus = $"自動儲存 {DateTime.Now:HH:mm:ss}";
+            _logger.LogInformation("儲存筆記：{Name}", note.Name);
+        }
+        finally
+        {
+            _saveLock.Release();
+        }
 
-    //    SelectedNote.Content = NoteContent;
-    //    await _noteService.UpdateNoteAsync(SelectedNote);
-    //    SaveStatus = $"已儲存 {DateTime.Now:HH:mm:ss}";
-    //    _logger.LogInformation("儲存筆記：{Name}", SelectedNote.Name);
-    //}
+        try
+        {
+            // 更新搜尋索引
+            if (SelectedNotebook != null)
+            {
+                await _searchService.IndexNoteAsync(
+                    note.Id, note.Name, note.Content ?? string.Empty,
+                    note.NotebookId, SelectedNotebook.Name);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "儲存筆記時，更新索引發生錯誤");
+        }
+    }
+    #endregion
 }
+
+
+//手動儲存功能
+
+//[RelayCommand]
+//private async Task SaveNoteAsync()
+//{
+//    if (SelectedNote is null) return;
+
+//    SelectedNote.Content = NoteContent;
+//    await _noteService.UpdateNoteAsync(SelectedNote);
+//    SaveStatus = $"已儲存 {DateTime.Now:HH:mm:ss}";
+//    _logger.LogInformation("儲存筆記：{Name}", SelectedNote.Name);
+//}
+
