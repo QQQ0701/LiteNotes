@@ -11,8 +11,8 @@ using StockEvernote.Data;
 namespace StockEvernote.Migrations
 {
     [DbContext(typeof(EvernoteDbContext))]
-    [Migration("20260404150058_AddAttachments")]
-    partial class AddAttachments
+    [Migration("20260405014420_AddAttachmentsTable")]
+    partial class AddAttachmentsTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,6 +57,13 @@ namespace StockEvernote.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("NoteId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

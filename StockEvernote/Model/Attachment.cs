@@ -6,7 +6,12 @@ public class Attachment
 {
     [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString();
+
+    [Required]
     public string NoteId { get; set; } = string.Empty;
+
+    [Required]
+    public string UserId { get; set; } = string.Empty;
     public string FileName { get; set; } = string.Empty;
     public string BlobUrl { get; set; } = string.Empty;
 
@@ -16,7 +21,9 @@ public class Attachment
     public long FileSize { get; set; }
     public string ContentType { get; set; } = string.Empty;
     public bool IsImage { get; set; }
+
     public bool IsDeleted { get; set; } = false;
     public bool IsSynced { get; set; } = false;
     public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 }

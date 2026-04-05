@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StockEvernote.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAttachments : Migration
+    public partial class AddAttachmentsTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,6 +17,7 @@ namespace StockEvernote.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     NoteId = table.Column<string>(type: "TEXT", nullable: false),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
                     FileName = table.Column<string>(type: "TEXT", nullable: false),
                     BlobUrl = table.Column<string>(type: "TEXT", nullable: false),
                     BlobName = table.Column<string>(type: "TEXT", nullable: false),
@@ -25,7 +26,8 @@ namespace StockEvernote.Migrations
                     IsImage = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsSynced = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
