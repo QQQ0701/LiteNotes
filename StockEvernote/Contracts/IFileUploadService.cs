@@ -14,7 +14,7 @@ public interface IFileUploadService
     Task DeleteBlobAsync(string blobName);
 
     /// <summary>取得指定筆記的所有附件。</summary>
-    Task<List<Attachment>> GetAttachmentsAsync(string noteId);
+    Task<List<Attachment>> GetAttachmentsAsync(string noteId, CancellationToken token = default);
 
     /// <summary>軟刪除附件記錄。</summary>
     Task SoftDeleteAsync(string attachmentId);

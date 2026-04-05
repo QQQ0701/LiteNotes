@@ -149,12 +149,12 @@ public class AzureBlobService : IFileUploadService
 
     #endregion
 
-    public async Task<List<Attachment>> GetAttachmentsAsync(string noteId)
+    public async Task<List<Attachment>> GetAttachmentsAsync(string noteId, CancellationToken token = default)
     {
         return await _dbContext.Attachments
               .Where(a => a.NoteId == noteId && !a.IsDeleted)
               .OrderByDescending(a => a.CreatedAt)
-              .ToListAsync();
+              .ToListAsync(token);
     }
 
  

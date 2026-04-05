@@ -1,9 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
+using Microsoft.MarkedNet;
 using StockEvernote.Contracts;
 using StockEvernote.Model;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Net.Mail;
+using Attachment = StockEvernote.Model.Attachment;
 using SearchResult = StockEvernote.Model.SearchResult;
 
 namespace StockEvernote.ViewModel;
@@ -22,6 +26,7 @@ public partial class NotesViewModel : ObservableObject
     private readonly ILogger<NotesViewModel> _logger;
     private readonly SemaphoreSlim _saveLock = new(1, 1);
     private readonly ISearchService _searchService;
+    private readonly IFileUploadService _fileUploadService;
 
     /// <summary>
     /// 搜尋跳轉期間抑制 OnSelectedNotebookChanged 的自動載入，防止 Double Fetching。
@@ -30,6 +35,10 @@ public partial class NotesViewModel : ObservableObject
     private string CurrentUserId => _userSession.LocalId ?? string.Empty;
     public Action? LogoutAction { get; set; }
 
+    /// <summary>通知 View 層將圖片插入 RichTextBox。</summary>
+    public event EventHandler<string>? RequestInsertImage;
+    // 宣告一個全域變數來追蹤目前的任務
+    private CancellationTokenSource? _loadAttachmentsCts;
     #endregion
 
     #region 建構函式
@@ -38,7 +47,8 @@ public partial class NotesViewModel : ObservableObject
         IUserSession userSession,
         IFirestoreService firestoreService,
         ILogger<NotesViewModel> logger,
-        ISearchService searchService)
+        ISearchService searchService,
+        IFileUploadService fileUploadService)
     {
         _notebookService = notebookService;
         _noteService = noteService;
@@ -46,6 +56,7 @@ public partial class NotesViewModel : ObservableObject
         _firestoreService = firestoreService;
         _logger = logger;
         _searchService = searchService;
+        _fileUploadService = fileUploadService;
     }
     #endregion
 
@@ -54,6 +65,7 @@ public partial class NotesViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<Notebook> _notebooks = new();
     [ObservableProperty] private ObservableCollection<Note> _notes = new();
     [ObservableProperty] private ObservableCollection<SearchResult> _searchResults = new();
+    [ObservableProperty] private ObservableCollection<Attachment> _attachments = new();
 
     [ObservableProperty] private Notebook? _selectedNotebook;
     [ObservableProperty] private Note? _selectedNote;
@@ -63,6 +75,7 @@ public partial class NotesViewModel : ObservableObject
     [ObservableProperty] private string _syncStatus = string.Empty;
     [ObservableProperty] private string _saveStatus = string.Empty;
     [ObservableProperty] private string _searchKeyword = string.Empty;
+    [ObservableProperty] private string _uploadErrorMessage = string.Empty;
 
     [ObservableProperty] private bool _isSearchMode = false;
     [ObservableProperty] private bool _isSearchGlobal = true;  // true=全域, false=當前筆記本
@@ -71,6 +84,140 @@ public partial class NotesViewModel : ObservableObject
     //---------------------正式要刪除-------------------------------
     [ObservableProperty] private bool _isAutoSyncEnabled = false;
     //---------------------正式要刪除-------------------------------
+
+    #region 上傳圖片和文件 (Azure Blob Storage)
+    /// <summary>
+    /// 上傳檔案到 Azure Blob 並建立附件記錄。
+    /// 上傳完成後透過事件通知 View 層處理圖片插入。
+    /// </summary>
+    [RelayCommand]
+    private async Task UploadFileAsync(string filePath)
+    {
+        if (SelectedNote is null || string.IsNullOrEmpty(filePath)) return;
+
+        try
+        {
+            var attachment = await _fileUploadService.UploadAsync(
+                filePath, SelectedNote.Id, CurrentUserId);
+
+            Attachments.Add(attachment);
+
+            // 如果是圖片，通知 View 層插入到 RichTextBox
+            if (attachment.IsImage)
+            {
+                RequestInsertImage?.Invoke(this, filePath);
+            }
+
+            _logger.LogInformation("上傳附件：{FileName}，NoteId：{NoteId}",
+                attachment.FileName, SelectedNote.Id);
+
+            UploadErrorMessage = string.Empty;
+        }
+        catch (InvalidOperationException ex)
+        {
+            // 這是我們自己丟出的「檔案太大/類型不符」，直接顯示給使用者
+            _logger.LogWarning("上傳驗證失敗：{Message}", ex.Message);
+            UploadErrorMessage = ex.Message;
+        }
+        catch (IOException ex)
+        {
+            // 系統層級的檔案鎖定錯誤
+            _logger.LogWarning(ex, "檔案讀取失敗，路徑：{Path}", filePath);
+            UploadErrorMessage = "無法讀取檔案，請確認檔案是否被其他程式（如 Word 或圖片檢視器）開啟中。";
+        }
+        catch (Azure.RequestFailedException ex)
+        {
+            // Azure 雲端連線失敗 (需 using Azure;)
+            _logger.LogError(ex, "Azure 雲端上傳失敗");
+            UploadErrorMessage = "雲端伺服器連線異常，請檢查網路連線或稍後再試。";
+        }
+        catch (Exception ex)
+        {
+            // 終極防線：攔截所有未知的當機錯誤
+            _logger.LogError(ex, "發生未知的上傳錯誤，檔案：{Path}", filePath);
+            UploadErrorMessage = "發生未知的錯誤，無法完成上傳。";
+        }
+    }
+
+    [RelayCommand]
+    private async Task OpenAttachmentAsync(Attachment attachment)
+    {
+        if (attachment is null) return;
+
+        try
+        {
+            var tempPath = await _fileUploadService.DownloadToTempAsync(attachment);
+
+            // 用系統預設程式開啟
+            var psi = new System.Diagnostics.ProcessStartInfo(tempPath)
+            {
+                UseShellExecute = true
+            };
+            System.Diagnostics.Process.Start(psi);
+
+            _logger.LogInformation("開啟附件：{FileName}", attachment.FileName);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "開啟附件失敗：{FileName}", attachment.FileName);
+            UploadErrorMessage = "下載或開啟檔案失敗，請檢查網路連線。";
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteAttachmentAsync(Attachment attachment)
+    {
+        if (attachment is null) return;
+
+        try
+        {
+            await _fileUploadService.SoftDeleteAsync(attachment.Id);
+
+            try
+            {
+                await _fileUploadService.DeleteBlobAsync(attachment.BlobName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Azure Blob 刪除失敗，產生孤兒檔案：{BlobName}", attachment.BlobName);
+            }
+
+            Attachments.Remove(attachment);
+            _logger.LogInformation("刪除附件成功：{FileName}", attachment.FileName);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "資料庫刪除附件失敗：{FileName}", attachment.FileName);
+            UploadErrorMessage = "刪除檔案記錄失敗，請稍後再試。";
+        }
+    }
+
+    /// <summary>
+    /// 切換筆記時載入該筆記的附件列表。
+    /// </summary>
+    private async Task LoadAttachmentsAsync(string noteId, CancellationToken token)
+    {
+        try
+        {
+          // await Task.Delay(3000, token);
+            var data = await _fileUploadService.GetAttachmentsAsync(noteId,token);
+
+            if (token.IsCancellationRequested) return;
+            Attachments.Clear();
+
+            foreach (var item in data)
+                Attachments.Add(item);
+        }
+        catch (Exception ex)
+        {
+            if (!token.IsCancellationRequested) // 只有沒被取消的錯誤才顯示
+            {
+                _logger.LogError(ex, "載入附件列表失敗");
+            }
+        }
+    }
+
+    #endregion
 
     #region 搜尋系統 (Search Subsystem)
     /// <summary>
@@ -465,6 +612,20 @@ public partial class NotesViewModel : ObservableObject
             _logger.LogError(ex, "儲存筆記時，更新索引發生錯誤");
         }
     }
+    partial void OnSelectedNoteChanged(Note? value)
+    {
+        _loadAttachmentsCts?.Cancel();
+        _loadAttachmentsCts?.Dispose();
+        if (value is null)
+        {
+            Attachments.Clear();
+            return;
+        }
+        _loadAttachmentsCts = new CancellationTokenSource();
+
+        _ = LoadAttachmentsAsync(value.Id, _loadAttachmentsCts.Token);
+    }
+
     #endregion
 }
 
