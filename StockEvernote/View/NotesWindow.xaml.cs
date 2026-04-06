@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using StockEvernote.Contracts;
 using StockEvernote.Model;
 using StockEvernote.ViewModel;
 using System.ComponentModel;
@@ -10,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace StockEvernote.View;
 
@@ -23,6 +23,7 @@ public partial class NotesWindow : Window
     private Note? _previousNote;
     private bool _isInternalLoading = false;
     private string _originalNoteTitle = string.Empty;
+    private System.Threading.Timer? _searchTimer;
 
     public NotesWindow(NotesViewModel viewModel)
     {
@@ -33,6 +34,7 @@ public partial class NotesWindow : Window
         this.Loaded += NotesWindow_Loaded;
 
         _vm.PropertyChanged += NotesViewModel_PropertyChanged;
+        _vm.RequestInsertImage += OnRequestInsertImage;
 
         _vm.LogoutAction = () =>
         {
@@ -44,7 +46,58 @@ public partial class NotesWindow : Window
         };
     }
 
-    private System.Threading.Timer? _searchTimer;
+    /// <summary>選擇檔案並上傳</summary>
+    private async void UploadButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_vm.SelectedNote is null) return;
+
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Title = "選擇要上傳的檔案",
+            Filter = "圖片檔案|*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.webp"
+                   + "|文件檔案|*.pdf;*.docx;*.xlsx;*.pptx;*.txt;*.csv"
+                   + "|所有支援的檔案|*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.webp;*.pdf;*.docx;*.xlsx;*.pptx;*.txt;*.csv",
+            FilterIndex = 3
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            await _vm.UploadFileCommand.ExecuteAsync(dialog.FileName);
+        }
+    }
+
+    /// <summary>將圖片插入到 RichTextBox 游標位置</summary>
+    private void OnRequestInsertImage(object? sender, string imagePath)
+    {
+        try
+        {
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad; // 關鍵字：讀取後立刻釋放檔案！
+            bitmap.UriSource = new Uri(imagePath);
+            bitmap.EndInit();
+
+            var image = new Image
+            {
+                Source = bitmap,
+                MaxWidth = 600,
+                Stretch = Stretch.Uniform
+            };
+
+            var container = new InlineUIContainer(image,
+                contentRichTextBox.CaretPosition);
+
+            // 在圖片後面加一個換行，方便繼續打字
+            contentRichTextBox.CaretPosition.InsertParagraphBreak();
+            contentRichTextBox.Focus();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"插入圖片失敗：{ex.Message}");
+        }
+    }
+
+  
 
     /// <summary>搜尋列文字變更：延遲 300ms 後觸發搜尋</summary>
     private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -67,6 +120,7 @@ public partial class NotesWindow : Window
 
     private async void NotesWindow_Loaded(object sender, RoutedEventArgs e)
     {
+        await _vm.InitializeInfrastructureCommand.ExecuteAsync(null);
         // 🔧 開發階段：透過開關控制是否啟動同步
         // 📌 正式上線：刪除 if 判斷，讓 try-catch 區塊直接執行
         if (_vm.IsAutoSyncEnabled)
@@ -89,8 +143,8 @@ public partial class NotesWindow : Window
         await _vm.LoadNotebooksCommand.ExecuteAsync(null);
 
         // 初始化搜尋索引
-  
-        await _vm.InitializeSearchCommand.ExecuteAsync(null);
+
+        await _vm.RebuildSearchIndexCommand.ExecuteAsync(null);
     }
 
     // ══════════════════════════════════════════════════════════

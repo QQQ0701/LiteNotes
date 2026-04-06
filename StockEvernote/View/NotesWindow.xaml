@@ -427,10 +427,15 @@
         <Grid Background="White">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <!-- 標題列 -->
                 <RowDefinition Height="*"/>
+                <!-- 筆記內容 -->
+                <RowDefinition Height="Auto"/>
+                <!-- 附件列表 -->
             </Grid.RowDefinitions>
+            
             <!-- ===== 沒選筆記時的引導畫面 ===== -->
-            <StackPanel Grid.RowSpan="2"
+            <StackPanel Grid.RowSpan="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 ZIndex="1">
@@ -452,7 +457,8 @@
                    HorizontalAlignment="Center"/>
             </StackPanel>
 
-            <!-- 標題列 -->
+            <!-- ===== Row 0：標題列 ===== -->
+
             <Border Grid.Row="0"
                     BorderBrush="#E8E8E8" BorderThickness="0,0,0,1"
                     Padding="24,8">
@@ -460,6 +466,9 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
+                        <!-- 上傳按鈕 -->
+                        <ColumnDefinition Width="Auto"/>
+                        <!-- 儲存狀態 -->
                     </Grid.ColumnDefinitions>
 
                     <!-- 筆記標題 -->
@@ -474,9 +483,24 @@
                              Background="Transparent"
                              Foreground="#1A1A1A"
                              IsEnabled="{Binding SelectedNote, Converter={StaticResource NullToBoolConverter}}"/>
-
+                    
+                    <!-- 上傳按鈕 -->
+                    <Button Grid.Column="1"
+                            Click="UploadButton_Click"
+                            Padding="8,4" Margin="8,0"
+                            BorderThickness="0" Background="Transparent"
+                            Foreground="#888888" Cursor="Hand"
+                            IsEnabled="{Binding SelectedNote, Converter={StaticResource NullToBoolConverter}}"
+                            ToolTip="上傳圖片或文件">
+                        
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📎" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBlock Text="附件" FontSize="13" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    
                     <!-- ✅ 儲存狀態取代儲存按鈕 -->
-                    <TextBlock Grid.Column="1"
+                    <TextBlock Grid.Column="2"
                                Text="{Binding SaveStatus}"
                                FontSize="12" Foreground="#9B9B9B"
                                VerticalAlignment="Center"
@@ -494,6 +518,73 @@
                          Foreground="#1A1A1A"
                          TextChanged="ContentRichTextBox_TextChanged"
                          IsEnabled="{Binding SelectedNote, Converter={StaticResource NullToBoolConverter}}"/>
+        
+            <!-- ===== Row 2：附件列表 ===== -->
+            <Border Grid.Row="2"
+                    BorderBrush="#E8E8E8" BorderThickness="0,1,0,0"
+                    Padding="24,8"
+                    Visibility="{Binding Attachments.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="📎 附件" FontSize="13" FontWeight="SemiBold"
+                               Foreground="#888888" Margin="0,0,0,8"/>
+
+                    <ItemsControl ItemsSource="{Binding Attachments}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="8,6" Margin="0,2" CornerRadius="4"
+                                        Background="#F7F7F7" Cursor="Hand">
+                                    <Border.InputBindings>
+                                        <MouseBinding MouseAction="LeftDoubleClick"
+                                          Command="{Binding DataContext.OpenAttachmentCommand,
+                                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                          CommandParameter="{Binding}"/>
+                                    </Border.InputBindings>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- 圖示 -->
+                                        <TextBlock Grid.Column="0" FontSize="16"
+                                                   VerticalAlignment="Center" Margin="0,0,8,0"
+                                                   Text="{Binding IsImage,
+                                                          Converter={StaticResource BoolToAttachmentIconConverter}}"/>
+
+                                        <!-- 檔名 -->
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding FileName}"
+                                                   FontSize="13" Foreground="#1A1A1A"
+                                                   VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis"/>
+
+                                        <!-- 大小 -->
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding FileSize,
+                                                          Converter={StaticResource FileSizeConverter}}"
+                                                   FontSize="12" Foreground="#999999"
+                                                   VerticalAlignment="Center" Margin="12,0"/>
+
+                                        <!-- 刪除按鈕 -->
+                                        <Button Grid.Column="3"
+                                                Command="{Binding DataContext.DeleteAttachmentCommand,
+                                                          RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}"
+                                                Content="✕" FontSize="12"
+                                                Padding="4,2" BorderThickness="0"
+                                                Background="Transparent" Foreground="#CCCCCC"
+                                                Cursor="Hand"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DockPanel>
+            </Border>
+
         </Grid>
 
     </DockPanel>

@@ -1,12 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using Microsoft.MarkedNet;
 using StockEvernote.Contracts;
 using StockEvernote.Model;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Net.Mail;
 using Attachment = StockEvernote.Model.Attachment;
 using SearchResult = StockEvernote.Model.SearchResult;
 
@@ -34,11 +32,11 @@ public partial class NotesViewModel : ObservableObject
     private bool _isNavigatingFromSearch = false;
     private string CurrentUserId => _userSession.LocalId ?? string.Empty;
     public Action? LogoutAction { get; set; }
+    // 宣告一個全域變數來追蹤目前的任務
+    private CancellationTokenSource? _loadAttachmentsCts;
 
     /// <summary>通知 View 層將圖片插入 RichTextBox。</summary>
     public event EventHandler<string>? RequestInsertImage;
-    // 宣告一個全域變數來追蹤目前的任務
-    private CancellationTokenSource? _loadAttachmentsCts;
     #endregion
 
     #region 建構函式
@@ -85,7 +83,34 @@ public partial class NotesViewModel : ObservableObject
     [ObservableProperty] private bool _isAutoSyncEnabled = false;
     //---------------------正式要刪除-------------------------------
 
-    #region 上傳圖片和文件 (Azure Blob Storage)
+    #region 系統啟動與基礎設施
+
+    /// <summary>
+    /// 階段一：確保底層基礎設施準備完畢 (造輪胎)
+    /// </summary>
+    [RelayCommand]
+    private async Task InitializeInfrastructureAsync()
+    {
+        await _searchService.InitializeAsync();
+
+        await _fileUploadService.InitializeAsync();
+
+        _logger.LogInformation("基礎設施 (搜尋表、Azure容器) 初始化完成");
+    }
+
+    /// <summary>
+    /// 階段四：重建搜尋索引 (必須在資料最新時執行)
+    /// </summary>
+    [RelayCommand]
+    private async Task RebuildSearchIndexAsync()
+    {
+        await _searchService.RebuildIndexAsync(CurrentUserId);
+        _logger.LogInformation("搜尋索引重建完成");
+    }
+
+    #endregion
+
+    #region 附件管理 (Azure Blob Storage)
     /// <summary>
     /// 上傳檔案到 Azure Blob 並建立附件記錄。
     /// 上傳完成後透過事件通知 View 層處理圖片插入。
@@ -102,10 +127,10 @@ public partial class NotesViewModel : ObservableObject
 
             Attachments.Add(attachment);
 
-            // 如果是圖片，通知 View 層插入到 RichTextBox
             if (attachment.IsImage)
             {
-                RequestInsertImage?.Invoke(this, filePath);
+                var tempPath = await _fileUploadService.DownloadToTempAsync(attachment);
+                RequestInsertImage?.Invoke(this, tempPath);
             }
 
             _logger.LogInformation("上傳附件：{FileName}，NoteId：{NoteId}",
@@ -172,24 +197,39 @@ public partial class NotesViewModel : ObservableObject
         try
         {
             await _fileUploadService.SoftDeleteAsync(attachment.Id);
-
-            try
-            {
-                await _fileUploadService.DeleteBlobAsync(attachment.BlobName);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Azure Blob 刪除失敗，產生孤兒檔案：{BlobName}", attachment.BlobName);
-            }
-
-            Attachments.Remove(attachment);
-            _logger.LogInformation("刪除附件成功：{FileName}", attachment.FileName);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "資料庫刪除附件失敗：{FileName}", attachment.FileName);
             UploadErrorMessage = "刪除檔案記錄失敗，請稍後再試。";
+            return;
         }
+
+        Attachments.Remove(attachment);
+
+        _logger.LogInformation("刪除附件成功：{FileName}", attachment.FileName);
+        try
+        {
+            await _fileUploadService.DeleteBlobAsync(attachment.BlobName);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Azure Blob 刪除失敗，產生孤兒檔案：{BlobName}", attachment.BlobName);
+        }
+
+        _logger.LogInformation("刪除附件成功：{FileName}", attachment.FileName);
+    }
+    partial void OnSelectedNoteChanged(Note? value)
+    {
+        _loadAttachmentsCts?.Cancel();
+        if (value is null)
+        {
+            Attachments.Clear();
+            return;
+        }
+        _loadAttachmentsCts = new CancellationTokenSource();
+
+        _ = LoadAttachmentsAsync(value.Id, _loadAttachmentsCts.Token);
     }
 
     /// <summary>
@@ -199,8 +239,8 @@ public partial class NotesViewModel : ObservableObject
     {
         try
         {
-          // await Task.Delay(3000, token);
-            var data = await _fileUploadService.GetAttachmentsAsync(noteId,token);
+            // await Task.Delay(3000, token);
+            var data = await _fileUploadService.GetAttachmentsAsync(noteId, token);
 
             if (token.IsCancellationRequested) return;
             Attachments.Clear();
@@ -208,28 +248,17 @@ public partial class NotesViewModel : ObservableObject
             foreach (var item in data)
                 Attachments.Add(item);
         }
+        catch (OperationCanceledException) { }
         catch (Exception ex)
         {
-            if (!token.IsCancellationRequested) // 只有沒被取消的錯誤才顯示
-            {
+            if (!token.IsCancellationRequested)
                 _logger.LogError(ex, "載入附件列表失敗");
-            }
         }
     }
 
     #endregion
 
     #region 搜尋系統 (Search Subsystem)
-    /// <summary>
-    /// 初始化 FTS5 虛擬資料表並重建當前使用者的全文檢索索引。
-    /// </summary>
-    [RelayCommand]
-    private async Task InitializeSearchAsync()
-    {
-        await _searchService.InitializeAsync();
-        await _searchService.RebuildIndexAsync(CurrentUserId);
-        _logger.LogInformation("搜尋索引初始化完成");
-    }
 
     /// <summary>
     /// 執行全文檢索，依據 IsSearchGlobal 決定搜尋範圍。
@@ -611,19 +640,6 @@ public partial class NotesViewModel : ObservableObject
         {
             _logger.LogError(ex, "儲存筆記時，更新索引發生錯誤");
         }
-    }
-    partial void OnSelectedNoteChanged(Note? value)
-    {
-        _loadAttachmentsCts?.Cancel();
-        _loadAttachmentsCts?.Dispose();
-        if (value is null)
-        {
-            Attachments.Clear();
-            return;
-        }
-        _loadAttachmentsCts = new CancellationTokenSource();
-
-        _ = LoadAttachmentsAsync(value.Id, _loadAttachmentsCts.Token);
     }
 
     #endregion
