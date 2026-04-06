@@ -35,9 +35,7 @@ public partial class NotesViewModel : ObservableObject
     // 宣告一個全域變數來追蹤目前的任務
     private CancellationTokenSource? _loadAttachmentsCts;
 
-    /// <summary>通知 View 層將圖片插入 RichTextBox。</summary>
-    public event EventHandler<string>? RequestInsertImage;
-    #endregion
+   #endregion
 
     #region 建構函式
     public NotesViewModel(INotebookService notebookService,
@@ -126,12 +124,6 @@ public partial class NotesViewModel : ObservableObject
                 filePath, SelectedNote.Id, CurrentUserId);
 
             Attachments.Add(attachment);
-
-            if (attachment.IsImage)
-            {
-                var tempPath = await _fileUploadService.DownloadToTempAsync(attachment);
-                RequestInsertImage?.Invoke(this, tempPath);
-            }
 
             _logger.LogInformation("上傳附件：{FileName}，NoteId：{NoteId}",
                 attachment.FileName, SelectedNote.Id);

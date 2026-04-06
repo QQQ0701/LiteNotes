@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace StockEvernote.View;
 
@@ -18,12 +17,13 @@ namespace StockEvernote.View;
 /// </summary>
 public partial class NotesWindow : Window
 {
-    private System.Threading.Timer? _autoSaveTimer;
     private readonly NotesViewModel _vm;
     private Note? _previousNote;
-    private bool _isInternalLoading = false;
     private string _originalNoteTitle = string.Empty;
+    private bool _isInternalLoading = false;
+
     private System.Threading.Timer? _searchTimer;
+    private System.Threading.Timer? _autoSaveTimer;
 
     public NotesWindow(NotesViewModel viewModel)
     {
@@ -32,92 +32,23 @@ public partial class NotesWindow : Window
         DataContext = _vm;
 
         this.Loaded += NotesWindow_Loaded;
-
         _vm.PropertyChanged += NotesViewModel_PropertyChanged;
-        _vm.RequestInsertImage += OnRequestInsertImage;
 
         _vm.LogoutAction = () =>
         {
             var scope = App.ServiceProvider!.CreateScope();
             var loginWindow = scope.ServiceProvider.GetRequiredService<LoginWindow>();
+            
             loginWindow.Closed += (s, e) => scope.Dispose();
             loginWindow.Show();
+            
             this.Close();
         };
     }
 
-    /// <summary>選擇檔案並上傳</summary>
-    private async void UploadButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (_vm.SelectedNote is null) return;
-
-        var dialog = new Microsoft.Win32.OpenFileDialog
-        {
-            Title = "選擇要上傳的檔案",
-            Filter = "圖片檔案|*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.webp"
-                   + "|文件檔案|*.pdf;*.docx;*.xlsx;*.pptx;*.txt;*.csv"
-                   + "|所有支援的檔案|*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.webp;*.pdf;*.docx;*.xlsx;*.pptx;*.txt;*.csv",
-            FilterIndex = 3
-        };
-
-        if (dialog.ShowDialog() == true)
-        {
-            await _vm.UploadFileCommand.ExecuteAsync(dialog.FileName);
-        }
-    }
-
-    /// <summary>將圖片插入到 RichTextBox 游標位置</summary>
-    private void OnRequestInsertImage(object? sender, string imagePath)
-    {
-        try
-        {
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.CacheOption = BitmapCacheOption.OnLoad; // 關鍵字：讀取後立刻釋放檔案！
-            bitmap.UriSource = new Uri(imagePath);
-            bitmap.EndInit();
-
-            var image = new Image
-            {
-                Source = bitmap,
-                MaxWidth = 600,
-                Stretch = Stretch.Uniform
-            };
-
-            var container = new InlineUIContainer(image,
-                contentRichTextBox.CaretPosition);
-
-            // 在圖片後面加一個換行，方便繼續打字
-            contentRichTextBox.CaretPosition.InsertParagraphBreak();
-            contentRichTextBox.Focus();
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"插入圖片失敗：{ex.Message}");
-        }
-    }
-
-  
-
-    /// <summary>搜尋列文字變更：延遲 300ms 後觸發搜尋</summary>
-    private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        _searchTimer?.Dispose();
-        _searchTimer = new System.Threading.Timer(_ =>
-        {
-            Dispatcher.Invoke(() =>
-            {
-                if (_vm.SearchCommand.CanExecute(null))
-                    _vm.SearchCommand.Execute(null);
-            });
-        }, null, 300, System.Threading.Timeout.Infinite);
-    }
-
-
     // ══════════════════════════════════════════════════════════
-    //  啟動載入 + 雲端同步
+    // 視窗生命週期（啟動 / 關閉）
     // ══════════════════════════════════════════════════════════
-
     private async void NotesWindow_Loaded(object sender, RoutedEventArgs e)
     {
         await _vm.InitializeInfrastructureCommand.ExecuteAsync(null);
@@ -141,16 +72,8 @@ public partial class NotesWindow : Window
         }
 
         await _vm.LoadNotebooksCommand.ExecuteAsync(null);
-
-        // 初始化搜尋索引
-
         await _vm.RebuildSearchIndexCommand.ExecuteAsync(null);
     }
-
-    // ══════════════════════════════════════════════════════════
-    //  關閉視窗：儲存 + 雲端同步
-    // ══════════════════════════════════════════════════════════
-
     protected override async void OnClosing(CancelEventArgs e)
     {
         // 強制儲存當前正在編輯的筆記
@@ -177,6 +100,54 @@ public partial class NotesWindow : Window
         }
 
         base.OnClosing(e);
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  筆記切換與 RTF 載入
+    // ══════════════════════════════════════════════════════════
+    private void NotesViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(_vm.SelectedNote))
+        {
+            // ✅ 切換前先儲存上一篇
+            if (_autoSaveTimer != null && _previousNote != null)
+            {
+                _autoSaveTimer.Dispose();
+                _autoSaveTimer = null;
+                SaveNote(_previousNote);
+            }
+
+            _previousNote = _vm.SelectedNote;
+            LoadRichTextContent();
+        }
+    }
+    private void LoadRichTextContent()
+    {
+        _isInternalLoading = true;
+
+        try
+        {
+            contentRichTextBox.Document.Blocks.Clear();
+
+            if (string.IsNullOrEmpty(_vm.SelectedNote?.Content)) return;
+
+            var bytes = Encoding.ASCII.GetBytes(_vm.SelectedNote.Content);
+            using var stream = new MemoryStream(bytes);
+            var range = new TextRange(
+                contentRichTextBox.Document.ContentStart,
+                contentRichTextBox.Document.ContentEnd);
+
+            range.Load(stream, DataFormats.Rtf);
+        }
+        catch
+        {
+            // 舊資料不是 RTF 格式就當純文字顯示
+            contentRichTextBox.Document.Blocks.Clear();
+        }
+        finally
+        {
+            _isInternalLoading = false;
+        }
     }
 
     // ══════════════════════════════════════════════════════════
@@ -209,59 +180,9 @@ public partial class NotesWindow : Window
     }
 
     // ══════════════════════════════════════════════════════════
-    //  切換筆記 & 載入內容
-    // ══════════════════════════════════════════════════════════
-    private void NotesViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(_vm.SelectedNote))
-        {
-            // ✅ 切換前先儲存上一篇
-            if (_autoSaveTimer != null && _previousNote != null)
-            {
-                _autoSaveTimer.Dispose();
-                _autoSaveTimer = null;
-                SaveNote(_previousNote);
-            }
-
-            _previousNote = _vm.SelectedNote;
-            LoadRichTextContent();
-        }
-    }
-
-    // 載入筆記內容
-    private void LoadRichTextContent()
-    {
-        // ✅ 鎖定旗標，防止 Load 觸發 TextChanged 啟動自動儲存
-        _isInternalLoading = true;
-
-        try
-        {
-            contentRichTextBox.Document.Blocks.Clear();
-
-            if (string.IsNullOrEmpty(_vm.SelectedNote?.Content)) return;
-
-            var bytes = Encoding.ASCII.GetBytes(_vm.SelectedNote.Content);
-            using var stream = new MemoryStream(bytes);
-            var range = new TextRange(
-                contentRichTextBox.Document.ContentStart,
-                contentRichTextBox.Document.ContentEnd);
-
-            range.Load(stream, DataFormats.Rtf);
-        }
-        catch
-        {
-            // 舊資料不是 RTF 格式就當純文字顯示
-            contentRichTextBox.Document.Blocks.Clear();
-        }
-        finally
-        {
-            // ✅ 解鎖
-            _isInternalLoading = false;
-        }
-    }
-    // ══════════════════════════════════════════════════════════
     //  筆記標題編輯：防空白 + 自動儲存
     // ══════════════════════════════════════════════════════════
+
     private void TitleTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         if (_vm.SelectedNote is null || _isInternalLoading) return;
@@ -305,6 +226,24 @@ public partial class NotesWindow : Window
     }
 
     // ══════════════════════════════════════════════════════════
+    // 搜尋防抖
+    // ══════════════════════════════════════════════════════════
+
+    /// <summary>搜尋列文字變更：延遲 300ms 後觸發搜尋</summary>
+    private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        _searchTimer?.Dispose();
+        _searchTimer = new System.Threading.Timer(_ =>
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (_vm.SearchCommand.CanExecute(null))
+                    _vm.SearchCommand.Execute(null);
+            });
+        }, null, 300, System.Threading.Timeout.Infinite);
+    }
+
+    // ══════════════════════════════════════════════════════════
     //  重新命名 TextBox 自動聚焦
     // ══════════════════════════════════════════════════════════
 
@@ -340,11 +279,13 @@ public partial class NotesWindow : Window
         }
     }
 
-
     // ══════════════════════════════════════════════════════════
-    //  點擊空白處確認重新命名
+    // 重新命名：點擊空白處確認
     // ══════════════════════════════════════════════════════════
 
+    /// <summary>
+    /// 攔截滑鼠預覽點擊事件，用於在點擊非編輯區域時，自動結束並確認重新命名的編輯狀態。
+    /// </summary>
     private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
         // 1. Fail-fast：找出所有正在編輯的項目
@@ -397,6 +338,7 @@ public partial class NotesWindow : Window
     // ══════════════════════════════════════════════════════════
     //  LostFocus 備援確認（焦點自然轉移時觸發）
     // ══════════════════════════════════════════════════════════
+
     private void NotebookRenameTextBox_LostFocus(object sender, RoutedEventArgs e)
     {
         if (sender is TextBox tb && tb.DataContext is Notebook notebook)
@@ -422,6 +364,29 @@ public partial class NotesWindow : Window
             {
                 vm.ConfirmNoteRenameCommand.Execute(note);
             }
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  附件上傳
+    // ══════════════════════════════════════════════════════════
+
+    private async void UploadButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_vm.SelectedNote is null) return;
+
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Title = "選擇要上傳的檔案",
+            Filter = "圖片檔案|*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.webp"
+                   + "|文件檔案|*.pdf;*.docx;*.xlsx;*.pptx;*.txt;*.csv"
+                   + "|所有支援的檔案|*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.webp;*.pdf;*.docx;*.xlsx;*.pptx;*.txt;*.csv",
+            FilterIndex = 3
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            await _vm.UploadFileCommand.ExecuteAsync(dialog.FileName);
         }
     }
 
