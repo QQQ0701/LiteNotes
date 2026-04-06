@@ -5,9 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using StockEvernote.Contracts;
 using StockEvernote.Data;
+using StockEvernote.Helpers;
 using StockEvernote.Model;
 using System.IO;
-using System.Linq;
 
 namespace StockEvernote.Services;
 
@@ -38,10 +38,10 @@ public class AzureBlobService : IFileUploadService
         _dbContext = dbContext;
         _logger = logger;
 
-        var connectionString = configuration["Azure:BlobConnectionString"]
+        var connectionString = configuration["Azure:Storage:ConnectionString"]
             ?? throw new InvalidOperationException("找不到 Azure:BlobConnectionString");
 
-        var containerName = configuration["Azure:BlobContainerName"]
+        var containerName = configuration["Azure:Storage:ContainerName"]
             ?? throw new InvalidOperationException("找不到 Azure:BlobContainerName");
 
         var blobServiceClient = new BlobServiceClient(connectionString);
@@ -56,7 +56,6 @@ public class AzureBlobService : IFileUploadService
         await _containerClient.CreateIfNotExistsAsync(PublicAccessType.None);
         _logger.LogInformation("Azure Blob Container 初始化完成");
     }
-    #region 上傳
     public async Task<Attachment> UploadAsync(string filePath, string noteId, string userId)
     {
         var fileInfo = new FileInfo(filePath);
@@ -70,19 +69,20 @@ public class AzureBlobService : IFileUploadService
         var maxSize = isImage ? MaxImageSize : MaxDocumentSize;
         if (fileInfo.Length > maxSize)
             throw new InvalidOperationException(
-                $"檔案大小超過限制：{FormatFileSize(fileInfo.Length)}，上限 {FormatFileSize(maxSize)}");
+                $"檔案大小超過限制：{FileHelper.FormatFileSize(fileInfo.Length)}" +
+                $"，上限 {FileHelper.FormatFileSize(maxSize)}");
         // 組合 Blob 路徑：userId/noteId/guid_filename
         var blobName = $"{userId}/{noteId}/{Guid.NewGuid():N}_{fileInfo.Name}";
         var blobClient = _containerClient.GetBlobClient(blobName);
         // 上傳到 Azure Blob
-        var contentType = GetContentType(extension);
+        var contentType = FileHelper.GetContentType(extension);
         var headers = new BlobHttpHeaders { ContentType = contentType };
 
         await using var stream = File.OpenRead(filePath);
         await blobClient.UploadAsync(stream, new BlobUploadOptions { HttpHeaders = headers });
 
         _logger.LogInformation("檔案上傳成功：{FileName}，大小：{Size}",
-            fileInfo.Name, FormatFileSize(fileInfo.Length));
+            fileInfo.Name, FileHelper.FormatFileSize(fileInfo.Length));
 
         // 建立本地資料庫記錄
         var attachment = new Attachment
@@ -103,9 +103,6 @@ public class AzureBlobService : IFileUploadService
 
         return attachment;
     }
-    #endregion
-
-    #region 下載
     public async Task<string> DownloadToTempAsync(Attachment attachment)
     {
         var blobClient = _containerClient.GetBlobClient(attachment.BlobName);
@@ -123,9 +120,6 @@ public class AzureBlobService : IFileUploadService
 
         return tempPath;
     }
-    #endregion
-
-    #region 刪除
 
     public async Task DeleteBlobAsync(string blobName)
     {
@@ -142,12 +136,11 @@ public class AzureBlobService : IFileUploadService
 
         attachment.IsDeleted = true;
         attachment.IsSynced = false;
+        attachment.UpdatedAt = DateTime.Now;
         await _dbContext.SaveChangesAsync();
 
         _logger.LogInformation("軟刪除附件：{FileName}", attachment.FileName);
     }
-
-    #endregion
 
     public async Task<List<Attachment>> GetAttachmentsAsync(string noteId, CancellationToken token = default)
     {
@@ -156,38 +149,4 @@ public class AzureBlobService : IFileUploadService
               .OrderByDescending(a => a.CreatedAt)
               .ToListAsync(token);
     }
-
- 
-    #region 工具方法
-
-    private static string GetContentType(string extension)
-    {
-        return extension.ToLowerInvariant() switch
-        {
-            ".jpg" or ".jpeg" => "image/jpeg",
-            ".png" => "image/png",
-            ".gif" => "image/gif",
-            ".bmp" => "image/bmp",
-            ".webp" => "image/webp",
-            ".pdf" => "application/pdf",
-            ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            ".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            ".pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-            ".txt" => "text/plain",
-            ".csv" => "text/csv",
-            _ => "application/octet-stream"
-        };
-    }
-
-    private static string FormatFileSize(long bytes)
-    {
-        return bytes switch
-        {
-            < 1024 => $"{bytes} B",
-            < 1024 * 1024 => $"{bytes / 1024.0:F1} KB",
-            _ => $"{bytes / (1024.0 * 1024.0):F1} MB"
-        };
-    }
-
-    #endregion
 }

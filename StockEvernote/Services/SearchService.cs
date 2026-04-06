@@ -3,9 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StockEvernote.Contracts;
 using StockEvernote.Data;
+using StockEvernote.Helpers;
 using StockEvernote.Model;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace StockEvernote.Services;
 
@@ -19,7 +18,7 @@ public class SearchService : ISearchService
         _dbContext = dbContext;
         _logger = logger;
     }
-    #region 索引生命週期管理
+  
     public async Task InitializeAsync()
     {
         var sql = @"
@@ -41,10 +40,10 @@ public class SearchService : ISearchService
     /// </summary>
     public async Task IndexNoteAsync(string noteId, string noteName, string content, string notebookId, string notebookName)
     {
-        var plainText = RtfToPlainText(content);
-        var tokenized = TokenizeForChinese(plainText);
-        var tokenizedName = TokenizeForChinese(noteName);
-        var tokenizedNotebookName = TokenizeForChinese(notebookName);
+        var plainText = TextHelper.RtfToPlainText(content);
+        var tokenized = TextHelper.TokenizeForChinese(plainText);
+        var tokenizedName = TextHelper.TokenizeForChinese(noteName);
+        var tokenizedNotebookName = TextHelper.TokenizeForChinese(notebookName);
 
         await _dbContext.Database.ExecuteSqlRawAsync(
        "DELETE FROM NotesIndex WHERE note_id = {0}", noteId);
@@ -105,9 +104,7 @@ public class SearchService : ISearchService
             throw;
         }
     }
-    #endregion
 
-    #region 全文搜尋
     /// <summary>
     /// 對使用者輸入進行消毒、中文斷詞處理後執行 FTS5 MATCH 查詢。
     /// 搜尋結果的 tokenized 中文會還原為正常顯示格式。
@@ -123,7 +120,7 @@ public class SearchService : ISearchService
             return new List<SearchResult>();
 
         // 把搜尋關鍵字也做中文字元拆分，才能跟索引匹配
-        var tokenizedKeyword = TokenizeForChinese(safeKeyword);
+        var tokenizedKeyword = TextHelper.TokenizeForChinese(safeKeyword);
         // 用 FTS5 的 MATCH 語法搜尋，* 做前綴匹配
         var ftsQuery = string.Join(" ", tokenizedKeyword.Split(' ', StringSplitOptions.RemoveEmptyEntries)
             .Select(word => $"\"{word}\"*"));
@@ -180,9 +177,9 @@ public class SearchService : ISearchService
                 {
                     NoteId = reader.GetString(0),
                     NotebookId = reader.GetString(1),
-                    NoteName = RestoreFromTokenized(reader.GetString(2)),
-                    NotebookName = RestoreFromTokenized(reader.GetString(3)),
-                    MatchSnippet = RestoreFromTokenized(reader.GetString(4))
+                    NoteName = TextHelper.RestoreFromTokenized(reader.GetString(2)),
+                    NotebookName = TextHelper.RestoreFromTokenized(reader.GetString(3)),
+                    MatchSnippet = TextHelper.RestoreFromTokenized(reader.GetString(4))
                 });
             }
         }
@@ -197,118 +194,4 @@ public class SearchService : ISearchService
         _logger.LogInformation("搜尋「{Keyword}」，命中 {Count} 筆", keyword, results.Count);
         return results;
     }
-
-#endregion
-
-    #region 文字處理工具
-
-    /// <summary>
-    /// 移除 RTF 控制碼，擷取純文字內容供 FTS5 索引使用。
-    /// 非 RTF 格式的字串直接回傳。
-    /// </summary>
-    private static string RtfToPlainText(string rtf)
-    {
-        if (string.IsNullOrEmpty(rtf)) return string.Empty;
-
-        // 如果不是 RTF 格式，直接回傳
-        if (!rtf.TrimStart().StartsWith("{\\rtf")) return rtf;
-
-        try
-        {
-            // 移除 RTF 控制碼的簡易正則
-            var text = rtf;
-
-            // 移除 {\*...} 群組
-            text = Regex.Replace(text, @"\{\\\*[^}]*\}", "", RegexOptions.Singleline);
-
-            // 移除 RTF 控制字（如 \par, \b, \i 等），保留文字
-            text = Regex.Replace(text, @"\\[a-z]+(-?\d+)?[ ]?", " ");
-
-            // 移除 Unicode 轉義 \'XX
-            text = Regex.Replace(text, @"\\'[0-9a-fA-F]{2}", "");
-
-            // 移除大括號
-            text = text.Replace("{", "").Replace("}", "");
-
-            // 清理多餘空白
-            text = Regex.Replace(text, @"\s+", " ").Trim();
-
-            return text;
-        }
-        catch
-        {
-            return string.Empty;
-        }
-    }
-
-    /// <summary>
-    /// 將中文字元之間插入空格，讓 FTS5 的 unicode61 tokenizer 能正確斷詞。
-    /// 英文單字保持原樣（本身就有空格分隔）。
-    /// 例如："股票分析report" → "股 票 分 析 report"
-    /// </summary>
-    private static string TokenizeForChinese(string input)
-    {
-        if (string.IsNullOrEmpty(input)) return string.Empty;
-
-        var sb = new StringBuilder(input.Length * 2);
-        bool prevWasChinese = false;
-
-        foreach (var ch in input)
-        {
-            bool isChinese = IsChinese(ch);
-
-            if (isChinese)
-            {
-                if (sb.Length > 0 && !prevWasChinese && sb[sb.Length - 1] != ' ')
-                    sb.Append(' ');
-
-                if (prevWasChinese)
-                    sb.Append(' ');
-
-                sb.Append(ch);
-                prevWasChinese = true;
-            }
-            else
-            {
-                if (prevWasChinese && ch != ' ')
-                    sb.Append(' ');
-
-                sb.Append(ch);
-                prevWasChinese = false;
-            }
-        }
-
-        return sb.ToString();
-    }
-
-    /// <summary>還原 tokenized 中文：移除漢字間的空格，保留英文空格。</summary>
-    private static string RestoreFromTokenized(string tokenized)
-    {
-        if (string.IsNullOrEmpty(tokenized)) return string.Empty;
-
-        var sb = new StringBuilder(tokenized.Length);
-        for (int i = 0; i < tokenized.Length; i++)
-        {
-            if (tokenized[i] == ' ')
-            {
-                // 如果前後都是中文字，跳過這個空格
-                bool prevChinese = i > 0 && IsChinese(tokenized[i - 1]);
-                bool nextChinese = i < tokenized.Length - 1 && IsChinese(tokenized[i + 1]);
-
-                if (prevChinese && nextChinese)
-                    continue;
-            }
-            sb.Append(tokenized[i]);
-        }
-        return sb.ToString();
-    }
-
-    /// <summary>判斷是否為中文字元（CJK 統一漢字）</summary>
-    private static bool IsChinese(char c)
-    {
-        return c >= 0x4E00 && c <= 0x9FFF  // CJK 統一漢字
-            || c >= 0x3400 && c <= 0x4DBF  // CJK 統一漢字擴展 A
-            || c >= 0xF900 && c <= 0xFAFF; // CJK 相容漢字
-    }
-    #endregion
 }
