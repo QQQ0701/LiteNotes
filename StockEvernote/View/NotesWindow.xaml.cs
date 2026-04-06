@@ -44,6 +44,11 @@ public partial class NotesWindow : Window
             
             this.Close();
         };
+        _vm.ShowErrorDialogAction = (title, message) =>
+        {
+            // 使用 Windows 內建的標準錯誤彈窗
+            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
+        };
     }
 
     // ══════════════════════════════════════════════════════════
@@ -59,15 +64,15 @@ public partial class NotesWindow : Window
             try
             {
                 // 先推本地變更 → 再拉雲端最新（順序不能反，避免已刪除的資料被復活）
-                _vm.SyncStatus = "⏳ 上傳本地變更...";
+                _vm.StatusMessage = "⏳ 上傳本地變更...";
                 await _vm.SyncCommand.ExecuteAsync(null);
 
-                _vm.SyncStatus = "⏳ 從雲端同步中...";
+                _vm.StatusMessage = "⏳ 從雲端同步中...";
                 await _vm.RestoreFromCloudCommand.ExecuteAsync(null);
             }
             catch
             {
-                _vm.SyncStatus = "❌ 啟動同步失敗，使用本地資料";
+                _vm.StatusMessage = "❌ 啟動同步失敗，使用本地資料";
             }
         }
 
@@ -90,7 +95,7 @@ public partial class NotesWindow : Window
         {
             try
             {
-                _vm.SyncStatus = "⏳ 關閉前同步中...";
+                _vm.StatusMessage = "⏳ 關閉前同步中...";
                 await _vm.SyncCommand.ExecuteAsync(null);
             }
             catch

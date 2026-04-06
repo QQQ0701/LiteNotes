@@ -189,7 +189,7 @@
                    BorderBrush="#E8E8E8" BorderThickness="0,1,0,0"
                    Height="28">
             <StatusBarItem>
-                <TextBlock Text="{Binding SyncStatus}"
+                <TextBlock Text="{Binding StatusMessage}"
                            FontSize="12" Foreground="#1A1A1A"/>
             </StatusBarItem>
             <!-- ===== 正式要刪除 ===== -->

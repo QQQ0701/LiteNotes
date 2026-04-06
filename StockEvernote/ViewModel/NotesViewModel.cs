@@ -31,11 +31,35 @@ public partial class NotesViewModel : ObservableObject
     /// </summary>
     private bool _isNavigatingFromSearch = false;
     private string CurrentUserId => _userSession.LocalId ?? string.Empty;
-    public Action? LogoutAction { get; set; }
-    // 宣告一個全域變數來追蹤目前的任務
     private CancellationTokenSource? _loadAttachmentsCts;
+    public Action? LogoutAction { get; set; }
+    public Action<string, string>? ShowErrorDialogAction { get; set; }
 
-   #endregion
+    #endregion
+
+    #region 可觀察屬性
+
+    [ObservableProperty] private ObservableCollection<Notebook> _notebooks = new();
+    [ObservableProperty] private ObservableCollection<Note> _notes = new();
+    [ObservableProperty] private ObservableCollection<SearchResult> _searchResults = new();
+    [ObservableProperty] private ObservableCollection<Attachment> _attachments = new();
+
+    [ObservableProperty] private Notebook? _selectedNotebook;
+    [ObservableProperty] private Note? _selectedNote;
+    [ObservableProperty] private SearchResult? _selectedSearchResult;
+
+    [ObservableProperty] private string _newNotebookName = string.Empty;
+    [ObservableProperty] private string _statusMessage = string.Empty;
+    [ObservableProperty] private string _saveStatus = string.Empty;
+    [ObservableProperty] private string _searchKeyword = string.Empty;
+
+    [ObservableProperty] private bool _isSearchMode = false;
+    [ObservableProperty] private bool _isSearchGlobal = true;  // true=全域, false=當前筆記本
+
+    #endregion
+    //---------------------正式要刪除-------------------------------
+    [ObservableProperty] private bool _isAutoSyncEnabled = false;
+    //---------------------正式要刪除-------------------------------
 
     #region 建構函式
     public NotesViewModel(INotebookService notebookService,
@@ -55,32 +79,6 @@ public partial class NotesViewModel : ObservableObject
         _fileUploadService = fileUploadService;
     }
     #endregion
-
-    #region 可觀察屬性
-
-    [ObservableProperty] private ObservableCollection<Notebook> _notebooks = new();
-    [ObservableProperty] private ObservableCollection<Note> _notes = new();
-    [ObservableProperty] private ObservableCollection<SearchResult> _searchResults = new();
-    [ObservableProperty] private ObservableCollection<Attachment> _attachments = new();
-
-    [ObservableProperty] private Notebook? _selectedNotebook;
-    [ObservableProperty] private Note? _selectedNote;
-    [ObservableProperty] private SearchResult? _selectedSearchResult;
-
-    [ObservableProperty] private string _newNotebookName = string.Empty;
-    [ObservableProperty] private string _syncStatus = string.Empty;
-    [ObservableProperty] private string _saveStatus = string.Empty;
-    [ObservableProperty] private string _searchKeyword = string.Empty;
-    [ObservableProperty] private string _uploadErrorMessage = string.Empty;
-
-    [ObservableProperty] private bool _isSearchMode = false;
-    [ObservableProperty] private bool _isSearchGlobal = true;  // true=全域, false=當前筆記本
-
-    #endregion
-    //---------------------正式要刪除-------------------------------
-    [ObservableProperty] private bool _isAutoSyncEnabled = false;
-    //---------------------正式要刪除-------------------------------
-
     #region 系統啟動與基礎設施
 
     /// <summary>
@@ -128,31 +126,33 @@ public partial class NotesViewModel : ObservableObject
             _logger.LogInformation("上傳附件：{FileName}，NoteId：{NoteId}",
                 attachment.FileName, SelectedNote.Id);
 
-            UploadErrorMessage = string.Empty;
+            StatusMessage = string.Empty;
         }
         catch (InvalidOperationException ex)
         {
-            // 這是我們自己丟出的「檔案太大/類型不符」，直接顯示給使用者
             _logger.LogWarning("上傳驗證失敗：{Message}", ex.Message);
-            UploadErrorMessage = ex.Message;
+            StatusMessage = "❌ 上傳中止";
+            ShowErrorDialogAction?.Invoke("上傳失敗", ex.Message);
         }
         catch (IOException ex)
         {
-            // 系統層級的檔案鎖定錯誤
             _logger.LogWarning(ex, "檔案讀取失敗，路徑：{Path}", filePath);
-            UploadErrorMessage = "無法讀取檔案，請確認檔案是否被其他程式（如 Word 或圖片檢視器）開啟中。";
+            StatusMessage = "無法讀取檔案，請確認檔案是否被其他程式（如 Word 或圖片檢視器）開啟中。";
+            ShowErrorDialogAction?.Invoke("檔案讀取失敗", "無法讀取檔案，請確認檔案是否被其他程式（如 Word 或圖片檢視器）開啟中。");
         }
         catch (Azure.RequestFailedException ex)
         {
             // Azure 雲端連線失敗 (需 using Azure;)
             _logger.LogError(ex, "Azure 雲端上傳失敗");
-            UploadErrorMessage = "雲端伺服器連線異常，請檢查網路連線或稍後再試。";
+            StatusMessage = "雲端伺服器連線異常，請檢查網路連線或稍後再試。";
+            ShowErrorDialogAction?.Invoke("連線異常", "雲端伺服器連線異常，請檢查網路連線或稍後再試。");
         }
         catch (Exception ex)
         {
             // 終極防線：攔截所有未知的當機錯誤
             _logger.LogError(ex, "發生未知的上傳錯誤，檔案：{Path}", filePath);
-            UploadErrorMessage = "發生未知的錯誤，無法完成上傳。";
+            StatusMessage = "發生未知的錯誤，無法完成上傳。";
+            ShowErrorDialogAction?.Invoke("系統錯誤", "發生未知的錯誤，無法完成上傳。");
         }
     }
 
@@ -177,7 +177,8 @@ public partial class NotesViewModel : ObservableObject
         catch (Exception ex)
         {
             _logger.LogError(ex, "開啟附件失敗：{FileName}", attachment.FileName);
-            UploadErrorMessage = "下載或開啟檔案失敗，請檢查網路連線。";
+            StatusMessage = "下載或開啟檔案失敗，請檢查網路連線。";
+            ShowErrorDialogAction?.Invoke("開啟失敗", "下載或開啟檔案失敗，請檢查網路連線。");
         }
     }
 
@@ -193,7 +194,8 @@ public partial class NotesViewModel : ObservableObject
         catch (Exception ex)
         {
             _logger.LogError(ex, "資料庫刪除附件失敗：{FileName}", attachment.FileName);
-            UploadErrorMessage = "刪除檔案記錄失敗，請稍後再試。";
+            StatusMessage = "刪除檔案記錄失敗，請稍後再試。";
+            ShowErrorDialogAction?.Invoke("刪除失敗", "無法刪除檔案記錄，請檢查網路或稍後再試。");
             return;
         }
 
@@ -320,16 +322,16 @@ public partial class NotesViewModel : ObservableObject
     {
         try
         {
-            SyncStatus = "⏳ 同步中...";
+            StatusMessage = "⏳ 同步中...";
             _logger.LogInformation("開始同步，UserId：{UserId}", CurrentUserId);
             await _firestoreService.SyncAllAsync(CurrentUserId);
-            SyncStatus = $"✅ 同步成功 {DateTime.Now:HH:mm:ss}";
+            StatusMessage = $"✅ 同步成功 {DateTime.Now:HH:mm:ss}";
             _logger.LogInformation("同步成功");
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "同步失敗");
-            SyncStatus = "❌ 同步失敗";
+            StatusMessage = "❌ 同步失敗";
         }
     }
 
@@ -341,7 +343,7 @@ public partial class NotesViewModel : ObservableObject
     {
         try
         {
-            SyncStatus = "⏳ 從雲端還原中...";
+            StatusMessage = "⏳ 從雲端還原中...";
             _logger.LogInformation("開始從雲端還原，UserId：{UserId}", CurrentUserId);
 
             await _firestoreService.RestoreFromCloudAsync(CurrentUserId);
@@ -350,13 +352,13 @@ public partial class NotesViewModel : ObservableObject
             // 雲端還原後重建索引
             await _searchService.RebuildIndexAsync(CurrentUserId);
 
-            SyncStatus = $"✅ 還原成功 {DateTime.Now:HH:mm:ss}";
+            StatusMessage = $"✅ 還原成功 {DateTime.Now:HH:mm:ss}";
             _logger.LogInformation("從雲端還原成功，共 {Count} 本筆記本", Notebooks.Count);
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "從雲端還原失敗");
-            SyncStatus = "❌ 還原失敗";
+            StatusMessage = "❌ 還原失敗";
         }
     }
 
@@ -591,6 +593,7 @@ public partial class NotesViewModel : ObservableObject
         catch (Exception ex)
         {
             _logger.LogError(ex, "刪除筆記時，清理索引發生錯誤");
+            ShowErrorDialogAction?.Invoke("刪除失敗", "無法刪除筆記，請稍後再試。");
         }
 
         if (SelectedNote == note)
@@ -612,6 +615,11 @@ public partial class NotesViewModel : ObservableObject
             await _noteService.UpdateNoteAsync(note);
             SaveStatus = $"自動儲存 {DateTime.Now:HH:mm:ss}";
             _logger.LogInformation("儲存筆記：{Name}", note.Name);
+        }
+        catch (Exception ex) 
+        {
+            _logger.LogError(ex, "自動儲存失敗：{Name}", note.Name);
+            SaveStatus = "❌ 儲存失敗"; 
         }
         finally
         {
