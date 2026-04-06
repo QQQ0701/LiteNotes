@@ -97,7 +97,7 @@ public partial class NotesViewModel : ObservableObject
     }
 
     /// <summary>
-    /// 階段四：重建搜尋索引 (必須在資料最新時執行)
+    /// 重建搜尋索引 (必須在資料最新時執行)
     /// </summary>
     [RelayCommand]
     private async Task RebuildSearchIndexAsync()

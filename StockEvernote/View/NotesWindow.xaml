@@ -424,7 +424,7 @@
         </Border>
 
         <!-- ===== 右側：編輯區 ===== -->
-        <Grid Background="White">
+        <Grid Background="White" AllowDrop="True" Drop="Grid_Drop">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <!-- 標題列 -->
@@ -517,7 +517,11 @@
                          VerticalScrollBarVisibility="Auto"
                          Foreground="#1A1A1A"
                          TextChanged="ContentRichTextBox_TextChanged"
-                         IsEnabled="{Binding SelectedNote, Converter={StaticResource NullToBoolConverter}}"/>
+                         IsEnabled="{Binding SelectedNote, Converter={StaticResource NullToBoolConverter}}"
+                         
+                         AllowDrop="True"
+                         PreviewDragOver="ContentRichTextBox_PreviewDragOver"
+                         PreviewDrop="ContentRichTextBox_PreviewDrop"/>
         
             <!-- ===== Row 2：附件列表 ===== -->
             <Border Grid.Row="2"
@@ -584,8 +588,6 @@
                     </ItemsControl>
                 </DockPanel>
             </Border>
-
         </Grid>
-
     </DockPanel>
 </Window>

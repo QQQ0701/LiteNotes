@@ -390,6 +390,62 @@ public partial class NotesWindow : Window
         }
     }
 
+    /// <summary>處理使用者將檔案拖曳進編輯區的事件</summary>
+    private async void Grid_Drop(object sender, DragEventArgs e)
+    {
+        // 1. 防呆：必須要有選中的筆記才能上傳
+        if (_vm.SelectedNote is null) return;
+
+        // 2. 檢查拖進來的東西是不是「檔案」
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            // 3. 把檔案路徑拿出來 (可能有一次拖很多個檔案，這是一個陣列)
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            // 4. 把每個檔案丟給 ViewModel 去上傳
+            foreach (var filePath in files)
+            {
+                // 檢查指令是否允許執行，然後非同步上傳
+                if (_vm.UploadFileCommand.CanExecute(filePath))
+                {
+                    await _vm.UploadFileCommand.ExecuteAsync(filePath);
+                }
+            }
+        }
+    }
+
+    /// <summary>攔截 RichTextBox 的拖曳經過，強制顯示「複製」的游標</summary>
+    private void ContentRichTextBox_PreviewDragOver(object sender, DragEventArgs e)
+    {
+        // 只有當拖進來的是「檔案」時，我們才介入
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            e.Effects = DragDropEffects.Copy;
+            e.Handled = true; // 🌟 告訴 RichTextBox：「這件事我接管了，不要顯示禁止圖示！」
+        }
+    }
+
+    /// <summary>攔截 RichTextBox 的放下事件，執行我們的上傳邏輯</summary>
+    private async void ContentRichTextBox_PreviewDrop(object sender, DragEventArgs e)
+    {
+        if (_vm.SelectedNote is null) return;
+
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            e.Handled = true; // 🌟 告訴 RichTextBox：「檔案我拿走了，你不要把它變成純文字貼上！」
+
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            foreach (var filePath in files)
+            {
+                if (_vm.UploadFileCommand.CanExecute(filePath))
+                {
+                    await _vm.UploadFileCommand.ExecuteAsync(filePath);
+                }
+            }
+        }
+    }
+
     // ══════════════════════════════════════════════════════════
     //  其他
     // ══════════════════════════════════════════════════════════
