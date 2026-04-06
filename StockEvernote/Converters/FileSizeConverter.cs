@@ -1,4 +1,4 @@
-﻿using StockEvernote.Services;
+﻿using StockEvernote.Helpers;
 using System.Globalization;
 using System.Windows.Data;
 
@@ -10,7 +10,7 @@ public class FileSizeConverter : IValueConverter
     {
         if (value is long bytes)
         {
-            return AzureBlobService.FormatFileSize(bytes);
+            return FileHelper.FormatFileSize(bytes);
         }
         return "0 B";
     }
