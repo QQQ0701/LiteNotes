@@ -8,5 +8,9 @@
         <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
         <converters:NullToBoolConverter x:Key="NullToBoolConverter"/>
         <converters:BoolToSearchScopeConverter x:Key="BoolToSearchScopeConverter"/>
+        <converters:FileSizeConverter x:Key="FileSizeConverter"/>
+        <converters:BoolToAttachmentIconConverter x:Key="BoolToAttachmentIconConverter"/>
+        <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+
     </Application.Resources>
 </Application>
