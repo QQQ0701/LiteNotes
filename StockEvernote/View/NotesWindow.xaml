@@ -466,9 +466,6 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
-                        <!-- 上傳按鈕 -->
-                        <ColumnDefinition Width="Auto"/>
-                        <!-- 儲存狀態 -->
                     </Grid.ColumnDefinitions>
 
                     <!-- 筆記標題 -->
@@ -484,25 +481,11 @@
                              Foreground="#1A1A1A"
                              IsEnabled="{Binding SelectedNote, Converter={StaticResource NullToBoolConverter}}"/>
                     
-                    <!-- 上傳按鈕 -->
-                    <Button Grid.Column="1"
-                            Click="UploadButton_Click"
-                            Padding="8,4" Margin="8,0"
-                            BorderThickness="0" Background="Transparent"
-                            Foreground="#888888" Cursor="Hand"
-                            IsEnabled="{Binding SelectedNote, Converter={StaticResource NullToBoolConverter}}"
-                            ToolTip="上傳圖片或文件">
-                        
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="📎" FontSize="16" VerticalAlignment="Center"/>
-                            <TextBlock Text="附件" FontSize="13" Margin="4,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    
                     <!-- ✅ 儲存狀態取代儲存按鈕 -->
                     <TextBlock Grid.Column="2"
                                Text="{Binding SaveStatus}"
                                FontSize="12" Foreground="#9B9B9B"
+                               HorizontalAlignment="Right"
                                VerticalAlignment="Center"
                                Margin="8,0"/>
                 </Grid>
@@ -527,11 +510,24 @@
             <Border Grid.Row="2"
                     BorderBrush="#E8E8E8" BorderThickness="0,1,0,0"
                     Padding="24,8"
-                    Visibility="{Binding Attachments.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                    IsEnabled="{Binding Attachments.Count, Converter={StaticResource NullToBoolConverter}}">
                 <DockPanel>
-                    <TextBlock DockPanel.Dock="Top"
-                               Text="📎 附件" FontSize="13" FontWeight="SemiBold"
-                               Foreground="#888888" Margin="0,0,0,8"/>
+
+                    <Button DockPanel.Dock="Top"
+                        Click="UploadButton_Click"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Padding="4" Margin="-4,0,0,8"
+                        ToolTip="點擊新增附件">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📎 附件" FontSize="13" FontWeight="SemiBold" 
+                                   Foreground="#888888" VerticalAlignment="Center"/>
+                            <TextBlock Text="+" FontSize="14" FontWeight="Bold" 
+                                   Foreground="#CCCCCC" Margin="6,-2,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
 
                     <ItemsControl ItemsSource="{Binding Attachments}">
                         <ItemsControl.ItemTemplate>
