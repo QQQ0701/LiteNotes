@@ -285,6 +285,7 @@ public partial class NotesViewModel : ObservableObject
         SearchKeyword = string.Empty;
         SearchResults.Clear();
         IsSearchMode = false;
+        IsSearchGlobal = true;
     }
 
     /// <summary>
@@ -372,11 +373,19 @@ public partial class NotesViewModel : ObservableObject
     #endregion
 
     #region 筆記本管理 (Notebook Management)
-    // 當選擇的筆記本改變時，自動載入該本的筆記
     partial void OnSelectedNotebookChanged(Notebook? value)
     {
         if (value is null) return;
         if (_isNavigatingFromSearch) return;
+
+        // 搜尋模式下，點擊筆記本 = 範圍過濾（重新搜尋只搜該筆記本）
+        if (IsSearchMode && !string.IsNullOrWhiteSpace(SearchKeyword))
+        {
+            IsSearchGlobal = false;
+            _ = SearchAsync();
+            return;
+        }
+
         _ = ExecuteLoadNotesAsync(value.Id);
     }
 
