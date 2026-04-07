@@ -9,15 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\**" />
     <Compile Remove="View\UserControls\**" />
+    <EmbeddedResource Remove="Repositories\**" />
     <EmbeddedResource Remove="View\UserControls\**" />
+    <None Remove="Repositories\**" />
     <None Remove="View\UserControls\**" />
+    <Page Remove="Repositories\**" />
     <Page Remove="View\UserControls\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Images\" />
-    <Folder Include="Repositories\" />
+    <None Remove="Images\note_icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +41,10 @@
     <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\note_icon.ico" />
   </ItemGroup>
 
   <ItemGroup>

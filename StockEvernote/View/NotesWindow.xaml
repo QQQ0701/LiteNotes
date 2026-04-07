@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:StockEvernote.ViewModel"
         xmlns:converters="clr-namespace:StockEvernote.Converters"
+        Icon="/Images/note_icon.ico"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=vm:NotesViewModel}"
         WindowStartupLocation="CenterScreen"
         PreviewMouseDown="Window_PreviewMouseDown"
         FontFamily="Microsoft JhengHei UI"
-        Title="StockEvernote" Height="680" Width="1200">
+        Title="LiteNotes" Height="680" Width="1200">
 
     <Grid>
         <Grid.RowDefinitions>

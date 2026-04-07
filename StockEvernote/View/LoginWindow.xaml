@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:StockEvernote.ViewModel"
+        Icon="/Images/note_icon.ico"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance Type=vm:LoginViewModel}"
-        Title="StockEvernote" Height="620" Width="420"
+        Title="LiteNotes" Height="660" Width="420"
         ResizeMode="NoResize"
         FontFamily="Microsoft JhengHei UI"
         FontSize="14"
@@ -27,18 +28,18 @@
                         HorizontalAlignment="Center"
                         Margin="0,0,0,16">
 
-                    <TextBlock Text="📈"
-                           FontSize="48"
+                    <TextBlock Text="🍃"
+                           FontSize="44"
                            HorizontalAlignment="Center"
                            Margin="0,0,0,12"/>
                 </Border>
 
-                <TextBlock Text="StockEvernote"
-                           FontSize="24" FontWeight="Bold"
+                <TextBlock Text="LiteNotes"
+                           FontSize="26" FontWeight="Bold"
                            Foreground="#1A1A1A"
                            HorizontalAlignment="Center"
-                           Margin="0,0,0,6"/>
-                <TextBlock Text="交易日誌，隨時同步上雲端"
+                           Margin="0,0,0,8"/>
+                <TextBlock Text="極速檢索，隨時同步你的靈感"
                            FontSize="13" Foreground="#9B9B9B"
                            HorizontalAlignment="Center"/>
             </StackPanel>
