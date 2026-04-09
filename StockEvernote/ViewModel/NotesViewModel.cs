@@ -190,28 +190,17 @@ public partial class NotesViewModel : ObservableObject
         try
         {
             await _fileUploadService.SoftDeleteAsync(attachment.Id);
+            Attachments.Remove(attachment);
+
+            StatusMessage = "🗑️ 附件已刪除";
+            _logger.LogInformation("軟刪除附件：{FileName}", attachment.FileName);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "資料庫刪除附件失敗：{FileName}", attachment.FileName);
-            StatusMessage = "刪除檔案記錄失敗，請稍後再試。";
+            StatusMessage = "❌ 刪除失敗";
             ShowErrorDialogAction?.Invoke("刪除失敗", "無法刪除檔案記錄，請檢查網路或稍後再試。");
-            return;
         }
-
-        Attachments.Remove(attachment);
-
-        _logger.LogInformation("刪除附件成功：{FileName}", attachment.FileName);
-        try
-        {
-            await _fileUploadService.DeleteBlobAsync(attachment.BlobName);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, "Azure Blob 刪除失敗，產生孤兒檔案：{BlobName}", attachment.BlobName);
-        }
-
-        _logger.LogInformation("刪除附件成功：{FileName}", attachment.FileName);
     }
     partial void OnSelectedNoteChanged(Note? value)
     {

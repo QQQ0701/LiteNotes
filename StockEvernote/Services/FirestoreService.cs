@@ -1,14 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Serilog.Core;
 using StockEvernote.Contracts;
 using StockEvernote.Data;
 using StockEvernote.Model;
 using StockEvernote.Model.Firestore;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Security.Policy;
 
 namespace StockEvernote.Services;
 
@@ -19,56 +17,159 @@ public class FirestoreService : IFirestoreService
     private readonly IUserSession _userSession;
     private readonly string _projectId;
     private readonly ILogger<FirestoreService> _logger;
+    private readonly IFileUploadService _fileUploadService;
     private const string BaseUrl = "https://firestore.googleapis.com/v1";
     private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(5, 5);
-
     public FirestoreService(
         HttpClient httpClient,
         EvernoteDbContext dbContext,
         IUserSession userSession,
         IConfiguration configuration,
-        ILogger<FirestoreService> logger)
+        ILogger<FirestoreService> logger,
+        IFileUploadService fileUploadService)
     {
         _httpClient = httpClient;
         _dbContext = dbContext;
         _userSession = userSession;
+        _fileUploadService = fileUploadService;
         _logger = logger;
         _projectId = configuration["Firebase:ProjectId"]
             ?? throw new InvalidOperationException("找不到 Firebase:ProjectId");
     }
-
-    /// <summary>
-    /// 執行全量雲端同步作業，依序將本地端未同步的筆記本與筆記推送至 Firestore。
-    /// </summary>
-    /// <remarks>
-    /// 同步順序具有嚴格相依性：必須先確保筆記本 (Notebook) 實體存在於雲端，才能推送其轄下的筆記 (Note)。
-    /// 資料來源直接依賴本地 SQLite 資料庫，而非 UI 層的資料綁定集合，以確保背景同步的絕對完整性。
-    /// </remarks>
-    /// <param name="userId">當前經授權驗證的使用者唯一識別碼 (Firebase UID)</param>
-    /// <returns>代表非同步操作的 Task，執行完畢即代表單向 (本地推至雲端) 同步完成</returns>
-    /// <exception cref="System.Net.Http.HttpRequestException">網路異常或 Firestore 伺服器拒絕連線時拋出</exception>
     public async Task SyncAllAsync(string userId)
     {
         _logger.LogInformation("開始全量同步，UserId：{UserId}", userId);
 
-        // 1. 確保外鍵關聯的父實體 (Notebook) 優先上傳，避免 Firestore 寫入孤兒筆記
         await SyncNotebooksAsync(userId);
 
-        // 2. 直接查詢實體資料庫取得所有活躍的 NotebookId
-        // 防坑 (Why)：嚴禁使用 ViewModel.Notebooks，防止 UI 尚未渲染或資料過濾導致同步清單缺漏
         var allNotebookIds = await _dbContext.Notebooks
-            .Where(n => n.UserId == userId && n.IsDeleted == false)
-            .Select(n => n.Id)
-            .ToListAsync();
+                 .Where(n => n.UserId == userId && n.IsDeleted == false)
+                 .Select(n => n.Id)
+                 .ToListAsync();
 
-        // 3. 遍歷所有有效筆記本，批次執行筆記實體的 Upsert 或 Delete 操作
         foreach (var notebookId in allNotebookIds)
         {
             await SyncNotesAsync(notebookId, userId);
         }
+        await SyncAttachmentsAsync(userId);
 
         _logger.LogInformation("全量同步完成，共同步 {Count} 本筆記本", allNotebookIds.Count);
     }
+    public async Task SyncAttachmentsAsync(string userId)
+    {
+        var unsynced = await _dbContext.Attachments
+       .Where(a => a.UserId == userId && a.IsSynced == false)
+       .ToListAsync();
+
+        _logger.LogInformation("待同步附件數量：{Count}", unsynced.Count);
+
+        if (!unsynced.Any()) return;
+
+        var syncTasks = unsynced.Select(async attachment =>
+        {
+            await _semaphore.WaitAsync();
+
+            try
+            {
+                if (attachment.IsDeleted)
+                {
+                    await DeleteFirestoreDocumentAsync(
+                     $"users/{userId}/attachments/{attachment.Id}");
+
+                    await DeleteBlobIfExistsAsync(attachment.BlobName);
+                }
+                else
+                {
+                    await UpsertAttachmentAsync(userId, attachment);
+                }
+
+                return (attachment, success: true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "附件同步失敗：{FileName}", attachment.FileName);
+                return (attachment, success: false);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+
+        });
+
+        var results = await Task.WhenAll(syncTasks);
+
+        foreach (var (attachment, success) in results.Where(r => r.success))
+            attachment.IsSynced = true;  
+
+        await _dbContext.SaveChangesAsync();
+
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // 新增 3：UpsertAttachmentAsync — 上傳附件記錄到 Firestore
+    // 放在 UpsertNoteAsync 方法後面
+    // ═══════════════════════════════════════════════════════════
+
+    private async Task UpsertAttachmentAsync(string userId, Attachment attachment)
+    {
+        _logger.LogInformation("上傳附件記錄：{FileName}", attachment.FileName);
+
+        var url = $"{BaseUrl}/projects/{_projectId}/databases/(default)/documents/users/{userId}/attachments/{attachment.Id}";
+
+        var body = new
+        {
+            fields = new Dictionary<string, object>
+            {
+                ["fileName"] = new { stringValue = attachment.FileName },
+                ["blobUrl"] = new { stringValue = attachment.BlobUrl },
+                ["blobName"] = new { stringValue = attachment.BlobName },
+                ["fileSize"] = new { integerValue = attachment.FileSize.ToString() },
+                ["contentType"] = new { stringValue = attachment.ContentType },
+                ["isImage"] = new { booleanValue = attachment.IsImage },
+                ["noteId"] = new { stringValue = attachment.NoteId },
+                ["userId"] = new { stringValue = attachment.UserId },
+                ["isDeleted"] = new { booleanValue = attachment.IsDeleted },
+                ["createdAt"] = new { timestampValue = attachment.CreatedAt.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ") },
+                ["updatedAt"] = new { timestampValue = attachment.UpdatedAt.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ") }
+            }
+        };
+
+        var request = new HttpRequestMessage(HttpMethod.Patch, url)
+        {
+            Content = JsonContent.Create(body)
+        };
+
+        request.Headers.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _userSession.IdToken);
+
+        var response = await _httpClient.SendAsync(request);
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            _logger.LogError("Attachment 寫入失敗：{Status} - {Error}", response.StatusCode, error);
+            throw new Exception($"Attachment 寫入失敗：{response.StatusCode} - {error}");
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // 新增 4：DeleteBlobIfExistsAsync — 同步時刪除 Azure Blob
+    // 放在 DeleteFirestoreDocumentAsync 方法後面
+    // ═══════════════════════════════════════════════════════════
+
+    private async Task DeleteBlobIfExistsAsync(string blobName)
+    {
+        try
+        {
+            await _fileUploadService.DeleteBlobAsync(blobName);
+            _logger.LogInformation("同步刪除 Azure Blob：{BlobName}", blobName);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "同步時刪除 Blob 失敗：{BlobName}", blobName);
+        }
+    }
+
 
     // ===== Notebook 同步 =====
 
@@ -93,18 +194,23 @@ public class FirestoreService : IFirestoreService
                 else
                     await UpsertNotebookAsync(userId, notebook);
 
-                notebook.IsSynced = true;
+                return (notebook, success: true);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "筆記本同步失敗：{Name}", notebook.Name);
+                return (notebook, success: false);
             }
             finally
             {
                 _semaphore.Release();
             }
         });
-        await Task.WhenAll(syncTasks);
+        var results = await Task.WhenAll(syncTasks);
+
+        foreach (var (notebook, success) in results.Where(r => r.success))
+            notebook.IsSynced = true; 
+
         await _dbContext.SaveChangesAsync();
     }
     private async Task UpsertNotebookAsync(string userId, Notebook notebook)
@@ -166,12 +272,12 @@ public class FirestoreService : IFirestoreService
                 else
                     await UpsertNoteAsync(userId, notebookId, note);
 
-                note.IsSynced = true;
-
+                return (note, success: true);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "筆記同步失敗：{Name}", note.Name);
+                return (note, success: false);
             }
             finally
             {
@@ -179,8 +285,13 @@ public class FirestoreService : IFirestoreService
             }
         });
 
-        await Task.WhenAll(syncTakes);
+        var results = await Task.WhenAll(syncTakes);
+
+        foreach (var (note, success) in results.Where(r => r.success))
+            note.IsSynced = true; // ← DB 更新集中在這裡
+
         await _dbContext.SaveChangesAsync();
+
     }
 
     private async Task UpsertNoteAsync(string userId, string notebookId, Note note)
@@ -255,19 +366,24 @@ public class FirestoreService : IFirestoreService
             try
             {
                 // 1. 拉取並還原筆記本
-                var notebookResponse = await FetchDocumentsAsync($"users/{userId}/notebooks");
-                var restoredNotebookIds = await RestoreNotebooksAsync(userId, notebookResponse);
+                var notebookDocs = await FetchDocumentsAsync($"users/{userId}/notebooks");
+                var restoredNotebookIds = await RestoreNotebooksAsync(userId, notebookDocs);
 
                 // 2. 併發拉取所有筆記本的筆記
                 var fetchTasks = restoredNotebookIds.Select(async notebookId =>
                 {
-                    var noteResponse = await FetchDocumentsAsync(
-                        $"users/{userId}/notebooks/{notebookId}/notes");
+                    await _semaphore.WaitAsync();
+                    try
+                    {
+                        var noteResponse = await FetchDocumentsAsync(
+                            $"users/{userId}/notebooks/{notebookId}/notes");
 
-                    if (noteResponse?.Documents is null)
-                        return Enumerable.Empty<(string, FirestoreDocument)>();
-
-                    return noteResponse.Documents.Select(doc => (notebookId, doc));
+                        return noteResponse.Select(doc => (notebookId, doc));
+                    }
+                    finally
+                    {
+                        _semaphore.Release();
+                    }
                 });
 
                 var fetchResults = await Task.WhenAll(fetchTasks);
@@ -276,10 +392,8 @@ public class FirestoreService : IFirestoreService
                     .SelectMany(x => x)
                     .ToList();
 
-                // 3. 還原所有筆記
                 await RestoreNotesAsync(allNoteDocs);
-
-                // 4. 全部成功才存檔和 Commit
+                await RestoreAttachmentsAsync(userId);
                 await _dbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
 
@@ -293,37 +407,141 @@ public class FirestoreService : IFirestoreService
             }
         });
     }
-
-    // 共用：拉取 Firestore 文件列表
-    private async Task<FirestoreListResponse?> FetchDocumentsAsync(string path)
+    // ═══════════════════════════════════════════════════════════
+    // 新增 6：RestoreAttachmentsAsync — 從 Firestore 還原附件記錄
+    // 放在 RestoreNotesAsync 方法後面
+    // ═══════════════════════════════════════════════════════════
+    private async Task RestoreAttachmentsAsync(string userId)
     {
-        var url = $"{BaseUrl}/projects/{_projectId}/databases/(default)/documents/{path}";
+        var documents = await FetchDocumentsAsync($"users/{userId}/attachments");
+        if (!documents.Any()) return;
 
-        var request = new HttpRequestMessage(HttpMethod.Get, url);
-        request.Headers.Authorization =
-            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _userSession.IdToken);
+        var cloudAttachments = documents
+            .Where(d => d.Fields != null)
+            .Select(d => new
+            {
+                Id = d.Name?.Split('/').Last() ?? Guid.NewGuid().ToString(),
+                FileName = d.Fields!.GetValueOrDefault("fileName")?.StringValue ?? "未命名",
+                BlobUrl = d.Fields!.GetValueOrDefault("blobUrl")?.StringValue ?? string.Empty,
+                BlobName = d.Fields!.GetValueOrDefault("blobName")?.StringValue ?? string.Empty,
+                FileSize = long.TryParse(d.Fields!.GetValueOrDefault("fileSize")?.IntegerValue, out var size) ? size : 0,
+                ContentType = d.Fields!.GetValueOrDefault("contentType")?.StringValue ?? string.Empty,
+                IsImage = d.Fields!.GetValueOrDefault("isImage")?.BooleanValue ?? false,
+                NoteId = d.Fields!.GetValueOrDefault("noteId")?.StringValue ?? string.Empty,
+                UserId = userId
+            })
+           .ToList();
 
-        var response = await _httpClient.SendAsync(request);
-        if (!response.IsSuccessStatusCode)
+        var cloudIds = cloudAttachments.Select(a => a.Id).ToList();
+
+        // 查出本地已存在的
+
+        var existingMap = new Dictionary<string, bool>(); // id -> IsDeleted
+        foreach (var chunk in cloudIds.Chunk(500))
         {
-            _logger.LogWarning("拉取雲端文件失敗，Path：{Path}，Status：{Status}", path, response.StatusCode);
-
-            return null;
+            var rows = await _dbContext.Attachments
+                .Where(a => chunk.Contains(a.Id))
+                .Select(a => new { a.Id, a.IsDeleted })
+                .ToListAsync();
+            foreach (var r in rows)
+                existingMap[r.Id] = r.IsDeleted;
         }
 
-        var json = await response.Content.ReadAsStringAsync();
-        return System.Text.Json.JsonSerializer.Deserialize<FirestoreListResponse>(json,
-            new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        // 在記憶體裡分類，不需要第二次查詢
+        var softDeletedIds = existingMap
+            .Where(kv => kv.Value == true)
+            .Select(kv => kv.Key)
+            .ToHashSet();
+
+        var allExistingIds = existingMap.Keys.ToHashSet();
+
+        // 還原軟刪除
+        var softDeleted = await _dbContext.Attachments
+            .Where(a => softDeletedIds.Contains(a.Id))
+            .ToListAsync();
+
+        foreach (var att in softDeleted)
+        {
+            att.IsDeleted = false;
+            att.IsSynced = true;
+            _logger.LogInformation("還原軟刪除附件：{FileName}", att.FileName);
+        }
+
+        // 新增本地完全沒有的
+        var newAttachments = cloudAttachments
+            .Where(a => !allExistingIds.Contains(a.Id))
+            .Select(a => new Attachment
+            {
+                Id = a.Id,
+                NoteId = a.NoteId,
+                UserId = a.UserId,
+                FileName = a.FileName,
+                BlobUrl = a.BlobUrl,
+                BlobName = a.BlobName,
+                FileSize = a.FileSize,
+                ContentType = a.ContentType,
+                IsImage = a.IsImage,
+                IsSynced = true,
+                IsDeleted = false,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            })
+            .ToList();
+
+        if (newAttachments.Any())
+        {
+            await _dbContext.Attachments.AddRangeAsync(newAttachments);
+            _logger.LogInformation("還原附件數量：{Count}", newAttachments.Count);
+        }
+    }
+
+    // 共用：拉取 Firestore 文件列表
+    private async Task<List<FirestoreDocument>> FetchDocumentsAsync(string path)
+    {
+        var allDocuments = new List<FirestoreDocument>();
+        string? pageToken = null;
+
+        do
+        {
+            // 🌟 加上 pageSize=300，讓每次拿到的資料最大化，減少迴圈次數 (提升 15 倍速度)
+            var url = $"{BaseUrl}/projects/{_projectId}/databases/(default)/documents/{path}?pageSize=300";
+
+            if (pageToken != null)
+                url += $"&pageToken={pageToken}"; // 🌟 注意這裡改成 &，因為前面已經有 ? 了
+
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _userSession.IdToken);
+
+            var response = await _httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogWarning("拉取雲端文件失敗，Path：{Path}，Status：{Status}", path, response.StatusCode);
+                break;
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var result = System.Text.Json.JsonSerializer.Deserialize<FirestoreListResponse>(json,
+                new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (result?.Documents != null)
+                allDocuments.AddRange(result.Documents);
+
+            pageToken = result?.NextPageToken;
+        }
+        while (pageToken != null);
+
+        return allDocuments;
     }
 
     // 還原筆記本，回傳雲端所有 NotebookId 供後續使用
-    private async Task<List<string>> RestoreNotebooksAsync(string userId, FirestoreListResponse? result)
+    private async Task<List<string>> RestoreNotebooksAsync(string userId, List<FirestoreDocument> documents)
     {
-        _logger.LogInformation("雲端筆記本文件數量：{Count}", result?.Documents?.Count ?? 0);
+        _logger.LogInformation("雲端筆記本文件數量：{Count}", documents.Count);
 
-        if (result?.Documents is null) return new List<string>();
+        if (!documents.Any()) return new List<string>();
 
-        var cloudDocs = result.Documents
+        var cloudDocs = documents
             .Where(d => d.Fields != null)
             .Select(d => new
             {
@@ -418,24 +636,30 @@ public class FirestoreService : IFirestoreService
 
         var cloudIds = cloudNotes.Select(n => n.Id).ToList();
 
-        // 1. 查出本地未刪除的已存在 Id
-        var existingIds = new HashSet<string>();
+        var existingMap = new Dictionary<string, bool>();
+
         foreach (var chunk in cloudIds.Chunk(500))
         {
-            var idsInChunk = await _dbContext.Notes
-                .Where(n => chunk.Contains(n.Id) && n.IsDeleted == false)
-                .Select(n => n.Id)
+            var rows = await _dbContext.Notes
+                .Where(n => chunk.Contains(n.Id))
+                .Select(n => new { n.Id, n.IsDeleted })
                 .ToListAsync();
-            existingIds.UnionWith(idsInChunk);
+
+            foreach (var r in rows)
+                existingMap[r.Id] = r.IsDeleted;
         }
 
-        // 2. 找出軟刪除的，把它們還原
-        var maybeDeletedIds = cloudIds
-            .Where(id => !existingIds.Contains(id))
-            .ToList();
+        // 在記憶體裡分類，不需要第二次查詢
+        var softDeletedIds = existingMap
+            .Where(kv => kv.Value == true)
+            .Select(kv => kv.Key)
+            .ToHashSet();
 
+        var allExistingIds = existingMap.Keys.ToHashSet();
+
+        // 還原軟刪除
         var softDeleted = await _dbContext.Notes
-            .Where(n => maybeDeletedIds.Contains(n.Id) && n.IsDeleted == true)
+            .Where(n => softDeletedIds.Contains(n.Id))
             .ToListAsync();
 
         foreach (var note in softDeleted)
@@ -443,17 +667,6 @@ public class FirestoreService : IFirestoreService
             note.IsDeleted = false;
             note.IsSynced = true;
             _logger.LogInformation("還原軟刪除筆記：{Name}", note.Name);
-        }
-
-        // 3. 查出資料庫完全沒有的
-        var allExistingIds = new HashSet<string>();
-        foreach (var chunk in cloudIds.Chunk(500))
-        {
-            var idsInChunk = await _dbContext.Notes
-                .Where(n => chunk.Contains(n.Id))
-                .Select(n => n.Id)
-                .ToListAsync();
-            allExistingIds.UnionWith(idsInChunk);
         }
 
         var newNotes = cloudNotes
@@ -481,4 +694,3 @@ public class FirestoreService : IFirestoreService
     }
 }
 
-    
