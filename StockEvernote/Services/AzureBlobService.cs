@@ -10,7 +10,14 @@ using StockEvernote.Model;
 using System.IO;
 
 namespace StockEvernote.Services;
-
+/// <summary>
+/// Azure Blob Storage 檔案服務：處理附件的上傳、下載、刪除，
+/// 以及本地 SQLite 附件記錄的 CRUD。
+/// </summary>
+/// <remarks>
+/// Blob 路徑規則：{userId}/{noteId}/{guid}_{filename}
+/// 檔案大小限制：圖片 5MB、文件 20MB。
+/// </remarks>
 public class AzureBlobService : IFileUploadService
 {
     private readonly BlobContainerClient _containerClient;
@@ -26,8 +33,8 @@ public class AzureBlobService : IFileUploadService
         ".pdf", ".docx", ".xlsx", ".pptx", ".txt", ".csv"
     };
 
-    private const long MaxImageSize = 5 * 1024 * 1024;      // 5 MB
-    private const long MaxDocumentSize = 20 * 1024 * 1024;   // 20 MB
+    private const long MaxImageSize = 5 * 1024 * 1024;     
+    private const long MaxDocumentSize = 20 * 1024 * 1024;  
 
 
     public AzureBlobService(
@@ -56,6 +63,12 @@ public class AzureBlobService : IFileUploadService
         await _containerClient.CreateIfNotExistsAsync(PublicAccessType.None);
         _logger.LogInformation("Azure Blob Container 初始化完成");
     }
+
+    /// <summary>
+    /// 驗證檔案類型與大小 → 上傳到 Azure Blob → 建立本地 SQLite 附件記錄。
+    /// </summary>
+    /// <exception cref="InvalidOperationException">檔案類型不支援或大小超過限制。</exception>
+
     public async Task<Attachment> UploadAsync(string filePath, string noteId, string userId)
     {
         var fileInfo = new FileInfo(filePath);
@@ -71,10 +84,10 @@ public class AzureBlobService : IFileUploadService
             throw new InvalidOperationException(
                 $"檔案大小超過限制：{FileHelper.FormatFileSize(fileInfo.Length)}" +
                 $"，上限 {FileHelper.FormatFileSize(maxSize)}");
-        // 組合 Blob 路徑：userId/noteId/guid_filename
+ 
         var blobName = $"{userId}/{noteId}/{Guid.NewGuid():N}_{fileInfo.Name}";
         var blobClient = _containerClient.GetBlobClient(blobName);
-        // 上傳到 Azure Blob
+
         var contentType = FileHelper.GetContentType(extension);
         var headers = new BlobHttpHeaders { ContentType = contentType };
 
@@ -84,7 +97,6 @@ public class AzureBlobService : IFileUploadService
         _logger.LogInformation("檔案上傳成功：{FileName}，大小：{Size}",
             fileInfo.Name, FileHelper.FormatFileSize(fileInfo.Length));
 
-        // 建立本地資料庫記錄
         var attachment = new Attachment
         {
             NoteId = noteId,
@@ -103,6 +115,8 @@ public class AzureBlobService : IFileUploadService
 
         return attachment;
     }
+
+    /// <summary>從 Azure Blob 下載到系統暫存資料夾，回傳完整路徑供外部程式開啟。</summary>
     public async Task<string> DownloadToTempAsync(Attachment attachment)
     {
         var blobClient = _containerClient.GetBlobClient(attachment.BlobName);
@@ -121,6 +135,7 @@ public class AzureBlobService : IFileUploadService
         return tempPath;
     }
 
+    /// <summary>刪除 Azure Blob 上的檔案本體。由 FirestoreService 同步時呼叫。</summary>
     public async Task DeleteBlobAsync(string blobName)
     {
         var blobClient = _containerClient.GetBlobClient(blobName);
@@ -129,6 +144,7 @@ public class AzureBlobService : IFileUploadService
         _logger.LogInformation("Azure Blob 已刪除：{BlobName}", blobName);
     }
 
+    /// <summary>軟刪除本地附件記錄，標記 IsSynced=false 等待下次同步時清理雲端。</summary>
     public async Task SoftDeleteAsync(string attachmentId)
     {
         var attachment = await _dbContext.Attachments.FindAsync(attachmentId)
@@ -140,8 +156,10 @@ public class AzureBlobService : IFileUploadService
         await _dbContext.SaveChangesAsync();
 
         _logger.LogInformation("軟刪除附件：{FileName}", attachment.FileName);
+
     }
 
+    /// <summary>取得指定筆記的所有未刪除附件，依建立時間降序排列。</summary>
     public async Task<List<Attachment>> GetAttachmentsAsync(string noteId, CancellationToken token = default)
     {
         return await _dbContext.Attachments

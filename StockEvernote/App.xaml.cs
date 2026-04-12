@@ -102,8 +102,8 @@ public partial class App : Application
         services.AddSingleton(configuration);
         services.AddSingleton<IDialogService, WpfDialogService>();
         services.AddSingleton<IUserSession, UserSession>();
-        services.AddSingleton<ISearchService, SearchService>();
-        services.AddSingleton<IFileUploadService, AzureBlobService>();
+        services.AddScoped<ISearchService, SearchService>();
+        services.AddScoped<IFileUploadService, AzureBlobService>();
 
         // --- 資料庫 (Database) ---
 

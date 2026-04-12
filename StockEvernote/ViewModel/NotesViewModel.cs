@@ -21,10 +21,10 @@ public partial class NotesViewModel : ObservableObject
     private readonly INoteService _noteService;
     private readonly IUserSession _userSession;
     private readonly IFirestoreService _firestoreService;
-    private readonly ILogger<NotesViewModel> _logger;
-    private readonly SemaphoreSlim _saveLock = new(1, 1);
     private readonly ISearchService _searchService;
     private readonly IFileUploadService _fileUploadService;
+    private readonly ILogger<NotesViewModel> _logger;
+    private readonly SemaphoreSlim _saveLock = new(1, 1);
 
     /// <summary>
     /// 搜尋跳轉期間抑制 OnSelectedNotebookChanged 的自動載入，防止 Double Fetching。
@@ -54,7 +54,7 @@ public partial class NotesViewModel : ObservableObject
     [ObservableProperty] private string _searchKeyword = string.Empty;
 
     [ObservableProperty] private bool _isSearchMode = false;
-    [ObservableProperty] private bool _isSearchGlobal = true;  // true=全域, false=當前筆記本
+    [ObservableProperty] private bool _isSearchGlobal = true;
 
     #endregion
     //---------------------正式要刪除-------------------------------
@@ -79,19 +79,15 @@ public partial class NotesViewModel : ObservableObject
         _fileUploadService = fileUploadService;
     }
     #endregion
+
     #region 系統啟動與基礎設施
 
-    /// <summary>
-    /// 階段一：確保底層基礎設施準備完畢 (造輪胎)
-    /// </summary>
     [RelayCommand]
     private async Task InitializeInfrastructureAsync()
     {
         await _searchService.InitializeAsync();
-
         await _fileUploadService.InitializeAsync();
-
-        _logger.LogInformation("基礎設施 (搜尋表、Azure容器) 初始化完成");
+        _logger.LogInformation("基礎設施初始化完成");
     }
 
     /// <summary>
@@ -118,6 +114,7 @@ public partial class NotesViewModel : ObservableObject
 
         try
         {
+            StatusMessage = "⏳ 上傳中...";
             var attachment = await _fileUploadService.UploadAsync(
                 filePath, SelectedNote.Id, CurrentUserId);
 
@@ -137,21 +134,18 @@ public partial class NotesViewModel : ObservableObject
         catch (IOException ex)
         {
             _logger.LogWarning(ex, "檔案讀取失敗，路徑：{Path}", filePath);
-            StatusMessage = "無法讀取檔案，請確認檔案是否被其他程式（如 Word 或圖片檢視器）開啟中。";
-            ShowErrorDialogAction?.Invoke("檔案讀取失敗", "無法讀取檔案，請確認檔案是否被其他程式（如 Word 或圖片檢視器）開啟中。");
+            ShowErrorDialogAction?.Invoke("檔案讀取失敗",
+               "無法讀取檔案，請確認檔案是否被其他程式開啟中。");
         }
         catch (Azure.RequestFailedException ex)
         {
-            // Azure 雲端連線失敗 (需 using Azure;)
             _logger.LogError(ex, "Azure 雲端上傳失敗");
-            StatusMessage = "雲端伺服器連線異常，請檢查網路連線或稍後再試。";
-            ShowErrorDialogAction?.Invoke("連線異常", "雲端伺服器連線異常，請檢查網路連線或稍後再試。");
+            ShowErrorDialogAction?.Invoke("連線異常",
+               "雲端伺服器連線異常，請檢查網路連線或稍後再試。");
         }
         catch (Exception ex)
         {
-            // 終極防線：攔截所有未知的當機錯誤
             _logger.LogError(ex, "發生未知的上傳錯誤，檔案：{Path}", filePath);
-            StatusMessage = "發生未知的錯誤，無法完成上傳。";
             ShowErrorDialogAction?.Invoke("系統錯誤", "發生未知的錯誤，無法完成上傳。");
         }
     }
@@ -337,10 +331,21 @@ public partial class NotesViewModel : ObservableObject
             _logger.LogInformation("開始從雲端還原，UserId：{UserId}", CurrentUserId);
 
             await _firestoreService.RestoreFromCloudAsync(CurrentUserId);
-            await LoadNotebooksAsync(); // 還原後重新載入畫面
-
-            // 雲端還原後重建索引
+            await LoadNotebooksAsync(); 
             await _searchService.RebuildIndexAsync(CurrentUserId);
+
+            if (SelectedNotebook != null)
+            {
+                var currentNoteId = SelectedNote?.Id;
+                await ExecuteLoadNotesAsync(SelectedNotebook.Id, currentNoteId);
+            }
+
+            if (SelectedNote != null)
+            {
+                _loadAttachmentsCts?.Cancel();
+                _loadAttachmentsCts = new CancellationTokenSource();
+                await LoadAttachmentsAsync(SelectedNote.Id, _loadAttachmentsCts.Token);
+            }
 
             StatusMessage = $"✅ 還原成功 {DateTime.Now:HH:mm:ss}";
             _logger.LogInformation("從雲端還原成功，共 {Count} 本筆記本", Notebooks.Count);
@@ -454,41 +459,30 @@ public partial class NotesViewModel : ObservableObject
     }
 
     /// <summary>
-    /// 刪除筆記本及其所有子筆記的 FTS5 索引。
-    /// 索引清理為次要操作，失敗不影響刪除本身。
+    /// 刪除筆記本。連鎖刪除（筆記 → 附件 → 索引）由 NotebookService 處理。
+    /// ViewModel 只負責更新 UI 集合。
     /// </summary>
     [RelayCommand]
     private async Task DeleteNotebookAsync(Notebook notebook)
     {
-        var notesToRemove = await _noteService.GetNotesAsync(notebook.Id);
-
-        await _notebookService.DeleteNotebookAsync(notebook.Id);
-        _logger.LogInformation("刪除筆記本：{Name}", notebook.Name);
-
-        bool isSelected = SelectedNotebook == notebook;
-        Notebooks.Remove(notebook);
-
-        // 移除該筆記本下所有筆記的索引
         try
         {
-            foreach (var note in notesToRemove)
-            {
-                await _searchService.RemoveNoteIndexAsync(note.Id);
-            }
+            bool isSelected = SelectedNotebook == notebook;
 
+            await _notebookService.DeleteNotebookAsync(notebook.Id);
+            Notebooks.Remove(notebook);
+
+            if (isSelected)
+            {
+                SelectedNote = null;
+                Notes.Clear();
+                SelectedNotebook = null;
+            }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "刪除筆記本時，清理索引發生錯誤。");
-            // 未來可加入自動修復機制，或依靠 RebuildIndexAsync 解決
-        }
-
-        // 如果刪的是目前選中的筆記本，清空右側筆記列表
-        if (isSelected)
-        {
-            SelectedNote = null;
-            Notes.Clear();
-            SelectedNotebook = null;
+            _logger.LogError(ex, "刪除筆記本失敗：{Name}", notebook.Name);
+            ShowErrorDialogAction?.Invoke("刪除失敗", "無法刪除筆記本，請稍後再試。");
         }
     }
 
@@ -577,25 +571,25 @@ public partial class NotesViewModel : ObservableObject
         note.EditingName = string.Empty;
     }
 
+    // <summary>
+    /// 刪除筆記。連鎖刪除（附件 + 索引）由 NoteService 處理。
+    /// </summary>
     [RelayCommand]
     private async Task DeleteNoteAsync(Note note)
     {
-        await _noteService.DeleteNoteAsync(note.Id);
-        _logger.LogInformation("刪除筆記：{Name}", note.Name);
-        Notes.Remove(note);
-
         try
         {
-            await _searchService.RemoveNoteIndexAsync(note.Id);
+            await _noteService.DeleteNoteAsync(note.Id);
+            Notes.Remove(note);
+
+            if (SelectedNote == note)
+                SelectedNote = null;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "刪除筆記時，清理索引發生錯誤");
+            _logger.LogError(ex, "刪除筆記失敗：{Name}", note.Name);
             ShowErrorDialogAction?.Invoke("刪除失敗", "無法刪除筆記，請稍後再試。");
         }
-
-        if (SelectedNote == note)
-            SelectedNote = null;
     }
 
     /// <summary>
@@ -614,10 +608,10 @@ public partial class NotesViewModel : ObservableObject
             SaveStatus = $"自動儲存 {DateTime.Now:HH:mm:ss}";
             _logger.LogInformation("儲存筆記：{Name}", note.Name);
         }
-        catch (Exception ex) 
+        catch (Exception ex)
         {
             _logger.LogError(ex, "自動儲存失敗：{Name}", note.Name);
-            SaveStatus = "❌ 儲存失敗"; 
+            SaveStatus = "❌ 儲存失敗";
         }
         finally
         {
