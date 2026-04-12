@@ -8,6 +8,14 @@ using StockEvernote.Model;
 
 namespace StockEvernote.Services;
 
+/// <summary>
+/// FTS5 全文搜尋服務：管理搜尋索引的生命週期（初始化、建立、刪除、重建），
+/// 並提供中文友善的全文檢索查詢。
+/// </summary>
+/// <remarks>
+/// 中文處理策略：在漢字間插入空格，讓 FTS5 的 unicode61 tokenizer 能逐字斷詞。
+/// 搜尋結果顯示時再還原回正常中文。
+/// </remarks>
 public class SearchService : ISearchService
 {
     private readonly EvernoteDbContext _dbContext;
@@ -18,7 +26,8 @@ public class SearchService : ISearchService
         _dbContext = dbContext;
         _logger = logger;
     }
-  
+
+    /// <summary>建立 FTS5 虛擬資料表（若不存在）。啟動時呼叫一次。</summary>
     public async Task InitializeAsync()
     {
         var sql = @"
@@ -35,9 +44,7 @@ public class SearchService : ISearchService
         _logger.LogInformation("FTS5 索引資料表初始化完成");
     }
 
-    /// <summary>
-    /// FTS5 不支援 UPSERT，必須先刪再插確保不重複。
-    /// </summary>
+    /// <summary>FTS5 不支援 UPSERT，必須先刪再插確保不重複。</summary>
     public async Task IndexNoteAsync(string noteId, string noteName, string content, string notebookId, string notebookName)
     {
         var plainText = TextHelper.RtfToPlainText(content);
@@ -57,6 +64,8 @@ public class SearchService : ISearchService
              new SqliteParameter("@notebookName", tokenizedNotebookName),
              new SqliteParameter("@content", tokenized));
     }
+
+    /// <summary>移除指定筆記的搜尋索引。</summary>
     public async Task RemoveNoteIndexAsync(string noteId)
     {
         await _dbContext.Database.ExecuteSqlRawAsync(
@@ -71,7 +80,6 @@ public class SearchService : ISearchService
     {
         _logger.LogInformation("開始重建搜尋索引，UserId：{UserId}", userId);
 
-        // 撈所有未刪除的筆記，連帶筆記本名稱
         var notes = await _dbContext.Notes
             .Where(n => !n.IsDeleted)
             .Join(_dbContext.Notebooks.Where(nb => nb.UserId == userId && !nb.IsDeleted),
@@ -119,9 +127,7 @@ public class SearchService : ISearchService
         if (string.IsNullOrWhiteSpace(safeKeyword))
             return new List<SearchResult>();
 
-        // 把搜尋關鍵字也做中文字元拆分，才能跟索引匹配
         var tokenizedKeyword = TextHelper.TokenizeForChinese(safeKeyword);
-        // 用 FTS5 的 MATCH 語法搜尋，* 做前綴匹配
         var ftsQuery = string.Join(" ", tokenizedKeyword.Split(' ', StringSplitOptions.RemoveEmptyEntries)
             .Select(word => $"\"{word}\"*"));
 
