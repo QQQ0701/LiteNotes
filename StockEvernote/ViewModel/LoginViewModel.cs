@@ -16,20 +16,6 @@ public partial class LoginViewModel : ObservableObject
     private readonly ITelegramService _gramService;
     private readonly ILogger<LoginViewModel> _logger;
 
-    public LoginViewModel(
-        IAuthService authService, 
-        IDialogService dialogService,
-        IUserSession userSession, 
-        ITelegramService gramService, 
-        ILogger<LoginViewModel> logger)
-    {
-        _authService = authService ?? throw new ArgumentNullException(nameof(authService));
-        _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-        _userSession = userSession ?? throw new ArgumentNullException(nameof(userSession));
-        _gramService = gramService ?? throw new ArgumentNullException(nameof(gramService));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
-
     // 輸入屬性
     [ObservableProperty] private string _email = string.Empty;
     [ObservableProperty] private string _password = string.Empty;
@@ -45,6 +31,22 @@ public partial class LoginViewModel : ObservableObject
     // 事件
     public Action? NavigateToNotes { get; set; }
     public event Action? RequestClearPasswords;
+
+    public LoginViewModel(
+        IAuthService authService, 
+        IDialogService dialogService,
+        IUserSession userSession, 
+        ITelegramService gramService, 
+        ILogger<LoginViewModel> logger)
+    {
+        _authService = authService ?? throw new ArgumentNullException(nameof(authService));
+        _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+        _userSession = userSession ?? throw new ArgumentNullException(nameof(userSession));
+        _gramService = gramService ?? throw new ArgumentNullException(nameof(gramService));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+  
 
     /// <summary>
     /// 切換登入/註冊模式指令。

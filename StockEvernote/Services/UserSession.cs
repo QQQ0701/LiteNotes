@@ -9,10 +9,7 @@ public class UserSession : IUserSession
 {
     public string? LocalId { get; set; }
     public string? IdToken { get; set; }
-
-    // 只要 IdToken 有值，我們就視為已登入
     public bool IsLoggedIn => !string.IsNullOrEmpty(IdToken);
-
     public void Clear()
     {
         LocalId = null;

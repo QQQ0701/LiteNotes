@@ -159,7 +159,6 @@ public partial class NotesViewModel : ObservableObject
         {
             var tempPath = await _fileUploadService.DownloadToTempAsync(attachment);
 
-            // 用系統預設程式開啟
             var psi = new System.Diagnostics.ProcessStartInfo(tempPath)
             {
                 UseShellExecute = true
@@ -216,7 +215,6 @@ public partial class NotesViewModel : ObservableObject
     {
         try
         {
-            // await Task.Delay(3000, token);
             var data = await _fileUploadService.GetAttachmentsAsync(noteId, token);
 
             if (token.IsCancellationRequested) return;
@@ -279,7 +277,6 @@ public partial class NotesViewModel : ObservableObject
     {
         if (value is null) return;
 
-        // 切換到對應筆記本
         var targetNotebook = Notebooks.FirstOrDefault(n => n.Id == value.NotebookId);
         if (targetNotebook != null)
         {
@@ -293,7 +290,6 @@ public partial class NotesViewModel : ObservableObject
             }
             else
             {
-                // 因為已經載入過了，直接切換選取狀態即可
                 SelectedNote = Notes.FirstOrDefault(n => n.Id == value.NoteId);
             }
         }
@@ -301,6 +297,7 @@ public partial class NotesViewModel : ObservableObject
     #endregion
 
     #region 雲端同步與帳號操作 (Cloud Sync & Session)
+
     [RelayCommand]
     private async Task SyncAsync()
     {
@@ -308,7 +305,9 @@ public partial class NotesViewModel : ObservableObject
         {
             StatusMessage = "⏳ 同步中...";
             _logger.LogInformation("開始同步，UserId：{UserId}", CurrentUserId);
+
             await _firestoreService.SyncAllAsync(CurrentUserId);
+
             StatusMessage = $"✅ 同步成功 {DateTime.Now:HH:mm:ss}";
             _logger.LogInformation("同步成功");
         }
@@ -331,7 +330,7 @@ public partial class NotesViewModel : ObservableObject
             _logger.LogInformation("開始從雲端還原，UserId：{UserId}", CurrentUserId);
 
             await _firestoreService.RestoreFromCloudAsync(CurrentUserId);
-            await LoadNotebooksAsync(); 
+            await LoadNotebooksAsync();
             await _searchService.RebuildIndexAsync(CurrentUserId);
 
             if (SelectedNotebook != null)
@@ -405,14 +404,13 @@ public partial class NotesViewModel : ObservableObject
         Notebooks.Insert(0, created);
         SelectedNotebook = created;
 
-        // ✅ 新增後自動進入編輯模式，讓使用者可以直接改名
         Edit(created);
     }
 
     [RelayCommand]
     private void Edit(Notebook notebook)
     {
-        notebook.EditingName = notebook.Name; // 預填目前名稱
+        notebook.EditingName = notebook.Name;
         notebook.IsEditing = true;
     }
 
@@ -439,13 +437,19 @@ public partial class NotesViewModel : ObservableObject
         notebook.Name = newName;
         await _notebookService.UpdateNotebookAsync(notebook);
 
-        // 精準更新此筆記本下的所有筆記索引，避免大重置
-        var childNotes = await _noteService.GetNotesAsync(notebook.Id);
-        foreach (var note in childNotes)
+        try
         {
-            await _searchService.IndexNoteAsync(
-                note.Id, note.Name, note.Content ?? string.Empty,
-                notebook.Id, newName); // 傳入新的筆記本名稱
+            var childNotes = await _noteService.GetNotesAsync(notebook.Id);
+            foreach (var note in childNotes)
+            {
+                await _searchService.IndexNoteAsync(
+                    note.Id, note.Name, note.Content ?? string.Empty,
+                    notebook.Id, newName);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "筆記本重新命名時，更新索引發生錯誤");
         }
     }
 
@@ -510,9 +514,7 @@ public partial class NotesViewModel : ObservableObject
             notebookId, Notes.Count);
 
         if (!string.IsNullOrEmpty(targetNoteIdToSelect))
-        {
             SelectedNote = Notes.FirstOrDefault(n => n.Id == targetNoteIdToSelect);
-        }
     }
 
     [RelayCommand]
@@ -525,7 +527,8 @@ public partial class NotesViewModel : ObservableObject
         created.EditingName = created.Name;
         created.IsEditing = true;
 
-        _logger.LogInformation("新增筆記：{Name}，NotebookId：{NotebookId}", created.Name, SelectedNotebook.Id);
+        _logger.LogInformation("新增筆記：{Name}，NotebookId：{NotebookId}", 
+            created.Name, SelectedNotebook.Id);
     }
 
     /// <summary>
@@ -551,12 +554,19 @@ public partial class NotesViewModel : ObservableObject
         note.Name = newName;
         await _noteService.UpdateNoteAsync(note);
 
-        if (SelectedNotebook != null)
+        try
         {
-            var existingNote = Notes.FirstOrDefault(n => n.Id == note.Id);
-            await _searchService.IndexNoteAsync(
-                note.Id, newName, existingNote?.Content ?? string.Empty,
-                note.NotebookId, SelectedNotebook.Name);
+            if (SelectedNotebook != null)
+            {
+                var existingNote = Notes.FirstOrDefault(n => n.Id == note.Id);
+                await _searchService.IndexNoteAsync(
+                    note.Id, newName, existingNote?.Content ?? string.Empty,
+                    note.NotebookId, SelectedNotebook.Name);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "筆記重新命名時，更新索引發生錯誤");
         }
     }
 
@@ -567,6 +577,7 @@ public partial class NotesViewModel : ObservableObject
 
         if (note.Name == "新筆記")
             Notes.Remove(note);
+
         note.IsEditing = false;
         note.EditingName = string.Empty;
     }
@@ -620,7 +631,6 @@ public partial class NotesViewModel : ObservableObject
 
         try
         {
-            // 更新搜尋索引
             if (SelectedNotebook != null)
             {
                 await _searchService.IndexNoteAsync(
@@ -636,18 +646,4 @@ public partial class NotesViewModel : ObservableObject
 
     #endregion
 }
-
-
-//手動儲存功能
-
-//[RelayCommand]
-//private async Task SaveNoteAsync()
-//{
-//    if (SelectedNote is null) return;
-
-//    SelectedNote.Content = NoteContent;
-//    await _noteService.UpdateNoteAsync(SelectedNote);
-//    SaveStatus = $"已儲存 {DateTime.Now:HH:mm:ss}";
-//    _logger.LogInformation("儲存筆記：{Name}", SelectedNote.Name);
-//}
 

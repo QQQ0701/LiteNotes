@@ -7,10 +7,6 @@ public interface IUserSession
 {
     string? LocalId { get; set; }
     string? IdToken { get; set; }
-
-    // 判斷當前是否處於登入狀態
     bool IsLoggedIn { get; }
-
-    // 登出時呼叫，清空所有機密資料
     void Clear();
 }

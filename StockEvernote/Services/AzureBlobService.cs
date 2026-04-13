@@ -22,7 +22,7 @@ public class AzureBlobService : IFileUploadService
 {
     private readonly BlobContainerClient _containerClient;
     private readonly EvernoteDbContext _dbContext;
-    private readonly ILogger _logger;
+    private readonly ILogger<AzureBlobService> _logger;
 
     private static readonly HashSet<string> AllowedImageExtensions = new(StringComparer.OrdinalIgnoreCase)
     {

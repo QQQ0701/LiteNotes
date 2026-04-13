@@ -17,7 +17,6 @@ public class FirebaseAuthService : IAuthService
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
 
-        // 讀取 AppSettings 的環境變數
         _apiKey = configuration["Firebase:ApiKey"]
                   ?? throw new InvalidOperationException("設定檔中找不到 Firebase:ApiKey");
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -40,7 +39,6 @@ public class FirebaseAuthService : IAuthService
     {
         try
         {
-            // 1. 封裝發送 DTO
             var requestBody = new FirebaseAuthRequest
             {
                 Email = email,
@@ -48,10 +46,8 @@ public class FirebaseAuthService : IAuthService
                 ReturnSecureToken = true
             };
 
-            // 2. 發送 API 請求
             var response = await _httpClient.PostAsJsonAsync(url, requestBody);
 
-            // 3. 處理成功回應
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<FirebaseAuthResponse>();
@@ -63,7 +59,6 @@ public class FirebaseAuthService : IAuthService
                 return AuthResult.Fail("API 回傳成功，但缺少必要的識別資訊。");
             }
 
-            // 4. 處理失敗回應 (HTTP 400)
             var errorResult = await response.Content.ReadFromJsonAsync<FirebaseErrorResponse>();
             string errorMessage = errorResult?.Error?.Message ?? "發生未知的驗證錯誤。";
 
@@ -72,7 +67,6 @@ public class FirebaseAuthService : IAuthService
         catch (HttpRequestException ex)
         {
             _logger.LogWarning(ex, "呼叫 Firebase API 時發生網路連線失敗。Email: {Email}", email);
-            // 攔截網路斷線等底層例外，轉換為業務錯誤結果
             return AuthResult.Fail("網路連線失敗，請檢查您的網路狀態。");
         }
         catch (Exception ex)

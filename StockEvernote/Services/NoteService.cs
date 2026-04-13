@@ -91,7 +91,7 @@ public class NoteService : INoteService
 
             foreach (var att in attachments)
             {
-                att.IsDeleted = false;
+                att.IsDeleted = true;
                 att.IsSynced = false;
                 att.UpdatedAt = DateTime.Now;
             }

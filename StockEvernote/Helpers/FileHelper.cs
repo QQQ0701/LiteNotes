@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace StockEvernote.Helpers;
+﻿namespace StockEvernote.Helpers;
 
 /// <summary>
 /// 檔案相關的共用工具類別

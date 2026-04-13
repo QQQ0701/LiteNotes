@@ -5,8 +5,8 @@
 public class AuthResult
 {
     public bool IsSuccess { get; set; }
-    public string? UserId { get; set; } // Firebase 回傳的 localId
-    public string? IdToken { get; set; } // 用於後續 API 授權的 Token
+    public string? UserId { get; set; } 
+    public string? IdToken { get; set; } 
     public string? ErrorMessage { get; set; }
 
     public static AuthResult Success(string userId, string idToken) =>

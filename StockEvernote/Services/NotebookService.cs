@@ -12,7 +12,6 @@ public class NotebookService : INotebookService
 {
     private readonly EvernoteDbContext _dbContext;
     private readonly INoteService _noteService;
-    private readonly ISearchService _searchService;
     private readonly ILogger<NotebookService> _logger;
     public NotebookService(
         EvernoteDbContext dbContext,
@@ -22,7 +21,6 @@ public class NotebookService : INotebookService
     {
         _dbContext = dbContext;
         _noteService = noteService;
-        _searchService = searchService;
         _logger = logger;
     }
     public async Task<Notebook> CreateNotebookAsync(string name, string userId)
@@ -83,7 +81,7 @@ public class NotebookService : INotebookService
         try
         {
             var childNotes = await _dbContext.Notes
-                .Where(n => n.Id == notebookId && !n.IsDeleted)
+                .Where(n => n.NotebookId == notebookId && !n.IsDeleted)
                 .ToListAsync();
 
             foreach (var note in childNotes)

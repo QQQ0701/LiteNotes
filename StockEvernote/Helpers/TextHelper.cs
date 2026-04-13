@@ -21,11 +21,18 @@ public static class TextHelper
         try
         {
             var text = rtf;
-            text = Regex.Replace(text, @"\{\\\*[^}]*\}", "", RegexOptions.Singleline);
-            text = Regex.Replace(text, @"\\[a-z]+(-?\d+)?[ ]?", " ");
+
+            string[] headersToRemove = { "fonttbl", "colortbl", "stylesheet", "info", "listtable" };
+            foreach (var header in headersToRemove)
+            {
+                text = Regex.Replace(text, @"\{\\" + header + @"(?>[^{}]+|\{(?<c>)|\}(?<-c>))*(?(c)(?!))\}", "", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            }
+            text = Regex.Replace(text, @"\{\\\*(?>[^{}]+|\{(?<c>)|\}(?<-c>))*(?(c)(?!))\}", "", RegexOptions.Singleline);
+            text = Regex.Replace(text, @"\\[a-zA-Z]+(-?\d+)?[ ]?", " ");
             text = Regex.Replace(text, @"\\'[0-9a-fA-F]{2}", "");
             text = text.Replace("{", "").Replace("}", "");
             text = Regex.Replace(text, @"\s+", " ").Trim();
+
             return text;
         }
         catch

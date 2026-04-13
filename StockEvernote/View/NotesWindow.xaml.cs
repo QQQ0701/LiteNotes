@@ -437,7 +437,7 @@ public partial class NotesWindow : Window
 
         if (e.Data.GetDataPresent(DataFormats.FileDrop))
         {
-            e.Handled = true; // 🌟 告訴 RichTextBox：「檔案我拿走了，你不要把它變成純文字貼上！」
+            e.Handled = true;
 
             var files = (string[])e.Data.GetData(DataFormats.FileDrop);
 

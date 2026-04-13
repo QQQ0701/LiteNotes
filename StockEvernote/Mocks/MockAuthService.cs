@@ -19,11 +19,8 @@ public class MockAuthService : IAuthService
 
         if (email == ValidEmail && password == ValidPassword)
         {
-            // 模擬成功，回傳假 ID 與假 Token
             return AuthResult.Success(Guid.NewGuid().ToString(), "fake_jwt_token");
         }
-
-        // 模擬失敗，不拋出 Exception，而是回傳錯誤結果
         return AuthResult.Fail($"帳號或密碼錯誤！(測試請用：{ValidEmail} / {ValidPassword})");
     }
 
@@ -40,7 +37,6 @@ public class MockAuthService : IAuthService
     }
     public Task<AuthResult> ForgotPasswordAsync(string email)
     {
-        // Mock 環境直接回傳成功
         return Task.FromResult(new AuthResult { IsSuccess = true });
     }
 }

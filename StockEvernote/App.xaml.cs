@@ -22,31 +22,22 @@ public partial class App : Application
     public static IServiceProvider? ServiceProvider { get; private set; }
     // 建立一個全局的 Scope 供應用程式生命週期使用，避免 Scoped 服務被提早釋放
     private IServiceScope? _appScope;
+
+    // ══════════════════════════════════════════════════════════
+    //  應用程式生命週期
+    // ══════════════════════════════════════════════════════════
     protected override void OnStartup(StartupEventArgs e)
     {
-        // 🌟 終極護城河：防堵 EF Core 幽靈測試員！
-        // 檢查：如果目前的執行緒不是 STA (UI 專屬執行緒)，代表是 EF Core 工具在背景亂敲門
-        if (System.Threading.Thread.CurrentThread.GetApartmentState() != System.Threading.ApartmentState.STA)
+        // EF Core CLI 工具（dotnet ef migrations）會以非 STA 執行緒啟動 App，
+        // 在此攔截避免觸發 UI 初始化導致崩潰
+        if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
         {
-            // 直接強制退出這個方法，不准往下執行畫畫面的邏輯！
             this.Shutdown();
             return;
         }
         base.OnStartup(e);
 
-        // 1. 初始化 Serilog
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information() // 設定只記錄 Information 以上的層級
-            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
-            .MinimumLevel.Override("System.Net.Http", LogEventLevel.Warning)
-            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")// 燈泡 1：寫入 Console (給工程師看)
-            .WriteTo.File(              // 燈泡 2：寫入實體檔案 (給客訴查修用)
-              path: "Logs/StockEvernote-.txt", // 檔案名稱，Serilog 會自動在後面加上日期
-              rollingInterval: RollingInterval.Day, // 🌟 每天自動開一個新檔案！
-              retainedFileCountLimit: 30,           // 最多保留 30 天的檔案，自動刪除舊檔防塞爆硬碟
-              outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}"
-      )
-      .CreateLogger();
+        InitializeSerilog();
 
         try
         {
@@ -64,10 +55,11 @@ public partial class App : Application
             IConfiguration configuration = builder.Build();
             Log.Information("設定檔載入完成");
 
+
             //  註冊 DI 容器
             var services = new ServiceCollection();
             ConfigureServices(services, configuration, environmentName);
-     
+
             ServiceProvider = services.BuildServiceProvider();
             Log.Information("DI 容器建置完成");
 
@@ -90,15 +82,46 @@ public partial class App : Application
             Shutdown();
         }
     }
-    // ==========================================
+    protected override void OnExit(ExitEventArgs e)
+    {
+        Log.Information("系統準備關閉...");
+
+        // 釋放全局 Scope
+        _appScope?.Dispose();
+
+        // 這是 Serilog 最重要的一步：把還卡在記憶體裡的 Log，強制寫進 txt 檔案裡！
+        Log.CloseAndFlush();
+        base.OnExit(e);
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  Serilog 初始化
+    // ══════════════════════════════════════════════════════════
+
+    private static void InitializeSerilog()
+    {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+            .MinimumLevel.Override("System.Net.Http", LogEventLevel.Warning)
+            .WriteTo.Console(
+                outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+            .WriteTo.File(
+                path: "Logs/StockEvernote-.txt",
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 30,
+                outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}")
+            .CreateLogger();
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  DI 容器註冊
+    // ══════════════════════════════════════════════════════════
+
     private void ConfigureServices(IServiceCollection services, IConfiguration configuration, string environmentName)
     {
         // --- 基礎建設 (Infrastructure) ---
-        services.AddLogging(loggingBuilder =>
-        {
-            loggingBuilder.AddSerilog(dispose: true);
-        });
-        // 註冊設定檔手冊 (全公司共用一本)
+        services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
         services.AddSingleton(configuration);
         services.AddSingleton<IDialogService, WpfDialogService>();
         services.AddSingleton<IUserSession, UserSession>();
@@ -109,19 +132,21 @@ public partial class App : Application
 
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);
-        var appFolder = System.IO.Path.Join(path, "StockEvernote");
-        System.IO.Directory.CreateDirectory(appFolder);
-        var dbPath = System.IO.Path.Join(appFolder, "StockEvernote.db");
+        var appFolder = Path.Join(path, "StockEvernote");
+        Directory.CreateDirectory(appFolder);
+        var dbPath = Path.Join(appFolder, "StockEvernote.db");
 
         services.AddDbContext<EvernoteDbContext>(options =>
         {
             options.UseSqlite($"Data Source={dbPath}");
         }, ServiceLifetime.Scoped);
 
-        // --- 外部 API 與業務邏輯 (Services) ---
+        // 業務邏輯 (Services) ---
 
         services.AddScoped<INotebookService, NotebookService>();
         services.AddScoped<INoteService, NoteService>();
+
+        // ── 外部 API ──
 
         services.AddHttpClient<IFirestoreService, FirestoreService>(client =>
         {
@@ -154,11 +179,15 @@ public partial class App : Application
 
         services.AddTransient<LoginViewModel>();
         services.AddTransient<LoginWindow>();
-
         services.AddTransient<NotesViewModel>();
         services.AddTransient<NotesWindow>();
     }
-    private void InitializeDatabase()
+
+    // ══════════════════════════════════════════════════════════
+    //  資料庫初始化
+    // ══════════════════════════════════════════════════════════
+
+    private static void InitializeDatabase()
     {
         Log.Information("開始檢查並更新資料庫 Schema...");
 
@@ -175,16 +204,5 @@ public partial class App : Application
             Log.Error(ex, "資料庫遷移失敗");
             throw;
         }
-    }
-    protected override void OnExit(ExitEventArgs e)
-    {
-        Log.Information("系統準備關閉...");
-
-        // 釋放全局 Scope
-        _appScope?.Dispose();
-
-        // 這是 Serilog 最重要的一步：把還卡在記憶體裡的 Log，強制寫進 txt 檔案裡！
-        Log.CloseAndFlush();
-        base.OnExit(e);
     }
 }
