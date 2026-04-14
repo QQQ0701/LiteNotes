@@ -48,6 +48,7 @@
 | 身份驗證 | Firebase Authentication |
 | 全文搜尋 | SQLite FTS5 |
 | 日誌系統 | Serilog（Console + File） |
+| 開發者監控 | Telegram Bot API |
 | 依賴注入 | Microsoft.Extensions.DependencyInjection |
 
 ---
@@ -57,24 +58,28 @@
 LiteNotes/
 ├── Contracts/          介面定義（INotebookService, INoteService, IFileUploadService 等）
 ├── Converters/         WPF 值轉換器（FileSizeConverter, BoolToVisibilityConverter 等）
-├── Data/               EF Core DbContext 與 Migration
-├── Helpers/            工具類別（RTF 轉純文字、中文斷詞、檔案格式判斷）
+├── Data/               EF Core DbContext、DbContextFactory 與資料庫初始化
+├── Helpers/            工具類別（RTF Unicode 解碼、中文斷詞、檔案類型判斷）
+├── Images/             應用程式圖示與截圖資源
+├── Migrations/         EF Core 資料庫遷移紀錄
+├── Mocks/              開發環境用的 Mock 服務（MockAuthService）
 ├── Model/              資料模型（Notebook, Note, Attachment, SearchResult）
 │   ├── Firebase/       Firebase Auth 的 Request/Response DTO
 │   ├── Firestore/      Firestore REST API 的 Document DTO
 │   └── Telegram/       Telegram Bot 訊息 DTO
 ├── Services/           業務邏輯層
-│   ├── NotebookService     筆記本 CRUD + 連鎖刪除
-│   ├── NoteService         筆記 CRUD + 連鎖刪除附件與索引
-│   ├── AzureBlobService    Azure Blob 上傳/下載/刪除
-│   ├── FirestoreService    Firestore 雙向同步與還原
-│   ├── SearchService       FTS5 全文搜尋索引管理
-│   ├── FirebaseAuthService Firebase 身份驗證
-│   └── UserSession         使用者狀態管理（Singleton）
+│   ├── NotebookService         筆記本 CRUD + 連鎖刪除
+│   ├── NoteService             筆記 CRUD + 連鎖刪除附件與索引
+│   ├── AzureBlobService        Azure Blob 上傳/下載/刪除
+│   ├── FirestoreService        Firestore 雙向同步與還原
+│   ├── SearchService           FTS5 全文搜尋索引管理
+│   ├── FirebaseAuthService     Firebase 身份驗證
+│   ├── TelegramMessageServices Telegram Bot 開發者監控通知
+│   ├── WpfDialogService        系統對話框封裝（檔案選擇器）
+│   └── UserSession             使用者狀態管理（Singleton）
 ├── View/               XAML 視窗與 Code-Behind
 ├── ViewModel/          MVVM ViewModel（LoginViewModel, NotesViewModel）
 └── App.xaml.cs         DI 容器設定、Serilog 初始化、資料庫 Migration
-
 ```
 ---
 ## 架構設計重點
