@@ -6,20 +6,26 @@ using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace LiteNotes.Services;
+
+/// <summary>
+/// 開發者監控通道：透過 Telegram Bot API 推送系統事件通知。
+/// </summary>
 public class TelegramMessageServices:ITelegramService
 {
     private readonly HttpClient _httpClient;
     private readonly string _testChatId;
     private readonly ILogger<TelegramMessageServices> _logger;
-    public TelegramMessageServices(HttpClient httpClient, IConfiguration configuration,
+
+    public TelegramMessageServices(
+        HttpClient httpClient, 
+        IConfiguration configuration,
         ILogger<TelegramMessageServices> logger)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         _testChatId = configuration["Telegram:TestChatId"] ??
             throw new InvalidOperationException("設定檔中找不到，找不到TestChatId");
-        
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
     public async Task<bool> SendMessageAsync(string message)
     {

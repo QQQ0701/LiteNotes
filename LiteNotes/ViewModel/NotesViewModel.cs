@@ -57,9 +57,6 @@ public partial class NotesViewModel : ObservableObject
     [ObservableProperty] private bool _isSearchGlobal = true;
 
     #endregion
-    //---------------------正式要刪除-------------------------------
-    [ObservableProperty] private bool _isAutoSyncEnabled = false;
-    //---------------------正式要刪除-------------------------------
 
     #region 建構函式
     public NotesViewModel(INotebookService notebookService,

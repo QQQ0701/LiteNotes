@@ -15,19 +15,34 @@ public static class TextHelper
     public static string RtfToPlainText(string rtf)
     {
         if (string.IsNullOrEmpty(rtf)) return string.Empty;
-
         if (!rtf.TrimStart().StartsWith("{\\rtf")) return rtf;
 
         try
         {
             var text = rtf;
 
+            // 移除 RTF 表頭區塊
             string[] headersToRemove = { "fonttbl", "colortbl", "stylesheet", "info", "listtable" };
             foreach (var header in headersToRemove)
             {
-                text = Regex.Replace(text, @"\{\\" + header + @"(?>[^{}]+|\{(?<c>)|\}(?<-c>))*(?(c)(?!))\}", "", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+                text = Regex.Replace(text, @"\{\\" + header + @"(?>[^{}]+|\{(?<c>)|\}(?<-c>))*(?(c)(?!))\}", "",
+                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
             }
-            text = Regex.Replace(text, @"\{\\\*(?>[^{}]+|\{(?<c>)|\}(?<-c>))*(?(c)(?!))\}", "", RegexOptions.Singleline);
+
+            text = Regex.Replace(text, @"\{\\\*(?>[^{}]+|\{(?<c>)|\}(?<-c>))*(?(c)(?!))\}", "",
+                RegexOptions.Singleline);
+
+            // ✅ 新增：先把 Unicode 跳脫序列轉成實際字元
+            // \u21488? → 台、\u31309? → 積、\u-26885? → 電
+            text = Regex.Replace(text, @"\\u(-?\d+)\?", match =>
+            {
+                var code = int.Parse(match.Groups[1].Value);
+                // RTF 的負數 Unicode：-26885 實際是 65536 + (-26885) = 38651
+                if (code < 0) code += 65536;
+                return ((char)code).ToString();
+            });
+
+            // 移除其他 RTF 控制碼
             text = Regex.Replace(text, @"\\[a-zA-Z]+(-?\d+)?[ ]?", " ");
             text = Regex.Replace(text, @"\\'[0-9a-fA-F]{2}", "");
             text = text.Replace("{", "").Replace("}", "");

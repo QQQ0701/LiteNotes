@@ -68,26 +68,6 @@
 
                         <Separator/>
 
-                        <MenuItem IsEnabled="False">
-                            <MenuItem.Icon>
-                                <TextBlock Text="📄" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </MenuItem.Icon>
-                            <MenuItem.Header>
-                                <TextBlock Text="匯出所有筆記" Margin="4,2,0,2"/>
-                            </MenuItem.Header>
-                        </MenuItem>
-
-                        <MenuItem IsEnabled="False">
-                            <MenuItem.Icon>
-                                <TextBlock Text="🌗" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </MenuItem.Icon>
-                            <MenuItem.Header>
-                                <TextBlock Text="佈景主題" Margin="4,2,0,2"/>
-                            </MenuItem.Header>
-                        </MenuItem>
-
-                        <Separator/>
-
                         <MenuItem Command="{Binding LogoutCommand}">
                             <MenuItem.Icon>
                                 <TextBlock Text="🚪" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -631,13 +611,6 @@
             <StatusBarItem>
                 <TextBlock Text="{Binding StatusMessage}"
                            FontSize="12" Foreground="#1A1A1A"/>
-            </StatusBarItem>
-            <!-- 🔧 正式上線時刪除 -->
-            <StatusBarItem HorizontalAlignment="Right">
-                <CheckBox Content="自動同步"
-                          IsChecked="{Binding IsAutoSyncEnabled}"
-                          FontSize="12" Foreground="#888888"
-                          VerticalContentAlignment="Center"/>
             </StatusBarItem>
         </StatusBar>
 

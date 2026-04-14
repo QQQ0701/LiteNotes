@@ -8,7 +8,6 @@ namespace EvernoteClone.Mocks;
 /// </summary>
 public class MockAuthService : IAuthService
 {
-    // 測試專用帳號與密碼
     private const string ValidEmail = "5566@gmail.com";
     private const string ValidPassword = "1234";
 
