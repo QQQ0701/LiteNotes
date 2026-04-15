@@ -46,7 +46,6 @@ public partial class App : Application
             var environmentName = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production";
             Log.Information("當前執行環境：{EnvironmentName}", environmentName);
 
-            // 2. 建置 Configuration 讀取器 (注意載入順序：後者會覆蓋前者)
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -55,25 +54,19 @@ public partial class App : Application
             IConfiguration configuration = builder.Build();
             Log.Information("設定檔載入完成");
 
-
-            //  註冊 DI 容器
             var services = new ServiceCollection();
             ConfigureServices(services, configuration, environmentName);
 
             ServiceProvider = services.BuildServiceProvider();
             Log.Information("DI 容器建置完成");
 
-            // 4. 初始化資料庫
             InitializeDatabase();
 
-            // 5. 解析並啟動起始畫面
             _appScope = ServiceProvider.CreateScope();
             var loginWindow = _appScope.ServiceProvider.GetRequiredService<LoginWindow>();
 
             Log.Information("顯示 LoginWindow");
             loginWindow.Show();
-            //var notesWindow = appScope.ServiceProvider.GetRequiredService<NotesWindow>();
-            //notesWindow.Show();
         }
         catch (Exception ex)
         {
@@ -86,10 +79,8 @@ public partial class App : Application
     {
         Log.Information("系統準備關閉...");
 
-        // 釋放全局 Scope
         _appScope?.Dispose();
 
-        // 這是 Serilog 最重要的一步：把還卡在記憶體裡的 Log，強制寫進 txt 檔案裡！
         Log.CloseAndFlush();
         base.OnExit(e);
     }
@@ -125,8 +116,6 @@ public partial class App : Application
         services.AddSingleton(configuration);
         services.AddSingleton<IDialogService, WpfDialogService>();
         services.AddSingleton<IUserSession, UserSession>();
-        services.AddScoped<ISearchService, SearchService>();
-        services.AddScoped<IFileUploadService, AzureBlobService>();
 
         // --- 資料庫 (Database) ---
 
@@ -145,6 +134,8 @@ public partial class App : Application
 
         services.AddScoped<INotebookService, NotebookService>();
         services.AddScoped<INoteService, NoteService>();
+        services.AddScoped<ISearchService, SearchService>();
+        services.AddScoped<IFileUploadService, AzureBlobService>();
 
         // ── 外部 API ──
 
